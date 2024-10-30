@@ -36,7 +36,7 @@ public class Round {
             // if player loses against boss, they reset the entire game 
             resetRounds();
             return false;
-            // created rounnd class 
+            // created round class 
         }
     }
 
@@ -73,7 +73,7 @@ public class Round {
     // hides the caption (for transitioning between rounds or screens)
     public void hideCaption() {
         caption = ""; // clears the caption
-        // ***** 
+        //* 
     }
 }
 
