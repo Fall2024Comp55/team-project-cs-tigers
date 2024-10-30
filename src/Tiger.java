@@ -20,11 +20,24 @@ public class Tiger {
 		return attack_val * 2;
 	}
 	
-	public GImage spawnTiger(getXPosition, getYPosition) { //placeholder for spawnTiger function change/replace as needed
-		return //GImage specialTiger = new(insert image file when we have, getXPosition, getYPosition)
+	public GImage returnIdle() {
+		return GImage idle;
+	}
+	
+	public GImage getAttackAnimation() {
+		return GImage attack;
+	}
+	
+	public GImage specialAttack() {
+		return Image specialAttack;
+	}
+	
+	
+	//public GImage spawnTiger(getXPosition, getYPosition) { //placeholder for spawnTiger function change/replace as needed
+		//return //GImage specialTiger = new(insert image file when we have, getXPosition, getYPosition)
 		
 	
-	}
+	//	}
 	
 	
 	
