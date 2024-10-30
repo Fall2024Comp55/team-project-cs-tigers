@@ -73,6 +73,7 @@ public class Round {
     // hides the caption (for transitioning between rounds or screens)
     public void hideCaption() {
         caption = ""; // clears the caption
+        // filler
     }
 }
 
