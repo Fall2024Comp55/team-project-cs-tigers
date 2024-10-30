@@ -16,17 +16,16 @@ public class Tiger {
 		return attack_val;
 	}
 	
-	public void attack() { //placeholder for attack function change/replace as needed
+	public int specialAttackVal() { 
+		return attack_val * 2;
+	}
+	
+	public GImage spawnTiger(getXPosition, getYPosition) { //placeholder for spawnTiger function change/replace as needed
+		return //GImage specialTiger = new(insert image file when we have, getXPosition, getYPosition)
 		
-	}
-	
-	public void specialAttack() { //placeholder for special attack function change/replace as needed
-		
-	}
-	
-	public void spawnTiger() { //placeholder for spawnTiger function change/replace as needed
 	
 	}
+	
 	
 	
 	
