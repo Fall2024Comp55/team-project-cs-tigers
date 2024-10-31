@@ -33,6 +33,7 @@ public class Tiger {
 	}
 	
 	
+	
 	//public GImage spawnTiger(getXPosition, getYPosition) { //placeholder for spawnTiger function change/replace as needed
 		//return //GImage specialTiger = new(insert image file when we have, getXPosition, getYPosition)
 		
