@@ -21,15 +21,15 @@ public class Tiger {
 	}
 	
 	public GImage returnIdle() {
-		return GImage idle;
+		return idle;
 	}
 	
 	public GImage getAttackAnimation() {
-		return GImage attack;
+		return attack;
 	}
 	
 	public GImage specialAttack() {
-		return Image specialAttack;
+		return specialAttack;
 	}
 	
 	
