@@ -71,7 +71,7 @@ public class Round {
     // displays the current round caption on screen
     public void displayCaption() {
         System.out.println(caption);
-    }
+    } //*
     // hides the caption (for transitioning between rounds or screens)
     public void hideCaption() {
         caption = ""; // clears the caption
