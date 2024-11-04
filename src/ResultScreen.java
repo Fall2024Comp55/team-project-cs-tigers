@@ -48,7 +48,7 @@ public class ResultScreen {
 // demo placerholder 
 class Player {
     private String name;
-    private int score;
+    private int score = 0;
 
     public Player(String name, int score) {
         this.name = name;
