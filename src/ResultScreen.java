@@ -16,6 +16,7 @@ public class ResultScreen {
             
 
         	//Credits - Made by Ibrahim, Faizah, Paul, Rogelio
+            System.out.println("\n");
         	System.out.println("Thank you for playing\n");
         	System.out.println("This game was made by Ibrahim, Faizah, Paul and Rogelio\n");
         }
