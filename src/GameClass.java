@@ -18,8 +18,7 @@ public class GameClass {
 	    
 	    Scanner userKey = new Scanner (System.in);
 	    
-	   // if(userKey == ){;}
-	    
+	   // if(public void keyPressed){;} checking if user pressed a key 
 }
 	
 	public void displayEndScreen() {
