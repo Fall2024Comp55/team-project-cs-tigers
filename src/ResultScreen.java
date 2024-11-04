@@ -36,6 +36,11 @@ public class ResultScreen {
         } else {
             System.out.println("CPU wins! Try again!");
             System.out.println("Score: " + cpu.score());
+            
+
+        	//Credits - Made by Ibrahim, Faizah, Paul, Rogelio
+        	System.out.println("Thank you for playing\n");
+        	System.out.println("This game was made by Ibrahim, Faizah, Paul and Rogelio\n");
         }
     }
 }
