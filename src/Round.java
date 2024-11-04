@@ -1,80 +1,74 @@
 public class Round {
-    private int currentRound = 1; // tracks the current round, starting with round 1
-    private boolean roundOver = false;
-    private String caption; // stores the current round caption for display
+    private int currentRound = 1; //tracks the current round, starting with round 1
+    private boolean roundOver = false; // indicator of whether or not round over
+    private String caption; //stores the current round caption for display
 
-
-    // starts the round based on the current round number
-    
+    //starts the round based on the current round number
     public void startRound() {
+        //add more setup for the specific round 
     }
 
-    	// might edit caption to an actual pop up instead
-        private void updateCaption() {
-
-    	updateCaption(); // sets the appropriate caption for the round
-        System.out.println(caption);
-       
-        // additional setup for the specific round can go here
+    //updates the caption for the current round and prints it
+    //planning to be updated to a pop up display in future
+    private void updateCaption() {
+        updateCaption(); //sets the appropriate caption for the round
+        System.out.println(caption); //prints the caption
     }
 
-    // checks if the player won the current round
+    //checks if the player won the current round and handles round progression
     public boolean checkWinner(boolean playerWon) {
         if (playerWon) {
             if (currentRound == 1) {
                 System.out.println("won round 1! moving to next round.");
-                nextRound();
+                nextRound(); //moves to next round
             } else if (currentRound == 2) {
                 System.out.println("won round 2! moving to final round.");
-                nextRound();
+                nextRound(); // moves  to final round
             } else {
                 System.out.println("victory! game won.");
-                endRound();
+                endRound(); // this ends  the game if the final round is won
             }
-            return true;
+            return true; // returns true if the player won
         } else {
             System.out.println("lost the round. resetting game to round 1.");
-            // if player loses against boss, they reset the entire game 
-            resetRounds();
-            return false;
-            // created round class 
+            resetRounds(); // resets the game to round 1 if the player loses
+            return false; // returns false if the player lost
         }
     }
 
     // ends the current round and updates the round status
     public void endRound() {
-        roundOver = true;
-        System.out.println("round over."); 
+        roundOver = true; // sets round status to over
+        System.out.println("round over.");
     }
 
-    //resets the game to round 1 if the player loses
+    // resets the game to round 1 if the player loses
     public void resetRounds() {
-        currentRound = 1;
-        roundOver = false;
-        updateCaption();
+        currentRound = 1; // resets to the first round
+        roundOver = false; // marks round as not over
+        updateCaption(); //updates the caption for round 1
         System.out.println("game reset to round 1.");
     }
 
-    // advances to the next round if the player wins
+    //advances to the next round if the player wins
     private void nextRound() {
-        currentRound++; 
-        updateCaption();
+        currentRound++; //increment the round number
+        updateCaption(); //updates the caption for the new round
     }
 
-    // filler just adds round Over
+    //returns whether the current round is over
     public boolean isRoundOver() {
-        return roundOver;
+        return roundOver; //returns round status
     }
     
-    // hide and displays
-    
-    // displays the current round caption on screen
+    //displays the current round caption on screen
     public void displayCaption() {
-        System.out.println(caption);
-    } //
-    // hides the caption (for transitioning between rounds or screens)
+        System.out.println(caption); //prints the caption
+    }
+
+    //hides the caption, useful for transitions between rounds or screens
     public void hideCaption() {
-        caption = ""; // clears the caption
+        caption = ""; //clears the caption
     }
 }
 

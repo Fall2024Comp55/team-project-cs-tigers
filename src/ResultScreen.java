@@ -18,7 +18,7 @@ public static void main (String[] args) {
 public class ResultScreen {
 
     public static void main(String[] args) {
-        System.out.println("---- Result Screen ----");
+        System.out.println("Result Screen");
 
         Player user = new Player("User", 50); // placeholder  
         Player cpu = new Player("CPU", 25);   //placeholder
