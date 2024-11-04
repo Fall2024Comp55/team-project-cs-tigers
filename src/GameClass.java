@@ -1,7 +1,7 @@
 import java.util.Scanner;
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+//import javax.swing.*;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
 
 
 public class GameClass {
@@ -14,13 +14,17 @@ public class GameClass {
 	
 	public static void displayStartScreen() {
 	    System.out.println("Welcome to the Game!");
-	    System.out.println("Press any key to start...");
+	    System.out.println("Press the enter key to start...");
 	    
 	    Scanner userKey = new Scanner (System.in);
 	    
-	   // if(userKey == ){;}
-	    
-}
+        // waits for the user to press Enter
+        userKey.nextLine();
+        
+        System.out.println("Starting game..."); //proceed to start the game or call the next method
+        userKey.close();
+    }
+    
 	
 	public void displayEndScreen() {
 		System.out.println("Game over\n");
