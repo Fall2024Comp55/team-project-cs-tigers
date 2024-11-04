@@ -3,9 +3,9 @@ public class Round {
     private boolean roundOver = false; // indicator of whether or not round over
     private String caption; //stores the current round caption for display
 
-    //starts the round based on the current round number
+    /// starts the round based on the current round number
     public void startRound() {
-        //add more setup for the specific round 
+        //add more setup for the specific round .
     }
 
     //updates the caption for the current round and prints it
