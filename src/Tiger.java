@@ -78,6 +78,7 @@ public class Tiger extends GraphicsProgram {
 		}
 	
 	
+	
 	public static void main(String[] args) {
 		new Tiger().start();
 	}
