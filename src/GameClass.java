@@ -18,7 +18,7 @@ public class GameClass {
 	    
 	    Scanner userKey = new Scanner (System.in);
 	    
-	    if(userKey == ){;}
+	   // if(userKey == ){;}
 	    
 }
 	
