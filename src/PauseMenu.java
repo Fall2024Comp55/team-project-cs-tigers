@@ -1,73 +1,76 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-// do not let it exit the entire game let it return to the homePage
-public class PauseMenu {
-    private boolean isPaused; //tracks if the game is paused
-    private JDialog pauseDialog; //dialog for the pause menu
 
-    //constructor to initialize the pause menu
+public class PauseMenu {    //will create a button on each round so that they can click it and it will pop up the following
+    private boolean isPaused; // tracks if the game is paused
+    private JDialog pauseDialog; // pop up for pause menu
+
+    // constructor initializes the pause menu
     public PauseMenu() {
-        isPaused = false; // game is not paused initially
-        createPauseDialog(); // create the dialog when the menu is instantiated
+        isPaused = false; // starts not paused
+        createPauseDialog(); // sets up the pop up menu
     }
 
-    // creates the pause menu dialog
+    // creates the popup menu
     private void createPauseDialog() {
-        pauseDialog = new JDialog(); // create new dialog
-        pauseDialog.setTitle("Game Paused"); // set title
-        pauseDialog.setSize(300, 150); // set size
+        pauseDialog = new JDialog(); // create a new dialog
+        pauseDialog.setTitle("Game Paused"); // set dialog title
+        pauseDialog.setSize(300, 150); // set size of dialog// placeholder for now
         pauseDialog.setLocationRelativeTo(null); // center on screen
-        pauseDialog.setModal(true); // modal dialog prevents interaction with other windows
 
-        JPanel panel = new JPanel(); // create a panel for buttons
-        JButton resumeButton = new JButton("Resume Game"); // button to resume
-        JButton exitButton = new JButton("Exit Game"); // button to exit
+        // create buttons for resume and exit
+        JButton resumeButton = new JButton("Resume Game");
+        JButton exitButton = new JButton("Return to Home Page");
 
-        // action listener to resume the game
+        // action for resume button
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resumeGame(); // call resumeGame method when button is pressed
+                resumeGame(); // resumes the game
             }
         });
 
-        // action listener to exit the game
+        // action for exit button
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exitGame(); // call exitGame method when button is pressed
+                returnToHomePage(); // returns to the home page
             }
         });
 
-        panel.add(resumeButton); // add resume button to panel
-        panel.add(exitButton); // add exit button to panel
+        // add buttons to dialog
+        JPanel panel = new JPanel(); // create panel for buttons
+        panel.add(resumeButton); // add resume button
+        panel.add(exitButton); // add exit button
+
         pauseDialog.add(panel); // add panel to dialog
     }
 
-    // method to pause the game
+    // pauses the game
     public void pauseGame() {
-        if (!isPaused) {
-            isPaused = true; // set paused state to true
-            pauseDialog.setVisible(true); // show the pause menu dialog
+        if (!isPaused) { // only pause if not already paused
+            isPaused = true; // set paused state
+            pauseDialog.setVisible(true); // show pause menu
         }
     }
 
-    // method to resume the game
+    // resumes the game
     private void resumeGame() {
-        isPaused = false; // set paused state to false
-        pauseDialog.setVisible(false); // hide the pause menu dialog
-        // add logic here to resume the game
+        isPaused = false; // set not paused state
+        pauseDialog.setVisible(false); // hide pause menu
     }
 
-    // method to exit the game
-    private void exitGame() {
-        // add logic here to exit the game or return to the main menu
-        System.exit(0); // exits the program
+    // returns to the home page
+    private void returnToHomePage() {
+        pauseDialog.setVisible(false); // hide pause menu
+        // logic to show the home page goes here
+        System.out.println("Returning to home page..."); // placeholder for home page logic
     }
 
-    // method to check if the game is currently paused
-    public boolean isPaused() {
-        return isPaused; // return paused state
+    // checks if the game is paused
+    public boolean isPaused() { 
+        return isPaused; // returns paused state
     }
 }
+
