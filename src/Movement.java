@@ -33,6 +33,8 @@ public class Movement extends GraphicsProgram {
 	}	
 	
 	
+	
+	
 	public void run() {
         add(tigerTesting);
         tigerTesting.setSize(tigerTesting.getWidth() / 3, tigerTesting.getHeight() / 3);
