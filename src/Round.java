@@ -61,7 +61,7 @@ public class Round {
         return roundOver; // returns round status
     }
 
-    // hides the caption, useful for transitions between rounds or screens
+    // hides the display, useful for transitions between rounds or screens
     public void hideCaption() {
     }
 }
