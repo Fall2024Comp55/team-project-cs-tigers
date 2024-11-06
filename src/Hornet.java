@@ -44,7 +44,7 @@ public class Hornet extends GraphicsProgram implements ActionListener {
             //setRandomTarget();
         }
     }
-	private void glideToEnemy(GImage s, double x, double y,boolean t) {
+	private void glideToEnemy(GImage s, double x, double y) {
         double dx = x - s.getX();
         double dy = y - s.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -52,14 +52,9 @@ public class Hornet extends GraphicsProgram implements ActionListener {
         if (distance > SPEED) {
             s.move(SPEED * dx / distance, SPEED * dy / distance);
         } else {
-        	if(t) {
         		s.setLocation(LocationX, LocationY);
 	            //setRandomTarget();
-	            //remove(s);
-        	}
-        	else {
 	            remove(s);
-        	}
         }
     }
 	public void checkSide(double x) {
@@ -85,6 +80,12 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 	public int getHoneyBombValue() {
 		return honeyBombValue;
 	}
+	public double getCenterX() {
+		return hornet.getWidth()/2;
+	}
+	public double getCenterY() {
+		return hornet.getHeight()/2;
+	}
 	public void move(double x,double y) {
         double distance = Math.sqrt(x * x + y * y);
         double SPEED = 20.0;
@@ -99,36 +100,47 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 		moveTask2 = new TimerTask() {
             @Override
             public void run() {
-            	glideToEnemy(s,x,y,false);
+            	glideToEnemy(s,x,y);
             }
         };
         timer.scheduleAtFixedRate(moveTask2, 0, 50);
 	}
 	public void honeyBombAttack(double x) {
-		GImage temp = new GImage("robot.png",hornet.getX(),hornet.getY());
+		GImage temp = new GImage("honeyBomb.png",hornet.getX(),hornet.getY());
 		add(temp);
 		
 		moveTask3 = new TimerTask() {
-            @Override
-            public void run() {
-            	glideToEnemy(temp,x,500,true);
-            }
-            
-        };
-        timer.scheduleAtFixedRate(moveTask3, 0, 50);
-        
-        Timer t = new Timer();
-        
-        t.schedule(new TimerTask() {
-        	@Override
-        	public void run() {
-        		temp.setImage("explosion.png");
-        		
-        		Timer t2 = new Timer();
-        		
-        		//t2.schedule();
-        	}
-        }, honeyBombValue);
+	        @Override
+	        public void run() {
+	            double dx = x - temp.getX();
+	            double dy = 600 - temp.getY();
+	            double distance = Math.sqrt(dx * dx + dy * dy);
+
+	            if (distance > SPEED) {
+	                temp.move(SPEED * dx / distance, SPEED * dy / distance);
+	            } else {
+	                temp.setLocation(x, 600);
+	                moveTask3.cancel(); 
+
+	                new Timer().schedule(new TimerTask() {
+	                    @Override
+	                    public void run() {
+	                        temp.setImage("explosion.png");
+
+	                        new Timer().schedule(new TimerTask() {
+	                            @Override
+	                            public void run() {
+	                                remove(temp); 
+	                            }
+	                        }, 1000); 
+	                    }
+	                }, 3000);
+	            }
+	        }
+	    };
+
+	    timer.scheduleAtFixedRate(moveTask3, 0, 50);
+		
 	}
 	@Override
 	public void run() {
@@ -143,6 +155,7 @@ public class Hornet extends GraphicsProgram implements ActionListener {
             public void run() {
                 setRandomTarget();
                 stingerAttack(750,500);
+                honeyBombAttack(400);
             }
         }, 0, 3000);
 
