@@ -42,6 +42,12 @@ public class Wave extends GraphicsProgram {
 	public int getSeaweedValue() {
 		return seaweedAttackValue;
 	}
+	public double getCenterX() {
+		return wave.getWidth()/2;
+	}
+	public double getCenterY() {
+		return wave.getHeight()/2;
+	}
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
         double dx = x - s.getX();
@@ -54,6 +60,13 @@ public class Wave extends GraphicsProgram {
         		s.setLocation(x, y);
         }
     }
+	
+	public void spawnWave() {
+		add(wave);
+		
+		
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
