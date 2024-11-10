@@ -7,15 +7,16 @@ import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-public class Wave {
+public class Wave extends GraphicsProgram {
 	private GImage wave = new GImage("Robot.png",500,500);
 	private int hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
 	private int waveAttackValue = 10;
 	private int meleeValue = 5;
 	private int seaweedAttackValue = 15;
-	private double tigerLocX;
-	private double tigerLocY;
+	private double tigerLocX = 1500;
+	private double tigerLocY = 800;
+	private static final double SPEED = 15.0;
 	
 	public void setTigerLocation(double x, double y) {
 		tigerLocX = x;
@@ -41,10 +42,48 @@ public class Wave {
 	public int getSeaweedValue() {
 		return seaweedAttackValue;
 	}
+	
+	private void walkToEnemy(GImage s,double x, double y) {	
+        double dx = x - s.getX();
+        double dy = y - s.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > SPEED) {
+            s.move(SPEED * dx / distance, SPEED * dy / distance);
+        } else {
+        		s.setLocation(x, y);
+        }
+    }
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+		add(wave);
+		
+		double tempX = tigerLocX;
+		double tempY = tigerLocY;
+		
+		Timer t = new Timer();
+		TimerTask t2 = new TimerTask() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				walkToEnemy(wave,tempX,tempY);
+			}
+		};	
+		
+		t.scheduleAtFixedRate(t2, 0, 50);
+	}
+	
+	public void init() {
+		setSize(1920,1080);
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
+		new Wave().start();
+		
 	}
 
 }
