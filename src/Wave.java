@@ -17,6 +17,8 @@ public class Wave extends GraphicsProgram {
 	private double tigerLocX = 1500;
 	private double tigerLocY = 800;
 	private static final double SPEED = 15.0;
+	private boolean isWalkActive = false;
+	private boolean isAttackActive = false;
 	
 	public void setTigerLocation(double x, double y) {
 		tigerLocX = x;
@@ -58,8 +60,37 @@ public class Wave extends GraphicsProgram {
             s.move(SPEED * dx / distance, SPEED * dy / distance);
         } else {
         		s.setLocation(x, y);
+        		isWalkActive = false;
         }
     }
+	
+	private void moveWaveAttack(GImage s, double x, double y) {
+		double dx = x - s.getX();
+        double dy = y - s.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > SPEED) {
+            s.move(SPEED * dx / distance, SPEED * dy / distance);
+        } else {
+        		s.setLocation(x, y);
+        		remove(s);
+        		isAttackActive = false;
+        }
+	}
+	
+	private void waveAttack() {
+		GImage waveAttack = new GImage("Wave.gif",1800,780);
+		add(waveAttack);
+		isAttackActive = true;
+		
+		Timer t = new Timer();
+		t.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				moveWaveAttack(waveAttack,0,780);
+			}
+		}, 0, 50);
+	}
 	
 	public void spawnWave() {
 		add(wave);
@@ -81,11 +112,16 @@ public class Wave extends GraphicsProgram {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				walkToEnemy(wave,tempX,tempY);
+				if(!isWalkActive) {
+					walkToEnemy(wave,tempX,tempY);
+					isWalkActive = true;
+				}
 			}
 		};	
 		
 		t.scheduleAtFixedRate(t2, 0, 50);
+		
+		waveAttack();
 	}
 	
 	public void init() {
