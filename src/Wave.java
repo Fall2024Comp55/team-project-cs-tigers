@@ -19,6 +19,7 @@ public class Wave extends GraphicsProgram {
 	private static final double SPEED = 15.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
+	private double GROUNDLEVEL = 700;
 	
 	public void setTigerLocation(double x, double y) {
 		tigerLocX = x;
@@ -87,9 +88,33 @@ public class Wave extends GraphicsProgram {
 		t.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				moveWaveAttack(waveAttack,0,780);
+				moveWaveAttack(waveAttack,0,GROUNDLEVEL);
 			}
 		}, 0, 50);
+	}
+	
+	private void seaweedAttack() {
+		isAttackActive = true;
+		//wave.setImage();
+		Timer temp = new Timer();
+		temp.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				//wave.setImage();
+				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
+				add(seaweed);
+				isAttackActive = true;
+				
+				Timer t = new Timer();
+				t.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						remove(seaweed);
+						isAttackActive = false;
+					}
+				}, 1000);
+			}
+		}, 500);
 	}
 	
 	public void spawnWave() {
@@ -148,6 +173,8 @@ public class Wave extends GraphicsProgram {
 		spawnWave();
 		
 		waveAttack();
+		
+		seaweedAttack();
 	}
 	
 	public void init() {
