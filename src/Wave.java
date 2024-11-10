@@ -95,6 +95,30 @@ public class Wave extends GraphicsProgram {
 	public void spawnWave() {
 		add(wave);
 		
+		Timer movementTimer = new Timer();
+		movementTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				if(!isWalkActive) {
+					
+					double tempX = tigerLocX;
+					double tempY = tigerLocY;
+					
+					Timer t = new Timer();
+					TimerTask t2 = new TimerTask() {
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+								walkToEnemy(wave,tempX,tempY);
+								isWalkActive = true;
+						}
+					};	
+					
+					t.scheduleAtFixedRate(t2, 0, 50);
+				}
+			}
+		}, 0, 50);
+		
 		
 	}
 	
@@ -104,22 +128,24 @@ public class Wave extends GraphicsProgram {
 		
 		add(wave);
 		
-		double tempX = tigerLocX;
-		double tempY = tigerLocY;
+//		double tempX = tigerLocX;
+//		double tempY = tigerLocY;
+//		
+//		Timer t = new Timer();
+//		TimerTask t2 = new TimerTask() {
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				if(!isWalkActive) {
+//					walkToEnemy(wave,tempX,tempY);
+//					isWalkActive = true;
+//				}
+//			}
+//		};	
+//		
+//		t.scheduleAtFixedRate(t2, 0, 50);
 		
-		Timer t = new Timer();
-		TimerTask t2 = new TimerTask() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				if(!isWalkActive) {
-					walkToEnemy(wave,tempX,tempY);
-					isWalkActive = true;
-				}
-			}
-		};	
-		
-		t.scheduleAtFixedRate(t2, 0, 50);
+		spawnWave();
 		
 		waveAttack();
 	}
