@@ -1,6 +1,5 @@
 import java.util.Timer;
 import java.util.TimerTask;
-
 import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
@@ -208,10 +207,9 @@ public class Hornet extends GraphicsProgram {
             }
         };
         timer.scheduleAtFixedRate(moveTask, 0, 50);
-	}
-	@Override
-	public void run() {
-		spawnHornet();
+        
+        
+        //everything below here is either temp which will get deleted or will go in game class.
         GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
         temp.setSize(200, 200);
         add(temp);
@@ -233,6 +231,10 @@ public class Hornet extends GraphicsProgram {
         };
 
         timer.scheduleAtFixedRate(actionTask, 500, 2000);
+	}
+	@Override
+	public void run() {
+		spawnHornet();
     }
 	public void init() {
 		setSize(1920,1080);
