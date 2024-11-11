@@ -24,19 +24,15 @@ public class King extends GraphicsProgram{
 		tigerLocX = x;
 		tigerLocY = y;
 	}
-	
 	public String getStage() {
 		return stageName;
 	}
-	
 	public int getHP() {
 		return hp;
 	}
-	
 	public int getTridentAttackValue() {
 		return tridentAttackValue;
 	}
-	
 	public int getMeleeValue() {
 		return meleeValue;
 	}
@@ -52,11 +48,83 @@ public class King extends GraphicsProgram{
 	public double getCenterY() {
 		return king.getHeight()/2;
 	}
+	
+	public void checkSide() {
+		if(king.getX() > tigerLocX) {
+			king.setImage("HornetPrototype.gif");
+		}
+		else {
+			king.setImage("HornetPrototypeFlipped.gif");
+		}
+	}
+	
+	public void walkToEnemy(GImage s,double x, double y) {	
+        double dx = x - s.getX();
+        double dy = y - s.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > SPEED) {
+            s.move(SPEED * dx / distance, SPEED * dy / distance);
+            checkSide();
+        } else {
+        		s.setLocation(x, y);
+        		isWalkActive = false;
+        }
+    }
+	
+	public void tridentStab() {
+		king.setImage("robot.png");
+		
+		Timer temp = new Timer();
+		
+		temp.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if(isWalkActive) {
+					king.setImage("robot.png");
+				}
+				else {
+					king.setImage("robot.png");
+				}
+			}
+		}, 300);
+	}
+	
+	public void spawnKing() {
+		add(king);
+		
+		Timer movementTimer = new Timer();
+		movementTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				if(!isWalkActive) {
+					
+					double tempX = tigerLocX;
+					double tempY = GROUNDLEVEL;
+					
+					Timer t = new Timer();
+					TimerTask t2 = new TimerTask() {
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+								walkToEnemy(king,tempX,tempY);
+								isWalkActive = true;
+						}
+					};	
+					
+					t.scheduleAtFixedRate(t2, 0, 50);
+				}
+			}
+		}, 0, 50);
+		
+		
+		
+	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		spawnKing();
 	}
 	
 	public static void main(String[] args) {
