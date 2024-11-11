@@ -1,8 +1,5 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
@@ -50,6 +47,15 @@ public class Wave extends GraphicsProgram {
 	}
 	public double getCenterY() {
 		return wave.getHeight()/2;
+	}
+	
+	public void checkSide() {
+		if(wave.getX() > tigerLocX) {
+			wave.setImage("HornetPrototype.gif");
+		}
+		else {
+			wave.setImage("HornetPrototypeFlipped.gif");
+		}
 	}
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
@@ -115,6 +121,24 @@ public class Wave extends GraphicsProgram {
 				}, 1000);
 			}
 		}, 500);
+	}
+	
+	private void waterWhip() {
+		wave.setImage("robot.png");
+		
+		Timer temp = new Timer();
+		
+		temp.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if(isWalkActive) {
+					wave.setImage("robot.png");
+				}
+				else {
+					wave.setImage("robot.png");
+				}
+			}
+		}, 300);
 	}
 	
 	public void spawnWave() {
