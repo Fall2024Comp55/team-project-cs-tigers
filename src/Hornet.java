@@ -1,5 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,7 +5,7 @@ import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-public class Hornet extends GraphicsProgram implements ActionListener {
+public class Hornet extends GraphicsProgram {
 	
 	private int hp = 100;
 	private String stageName = "Burn's Tower";
@@ -77,6 +75,9 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 	}
 	public String getStageName() {
 		return stageName;
+	}
+	public boolean getActive() {
+		return active;
 	}
 	public int getRangedAttackValue() {
 		return rangedAttackValue;
@@ -185,14 +186,11 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 
 	        timer.scheduleAtFixedRate(chargeTask, 0, 50);
 	    }
-	@Override
-	public void run() {
-        add(hornet);
-        GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
-        temp.setSize(200, 200);
-        add(temp);
-        
-        Timer t = new Timer();
+	 
+	public void spawnHornet() {
+		add(hornet);
+		
+		Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
         	@Override
         	public void run() {
@@ -204,18 +202,24 @@ public class Hornet extends GraphicsProgram implements ActionListener {
             @Override
             public void run() {
                 if (!active) {
-//                    setRandomTarget();
                     glideToTarget();
                     checkSide();
                 }
             }
         };
         timer.scheduleAtFixedRate(moveTask, 0, 50);
+	}
+	@Override
+	public void run() {
+		spawnHornet();
+        GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
+        temp.setSize(200, 200);
+        add(temp);
 
         TimerTask actionTask = new TimerTask() {
             @Override
             public void run() {
-                if (!active) {
+                if (!getActive()) {
                     int choice = rgen.nextInt(1, 3);
                     if (choice == 1) {
                         chargeAttack();
