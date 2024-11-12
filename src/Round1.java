@@ -1,12 +1,20 @@
 import javax.swing.JOptionPane;
 
 public class Round1 extends Round {
+
     // start round 1 with specific contents
     @Override
     public void startRound() {
-        updateCaption("Round 1: Battle with Hornet!");
+        updateCaption("Round 1: Battle with Hornet at Burn's Tower!");
+        setupBackground();
         showContent();
-        System.out.println("setting up tiger vs hornet"); // placeholder for actual display setup
+        System.out.println("setting up tiger vs hornet at Burn's Tower"); // placeholder for actual display setup
+    }
+
+    // sets up Burn's Tower as the background for round 1
+    private void setupBackground() {
+        System.out.println("Setting background to 'Burn's Tower' for round 1");
+        // code to set Burn's Tower as the background
     }
 
     // advances to the next round (could trigger Round2)
@@ -14,7 +22,7 @@ public class Round1 extends Round {
     protected void nextRound() {
         endRound();
         JOptionPane.showMessageDialog(null, "Round 1 complete! Moving to Round 2.", "Round Transition", JOptionPane.INFORMATION_MESSAGE);
-        // here you might trigger Round2 start
+        // logic to start Round2 could be triggered here
     }
 
     // shows tiger and hornet on screen
@@ -22,7 +30,7 @@ public class Round1 extends Round {
     public void showContent() {
         super.showContent();
         System.out.println("displaying tiger and hornet for round 1");
-        // actual code to display tiger and hornet
+        // actual code to display tiger and hornet at Burn's Tower
     }
 
     // hides tiger and hornet (useful for pause menu)
