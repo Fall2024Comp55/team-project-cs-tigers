@@ -1,4 +1,7 @@
+import java.awt.event.KeyEvent;
 import acm.graphics.*;
+import acm.program.GraphicsProgram;
+
 
 public class Tiger {
 	public static final int hp = 100; //temp hp value change later
@@ -40,12 +43,8 @@ public class Tiger {
 	
 	//	}
 	
-	
-	
-	
-	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	
 	}
 }
 
