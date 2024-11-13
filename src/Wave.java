@@ -6,7 +6,7 @@ import acm.util.RandomGenerator;
 
 public class Wave extends GraphicsProgram {
 	private GImage wave = new GImage("Robot.png",500,500);
-	private int hp = 100;
+	private double hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
 	private int waveAttackValue = 10;
 	private int meleeValue = 5;
@@ -27,8 +27,16 @@ public class Wave extends GraphicsProgram {
 		return stageName;
 	}
 	
-	public int getHP() {
+	public void setHP(double i) {
+		hp = i;
+	}
+	
+	public double getHP() {
 		return hp;
+	}
+	
+	public void damage(double i) {
+		setHP(getHP() - i);
 	}
 	
 	public int getWaveAttackValue() {
@@ -49,6 +57,15 @@ public class Wave extends GraphicsProgram {
 		return wave.getHeight()/2;
 	}
 	
+	public boolean isDead() {
+		if(hp <= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public void checkSide() {
 		if(wave.getX() > tigerLocX) {
 			wave.setImage("HornetPrototype.gif");
@@ -65,6 +82,7 @@ public class Wave extends GraphicsProgram {
 
         if (distance > SPEED) {
             s.move(SPEED * dx / distance, SPEED * dy / distance);
+            checkSide();
         } else {
         		s.setLocation(x, y);
         		isWalkActive = false;
@@ -120,7 +138,7 @@ public class Wave extends GraphicsProgram {
 					}
 				}, 1000);
 			}
-		}, 500);
+		}, 5000);
 	}
 	
 	private void waterWhip() {
@@ -151,7 +169,7 @@ public class Wave extends GraphicsProgram {
 				if(!isWalkActive) {
 					
 					double tempX = tigerLocX;
-					double tempY = tigerLocY;
+					double tempY = GROUNDLEVEL;
 					
 					Timer t = new Timer();
 					TimerTask t2 = new TimerTask() {

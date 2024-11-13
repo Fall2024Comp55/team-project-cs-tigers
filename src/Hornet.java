@@ -6,7 +6,7 @@ import acm.util.RandomGenerator;
 
 public class Hornet extends GraphicsProgram {
 	
-	private int hp = 100;
+	private double hp = 100;
 	private String stageName = "Burn's Tower";
 	private int rangedAttackValue = 10;
 	private int meleeValue = 5;
@@ -69,7 +69,13 @@ public class Hornet extends GraphicsProgram {
 			hornet.setImage("HornetPrototypeFlipped.gif");
 		}
 	}
-	public int getHP() {
+	public void setHP(double i) {
+		hp = i;
+	}
+	public void damage(double i) {
+		setHP(getHP() - i);
+	}
+	public double getHP() {
 		return hp;
 	}
 	public String getStageName() {
@@ -92,6 +98,14 @@ public class Hornet extends GraphicsProgram {
 	}
 	public double getCenterY() {
 		return hornet.getHeight()/2;
+	}
+	public boolean isDead() {
+		if(hp <= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	public void move(double x,double y) {
         double distance = Math.sqrt(x * x + y * y);
