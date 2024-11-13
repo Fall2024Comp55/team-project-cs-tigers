@@ -1,15 +1,12 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
 public class Wave extends GraphicsProgram {
 	private GImage wave = new GImage("Robot.png",500,500);
-	private int hp = 100;
+	private double hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
 	private int waveAttackValue = 10;
 	private int meleeValue = 5;
@@ -30,8 +27,16 @@ public class Wave extends GraphicsProgram {
 		return stageName;
 	}
 	
-	public int getHP() {
+	public void setHP(double i) {
+		hp = i;
+	}
+	
+	public double getHP() {
 		return hp;
+	}
+	
+	public void damage(double i) {
+		setHP(getHP() - i);
 	}
 	
 	public int getWaveAttackValue() {
@@ -52,6 +57,24 @@ public class Wave extends GraphicsProgram {
 		return wave.getHeight()/2;
 	}
 	
+	public boolean isDead() {
+		if(hp <= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public void checkSide() {
+		if(wave.getX() > tigerLocX) {
+			wave.setImage("HornetPrototype.gif");
+		}
+		else {
+			wave.setImage("HornetPrototypeFlipped.gif");
+		}
+	}
+	
 	private void walkToEnemy(GImage s,double x, double y) {	
         double dx = x - s.getX();
         double dy = y - s.getY();
@@ -59,6 +82,7 @@ public class Wave extends GraphicsProgram {
 
         if (distance > SPEED) {
             s.move(SPEED * dx / distance, SPEED * dy / distance);
+            checkSide();
         } else {
         		s.setLocation(x, y);
         		isWalkActive = false;
@@ -114,7 +138,25 @@ public class Wave extends GraphicsProgram {
 					}
 				}, 1000);
 			}
-		}, 500);
+		}, 5000);
+	}
+	
+	private void waterWhip() {
+		wave.setImage("robot.png");
+		
+		Timer temp = new Timer();
+		
+		temp.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if(isWalkActive) {
+					wave.setImage("robot.png");
+				}
+				else {
+					wave.setImage("robot.png");
+				}
+			}
+		}, 300);
 	}
 	
 	public void spawnWave() {
@@ -127,7 +169,7 @@ public class Wave extends GraphicsProgram {
 				if(!isWalkActive) {
 					
 					double tempX = tigerLocX;
-					double tempY = tigerLocY;
+					double tempY = GROUNDLEVEL;
 					
 					Timer t = new Timer();
 					TimerTask t2 = new TimerTask() {
@@ -175,6 +217,8 @@ public class Wave extends GraphicsProgram {
 		waveAttack();
 		
 		seaweedAttack();
+		
+		//
 	}
 	
 	public void init() {

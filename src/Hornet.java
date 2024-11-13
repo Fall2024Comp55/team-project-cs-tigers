@@ -1,15 +1,12 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-public class Hornet extends GraphicsProgram implements ActionListener {
+public class Hornet extends GraphicsProgram {
 	
-	private int hp = 100;
+	private double hp = 100;
 	private String stageName = "Burn's Tower";
 	private int rangedAttackValue = 10;
 	private int meleeValue = 5;
@@ -17,34 +14,42 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 	Timer timer = new Timer();
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	GImage hornet = new GImage("HornetPrototype.gif",100,100);
+	private boolean active;
     private double LocationX;
     private double LocationY;
+    private double tigerLocX = 400;
+    private double tigerLocY = 400;
+    private static final double GROUNDLEVEL = 600.0;
     private static final double SPEED = 15.0;
     private TimerTask moveTask;
-    private TimerTask moveTask2;
-    private TimerTask moveTask3;
 
 	
 	public Hornet() {
         setRandomTarget();
     }
-	private void setRandomTarget() {
-        LocationX = rgen.nextDouble(0, 1400);
-        LocationY = rgen.nextDouble(0, 800);
+	public void setTigerLoc(double x, double y) {
+		tigerLocX = x;
+		tigerLocY = y;
+	}
+	public void setRandomTarget() {
+	        LocationX = rgen.nextDouble(0, 1400);
+	        LocationY = rgen.nextDouble(0, 800);
     }
-	private void glideToTarget() {
-        double dx = LocationX - hornet.getX();
-        double dy = LocationY - hornet.getY();
-        double distance = Math.sqrt(dx * dx + dy * dy);
+	public void glideToTarget() {
+        if (!active) {
+            double dx = LocationX - hornet.getX();
+            double dy = LocationY - hornet.getY();
+            double distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance > SPEED) {
-            hornet.move(SPEED * dx / distance, SPEED * dy / distance);
-        } else {
-            hornet.setLocation(LocationX, LocationY);
-            //setRandomTarget();
+            if (distance > SPEED) {
+                hornet.move(SPEED * dx / distance, SPEED * dy / distance);
+            } else {
+                hornet.setLocation(LocationX, LocationY);
+            }
         }
     }
-	private void glideToEnemy(GImage s, double x, double y) {
+	
+	public void glideToEnemy(GImage s, double x, double y) {
         double dx = x - s.getX();
         double dy = y - s.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -52,24 +57,32 @@ public class Hornet extends GraphicsProgram implements ActionListener {
         if (distance > SPEED) {
             s.move(SPEED * dx / distance, SPEED * dy / distance);
         } else {
-        		s.setLocation(LocationX, LocationY);
-	            //setRandomTarget();
-	            remove(s);
+            s.setLocation(LocationX, LocationY);
+            remove(s);
         }
     }
-	public void checkSide(double x) {
-		if(hornet.getX() > x) {
+	public void checkSide() {
+		if(hornet.getX() > tigerLocX) {
 			hornet.setImage("HornetPrototype.gif");
 		}
 		else {
 			hornet.setImage("HornetPrototypeFlipped.gif");
 		}
 	}
-	public int getHP() {
+	public void setHP(double i) {
+		hp = i;
+	}
+	public void damage(double i) {
+		setHP(getHP() - i);
+	}
+	public double getHP() {
 		return hp;
 	}
 	public String getStageName() {
 		return stageName;
+	}
+	public boolean getActive() {
+		return active;
 	}
 	public int getRangedAttackValue() {
 		return rangedAttackValue;
@@ -86,6 +99,14 @@ public class Hornet extends GraphicsProgram implements ActionListener {
 	public double getCenterY() {
 		return hornet.getHeight()/2;
 	}
+	public boolean isDead() {
+		if(hp <= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	public void move(double x,double y) {
         double distance = Math.sqrt(x * x + y * y);
         double SPEED = 20.0;
@@ -93,84 +114,145 @@ public class Hornet extends GraphicsProgram implements ActionListener {
         hornet.move(SPEED * x / distance, SPEED * y / distance);
         		
 	}
-	public void stingerAttack(double x,double y) {
-		GImage s = new GImage("robot.png",hornet.getX(),hornet.getY());
-		add(s);
-		
-		moveTask2 = new TimerTask() {
+	 public void stingerAttack() {
+	 	double tempX = tigerLocX;
+	 	double tempY = tigerLocY;
+        GImage s = new GImage("robot.png", hornet.getX(), hornet.getY());
+        add(s);
+        
+        TimerTask stingerTask = new TimerTask() {
             @Override
             public void run() {
-            	glideToEnemy(s,x,y);
+                glideToEnemy(s, tempX, tempY);
+                if (s.getX() == tempX && s.getY() == tempY) {
+                    cancel();
+                }
             }
         };
-        timer.scheduleAtFixedRate(moveTask2, 0, 50);
-	}
-	public void honeyBombAttack(double x) {
-		GImage temp = new GImage("honeyBomb.png",hornet.getX(),hornet.getY());
-		add(temp);
-		
-		moveTask3 = new TimerTask() {
-	        @Override
-	        public void run() {
-	            double dx = x - temp.getX();
-	            double dy = 600 - temp.getY();
-	            double distance = Math.sqrt(dx * dx + dy * dy);
+        
+        timer.scheduleAtFixedRate(stingerTask, 0, 50);
+	 }
+	 public void honeyBombAttack() {	
+		 	double tempX = tigerLocX;
+	        GImage temp = new GImage("honeyBomb.png", hornet.getX(), hornet.getY());
+	        add(temp);
+	        
+	        TimerTask honeyBombTask = new TimerTask() {
+	            @Override
+	            public void run() {
+	                double dx = tempX - temp.getX();
+	                double dy = GROUNDLEVEL - temp.getY();
+	                double distance = Math.sqrt(dx * dx + dy * dy);
 
-	            if (distance > SPEED) {
-	                temp.move(SPEED * dx / distance, SPEED * dy / distance);
-	            } else {
-	                temp.setLocation(x, 600);
-	                moveTask3.cancel(); 
+	                if (distance > SPEED) {
+	                    temp.move(SPEED * dx / distance, SPEED * dy / distance);
+	                } else {
+	                    temp.setLocation(tempX, GROUNDLEVEL);
+	                    cancel();
 
-	                new Timer().schedule(new TimerTask() {
-	                    @Override
-	                    public void run() {
-	                        temp.setImage("explosion.png");
+	                    new Timer().schedule(new TimerTask() {
+	                        @Override
+	                        public void run() {
+	                            temp.setImage("explosion.png");
+	                            temp.setSize(100, 100);
 
-	                        new Timer().schedule(new TimerTask() {
-	                            @Override
-	                            public void run() {
-	                                remove(temp); 
-	                            }
-	                        }, 1000); 
-	                    }
-	                }, 3000);
+	                            new Timer().schedule(new TimerTask() {
+	                                @Override
+	                                public void run() {
+	                                    remove(temp);
+	                                }
+	                            }, 1000);
+	                        }
+	                    }, 3000);
+	                }
 	            }
-	        }
-	    };
+	        };
+	        
+	        timer.scheduleAtFixedRate(honeyBombTask, 0, 50);
+	    }
+	 public void chargeAttack() {
+	        if (active) return;
+	        active = true;
+	        
+	        double tempX = tigerLocX;
+	        double tempY = tigerLocY;
 
-	    timer.scheduleAtFixedRate(moveTask3, 0, 50);
-		
-	}
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	        TimerTask chargeTask = new TimerTask() {
+	            @Override
+	            public void run() {
+	                double dx = tempX - hornet.getX();
+	                double dy = tempY - hornet.getY();
+	                double distance = Math.sqrt(dx * dx + dy * dy);
+
+	                hornet.setImage("robot.png");
+
+	                if (distance > SPEED) {
+	                    hornet.move(SPEED * dx / distance, SPEED * dy / distance);
+	                } else {
+	                    hornet.setLocation(tempX, tempY);
+	                    hornet.setImage("HornetPrototype.gif");
+	                    active = false;
+	                    cancel();
+	                }
+	            }
+	        };
+
+	        timer.scheduleAtFixedRate(chargeTask, 0, 50);
+	    }
+	 
+	public void spawnHornet() {
 		add(hornet);
-		GImage temp = new GImage("TigerPlaceHolder.png",750,500);
-		temp.setSize(200, 200);
-		add(temp);
 		
-		timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                setRandomTarget();
-                stingerAttack(750,500);
-                honeyBombAttack(400);
-            }
-        }, 0, 3000);
+		Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		setRandomTarget();
+        	}
+        }, 0, 2000);
 
         moveTask = new TimerTask() {
             @Override
             public void run() {
-                glideToTarget();
-                checkSide(600);
+                if (!active) {
+                    glideToTarget();
+                    checkSide();
+                }
             }
         };
         timer.scheduleAtFixedRate(moveTask, 0, 50);
-        		
+        
+        
+        //everything below here is either temp which will get deleted or will go in game class.
+        GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
+        temp.setSize(200, 200);
+        add(temp);
+
+        TimerTask actionTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (!getActive()) {
+                    int choice = rgen.nextInt(1, 3);
+                    if (choice == 1) {
+                        chargeAttack();
+                    } else if (choice == 2) {
+                        stingerAttack();
+                    } else if (choice == 3) {
+                        honeyBombAttack();
+                    }
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(actionTask, 500, 2000);
 	}
+	@Override
+	public void run() {
+		spawnHornet();
+		//
+    }
 	public void init() {
-		setSize(1700,1000);
+		setSize(1920,1080);
 	}
 	
 	public static void main(String[] args) {

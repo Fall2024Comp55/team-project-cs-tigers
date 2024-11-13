@@ -65,7 +65,7 @@ public class PauseMenu {    //will create a button on each round so that they ca
     private void returnToHomePage() {
         pauseDialog.setVisible(false); // hide pause menu
         // logic to show the home page goes here
-        System.out.println("Returning to home page..."); // placeholder for home page logic
+        System.out.println("Returning to home page..."); // placeholder for now
     }
 
     // checks if the game is paused
