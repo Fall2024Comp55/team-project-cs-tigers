@@ -29,7 +29,7 @@ public class Round1 extends Round {
     @Override
     public void showContent() {
         super.showContent();
-        System.out.println("displaying tiger and hornet for round 1");
+        System.out.println("displaying tiger and hornet for round 1!");
         // actual code to display tiger and hornet at Burn's Tower
     }
 
@@ -37,7 +37,7 @@ public class Round1 extends Round {
     @Override
     public void hideContent() {
         super.hideContent();
-        System.out.println("hiding tiger and hornet for round 1");
+        System.out.println("hiding tiger and hornet for round 1!");
         // actual code to hide tiger and hornet
     }
 }
