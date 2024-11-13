@@ -49,18 +49,18 @@ public class Hornet extends GraphicsProgram {
         }
     }
 	
-	 public void glideToEnemy(GImage s, double x, double y) {
-	        double dx = x - s.getX();
-	        double dy = y - s.getY();
-	        double distance = Math.sqrt(dx * dx + dy * dy);
+	public void glideToEnemy(GImage s, double x, double y) {
+        double dx = x - s.getX();
+        double dy = y - s.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
-	        if (distance > SPEED) {
-	            s.move(SPEED * dx / distance, SPEED * dy / distance);
-	        } else {
-	            s.setLocation(LocationX, LocationY);
-	            remove(s);
-	        }
-	    }
+        if (distance > SPEED) {
+            s.move(SPEED * dx / distance, SPEED * dy / distance);
+        } else {
+            s.setLocation(LocationX, LocationY);
+            remove(s);
+        }
+    }
 	public void checkSide() {
 		if(hornet.getX() > tigerLocX) {
 			hornet.setImage("HornetPrototype.gif");
@@ -133,7 +133,7 @@ public class Hornet extends GraphicsProgram {
 	                if (distance > SPEED) {
 	                    temp.move(SPEED * dx / distance, SPEED * dy / distance);
 	                } else {
-	                    temp.setLocation(tempX, 600);
+	                    temp.setLocation(tempX, GROUNDLEVEL);
 	                    cancel();
 
 	                    new Timer().schedule(new TimerTask() {

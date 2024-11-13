@@ -19,7 +19,7 @@ public class King extends GraphicsProgram{
 	private static final double SPEED = 15.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
-	private static double GROUNDLEVEL = 700;
+	private static double GROUNDLEVEL = 900;
 	private static double KINGWIDTH = 300;
 	private static double KINGHEIGHT = 300;
 	
@@ -108,7 +108,7 @@ public class King extends GraphicsProgram{
                 if (distance > SPEED) {
                     temp.move(SPEED * dx / distance, SPEED * dy / distance);
                 } else {
-                    temp.setLocation(tempX, 600);
+                    temp.setLocation(tempX, GROUNDLEVEL);
                     cancel();
 
                     new Timer().schedule(new TimerTask() {
