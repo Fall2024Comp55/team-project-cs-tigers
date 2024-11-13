@@ -7,6 +7,7 @@ import acm.util.RandomGenerator;
 public class King extends GraphicsProgram{
 	
 	private GImage king = new GImage("tritonRight.png",0,0);
+	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private int hp = 100;
 	private String stageName = "Alex G. Spanos Center";
 	private int tridentAttackValue = 10;
@@ -90,8 +91,11 @@ public class King extends GraphicsProgram{
     }
 	
 	public void grenadeAttack() {	
-	 	double tempX = tigerLocX;
+	 	//double tempX = tigerLocX;
+	 	double tempX = rgen.nextDouble(0,1920);
+
         GImage temp = new GImage("LightingBall.gif", king.getX(), king.getY());
+        temp.setSize(120, 120);
         add(temp);
         
         TimerTask honeyBombTask = new TimerTask() {
@@ -201,6 +205,8 @@ public class King extends GraphicsProgram{
 		// TODO Auto-generated method stub
 		spawnKing();
 		
+		grenadeAttack();
+		grenadeAttack();
 		grenadeAttack();
 	}
 	
