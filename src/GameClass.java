@@ -3,16 +3,22 @@ import java.util.Scanner;
 //import java.awt.event.KeyEvent;
 //import java.awt.event.KeyListener;
 
-
 public class GameClass {
 
 	public static void main (String[]args) {
 	    System.out.println("Game is starting!!!\n");
 	    
-	    this.DisplayStartScreen();
+	    DisplayStartScreen();
 	}
 
 	
+	private static void DisplayStartScreen() {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
+
 	public void displayEndScreen() {
 		System.out.println("Game over\n");
 		System.out.println("Thank you for playing.");
