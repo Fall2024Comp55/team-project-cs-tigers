@@ -249,6 +249,7 @@ public class Hornet extends GraphicsProgram {
 	@Override
 	public void run() {
 		spawnHornet();
+		//
     }
 	public void init() {
 		setSize(1920,1080);

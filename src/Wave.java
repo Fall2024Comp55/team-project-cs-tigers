@@ -217,6 +217,8 @@ public class Wave extends GraphicsProgram {
 		waveAttack();
 		
 		seaweedAttack();
+		
+		//
 	}
 	
 	public void init() {

@@ -268,6 +268,7 @@ public class King extends GraphicsProgram{
 		
 		tridentThrowAttack();
 		
+		//
 
 	}
 	
