@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+/*import javax.swing.JOptionPane;
 
 public class Round3 extends Round {
 
@@ -56,4 +56,4 @@ public class Round3 extends Round {
         System.out.println("Hiding content for Final Round");
         // Code to hide all characters and backgrounds
     }
-}
+}*/

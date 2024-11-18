@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+/*import javax.swing.JOptionPane;
 
 public class Round2 extends Round {
 
@@ -59,3 +59,4 @@ public class Round2 extends Round {
         // logic to hide characters and background
     }
 }
+*/

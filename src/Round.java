@@ -1,72 +1,74 @@
-import javax.swing.JOptionPane;
-
 public abstract class Round {
-    protected boolean roundOver = false; // track if the round is over
-    protected boolean isPaused = false;  // track if the round is paused
-    protected String caption;            // round caption for display
+    private int currentRound = 1; // tracks the current round, starting with round 1
+    private boolean roundOver = false; // indicates if the round is over
+    private String caption; // stores the current round caption for display
 
-    // starts the round (to be implemented in each specific round class)
+    // starts the round (to be implemented by subclasses)
     public abstract void startRound();
 
-    // updates and displays the caption
-    protected void updateCaption(String captionText) {
-        caption = captionText;
-        if (!isPaused) {
-            JOptionPane.showMessageDialog(null, caption, "Round Notification", JOptionPane.INFORMATION_MESSAGE);
-        }
+    // updates the caption for the round
+    public void updateCaption(String caption) {
+        this.caption = caption; // sets the caption
+        System.out.println(caption); // displays the caption in the console (for debugging)
     }
 
-    // checks if the player won the current round and advances or resets as needed
+    // checks if the player won the current round
     public boolean checkWinner(boolean playerWon) {
         if (playerWon) {
-            nextRound();
+            if (currentRound == 1) {
+                System.out.println("Won Round 1! Moving to next round.");
+                nextRound();
+            } else if (currentRound == 2) {
+                System.out.println("Won Round 2! Moving to final round.");
+                nextRound();
+            } else {
+                System.out.println("Victory! Game won.");
+                endRound();
+            }
             return true;
         } else {
-            resetRounds();
+            System.out.println("Lost the round. Resetting game to Round 1.");
+            resetRounds(); // reset game if player loses
             return false;
         }
     }
 
-    // ends the current round and marks it as over
+    // ends the current round
     public void endRound() {
         roundOver = true;
-        JOptionPane.showMessageDialog(null, "Round over.", "Round Status", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println("Round over.");
     }
 
-    // resets the game to round 1
+    // resets the game to Round 1
     public void resetRounds() {
+        currentRound = 1;
         roundOver = false;
-        updateCaption("Game reset to round 1.");
+        updateCaption("Game reset to Round 1.");
     }
 
-    // advances to the next round (handled in specific round classes)
-    protected abstract void nextRound();
-
-    // shows content (characters/backgrounds)
-    public void showContent() {
-        if (!isPaused) {
-            System.out.println("showing content for the round");
-            // code to display background, characters, etc.
-        }
+    // advances to the next round
+    protected void nextRound() {
+        currentRound++;
+        updateCaption("Round " + currentRound + " started.");
     }
 
-    // hides content (characters/backgrounds) when paused
-    public void hideContent() {
-        System.out.println("hiding content for the round");
-        // code to hide characters, backgrounds, etc.
+    // checks if the round is over
+    public boolean isRoundOver() {
+        return roundOver;
     }
 
-    // pause functionality
-    public void pauseGame() {
-        isPaused = true;
-        hideContent();
-        JOptionPane.showMessageDialog(null, "Game paused", "Pause", JOptionPane.INFORMATION_MESSAGE);
+    // displays the current round caption
+    public void displayCaption() {
+        System.out.println(caption);
     }
 
-    // resume functionality
-    public void resumeGame() {
-        isPaused = false;
-        showContent();
-        JOptionPane.showMessageDialog(null, "Game resumed", "Resume", JOptionPane.INFORMATION_MESSAGE);
+    // hides the current caption
+    public void hideCaption() {
+        caption = ""; // clears the caption
     }
+
+    // abstract methods to be implemented by subclasses
+    public abstract void showContent();
+
+    public abstract void hideContent();
 }
