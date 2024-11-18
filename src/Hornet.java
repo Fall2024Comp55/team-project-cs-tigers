@@ -21,6 +21,9 @@ public class Hornet extends GraphicsProgram {
     private double tigerLocY = 400;
     private static final double GROUNDLEVEL = 600.0;
     private static final double SPEED = 15.0;
+    private static final double STINGERSPEED = 20.0;
+    private static final double HONEYBOMBSPEED = 20.0;
+    private static final double CHARGESPEED = 25.0;
     private TimerTask moveTask;
 
 	
@@ -49,13 +52,13 @@ public class Hornet extends GraphicsProgram {
         }
     }
 	
-	public void glideToEnemy(GImage s, double x, double y) {
+	public void glideToEnemy(GImage s, double x, double y, double speed) {
         double dx = x - s.getX();
         double dy = y - s.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance > SPEED) {
-            s.move(SPEED * dx / distance, SPEED * dy / distance);
+        if (distance > speed) {
+            s.move(speed * dx / distance, speed * dy / distance);
         } else {
             s.setLocation(LocationX, LocationY);
             remove(s);
@@ -117,13 +120,36 @@ public class Hornet extends GraphicsProgram {
 	 public void stingerAttack() {
 	 	double tempX = tigerLocX;
 	 	double tempY = tigerLocY;
+	 	
         GImage s = new GImage("robot.png", hornet.getX(), hornet.getY());
+        
+//        if(getCenterX() > tigerLocX) {
+//        	if(getCenterY() > tigerLocY) {
+//        		s.setImage("LeftCornerStinger.png");
+//        	}
+//        	else {
+//        		//s.setImage("");
+//        	}
+//        }
+//        else {
+//        	if(getCenterY() > tigerLocY) {
+//        		s.setImage("TopLeftCornerStinger.png");
+//        	}
+//        	else {
+//        		//s.setImage("BottomRightCornerStinger.png");
+//        	}
+//        }
+        
+        
+        
+        
+        
         add(s);
         
         TimerTask stingerTask = new TimerTask() {
             @Override
             public void run() {
-                glideToEnemy(s, tempX, tempY);
+                glideToEnemy(s, tempX, tempY, STINGERSPEED);
                 if (s.getX() == tempX && s.getY() == tempY) {
                     cancel();
                 }
@@ -144,8 +170,8 @@ public class Hornet extends GraphicsProgram {
 	                double dy = GROUNDLEVEL - temp.getY();
 	                double distance = Math.sqrt(dx * dx + dy * dy);
 
-	                if (distance > SPEED) {
-	                    temp.move(SPEED * dx / distance, SPEED * dy / distance);
+	                if (distance > HONEYBOMBSPEED) {
+	                    temp.move(HONEYBOMBSPEED * dx / distance, HONEYBOMBSPEED * dy / distance);
 	                } else {
 	                    temp.setLocation(tempX, GROUNDLEVEL);
 	                    cancel();
@@ -186,8 +212,8 @@ public class Hornet extends GraphicsProgram {
 
 	                hornet.setImage("robot.png");
 
-	                if (distance > SPEED) {
-	                    hornet.move(SPEED * dx / distance, SPEED * dy / distance);
+	                if (distance > CHARGESPEED) {
+	                    hornet.move(CHARGESPEED * dx / distance, CHARGESPEED * dy / distance);
 	                } else {
 	                    hornet.setLocation(tempX, tempY);
 	                    hornet.setImage("HornetPrototype.gif");
