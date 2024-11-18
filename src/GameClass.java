@@ -8,7 +8,9 @@ public class GameClass {
 	public static void main (String[]args) {
 	    System.out.println("Game is starting!!!\n");
 	    
+	    GameClass.startInteractiveScript();
 	    DisplayStartScreen();
+	    
 	}
 
 	
@@ -42,6 +44,9 @@ public class GameClass {
 		
 		
 	}
-
+	
+	public static void startInteractiveScript() {
+        SwingUtilities.invokeLater(() -> new InteractiveScriptScreen());
+    }
 	
 }
