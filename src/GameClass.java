@@ -1,7 +1,7 @@
 import java.util.Scanner;
-//import javax.swing.*;
-//import java.awt.event.KeyEvent;
-//import java.awt.event.KeyListener;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class GameClass {
 
@@ -13,8 +13,7 @@ public class GameClass {
 
 	
 	private static void DisplayStartScreen() {
-		// TODO Auto-generated method stub
-		
+		SwingUtilities.invokeLater(() -> new DisplayStartScreen());		
 		
 	}
 
@@ -30,7 +29,7 @@ public class GameClass {
 	
 	public void nextLevel() {
 	    System.out.println("Get ready for the next level!");
-//reset player health for the next level
+	    //reset player health for the next level
 	    //method to be added 
 	    
 	    displayGameInfo();
