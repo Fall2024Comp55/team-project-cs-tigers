@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
         backgroundImage = new ImageIcon("/Users/ibrahimtahir/git/team-project-cs-tigers1/media/BG1.png").getImage();
 
         // Set up the frame
-        setTitle("PowerCat, Saviour of UOP");
+        setTitle("PowerCat, Protector of UOP");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
