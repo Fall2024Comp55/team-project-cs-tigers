@@ -1,7 +1,7 @@
-import java.util.Scanner;
+//import java.util.Scanner;
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
 
 public class GameClass {
 
