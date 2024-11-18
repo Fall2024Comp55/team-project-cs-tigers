@@ -20,9 +20,9 @@ public class King extends GraphicsProgram{
 	private static final double GRENADESPEED = 25.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
-	private static double GROUNDLEVEL = 650;
-	private static double KINGWIDTH = 300;
-	private static double KINGHEIGHT = 324;
+	private static final double GROUNDLEVEL = 650;
+	private static final double KINGWIDTH = 300;
+	private static final double KINGHEIGHT = 324;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("tritonRight.png",0,GROUNDLEVEL - KINGHEIGHT);
 	
