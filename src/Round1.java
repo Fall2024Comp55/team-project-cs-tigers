@@ -1,7 +1,7 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-// tester!!!
+
 public class Round1 extends Round {
     private GImage hornetImage; // Hornet character
     private GImage backgroundImage; // Background image
@@ -60,12 +60,12 @@ public class Round1 extends Round {
         // Add Pause button
         pauseButton = new GRect(1150, 20, 100, 40);
         pauseButton.setFilled(true);
-        pauseButton.setFillColor(java.awt.Color.GRAY);
+        pauseButton.setFillColor(java.awt.Color.BLACK);
         add(pauseButton);
 
         pauseLabel = new GLabel("Pause", 1175, 45);
-        pauseLabel.setFont("Arial-bold-16");
-        pauseLabel.setColor(java.awt.Color.WHITE); // Set pause label color to white
+        pauseLabel.setFont("Monospaced-15");
+        pauseLabel.setColor(java.awt.Color.ORANGE); // Set pause label color to white
         add(pauseLabel);
 
         // Add Mouse Listener for pause
@@ -103,7 +103,7 @@ public class Round1 extends Round {
 
         // Add pause message
         pauseMessage = new GLabel("Game Paused. Click anywhere to resume.", getWidth() / 2 - 200, getHeight() / 2);
-        pauseMessage.setFont("Arial-bold-18");
+        pauseMessage.setFont("Monospaced-bold-25");
         pauseMessage.setColor(java.awt.Color.WHITE);
         add(pauseMessage);
     }

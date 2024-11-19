@@ -1,7 +1,10 @@
 import acm.graphics.*;
+import java.awt.Font;
 
 public class PauseMenu {
     private GRect overlay;
+    private GRect pauseButton;
+    private GLabel pauseLabel;
     private GLabel resumeLabel;
 
     public void showPauseMenu(Round1 round) {
@@ -13,7 +16,7 @@ public class PauseMenu {
 
         // Add Resume Label
         resumeLabel = new GLabel("Game Paused. Click to Resume.", round.getWidth() / 2 - 150, round.getHeight() / 2);
-        resumeLabel.setFont("Arial-bold-18");
+        resumeLabel.setFont(new Font("ArcadeClassic", Font.BOLD, 18)); // Use a video game font
         resumeLabel.setColor(java.awt.Color.WHITE);
         round.add(resumeLabel);
 
@@ -26,4 +29,25 @@ public class PauseMenu {
             round.remove(resumeLabel);
         }
     }
+
+    public void addPauseButton(Round1 round) {
+        // Create a black pause button
+        pauseButton = new GRect(round.getWidth() - 120, 20, 100, 40);
+        pauseButton.setFilled(true);
+        pauseButton.setFillColor(java.awt.Color.BLACK); // Black background
+        round.add(pauseButton);
+
+        // Add a label with white text in a video game font
+        pauseLabel = new GLabel("PAUSE", round.getWidth() - 110, 50);
+        pauseLabel.setFont(new Font("ArcadeClassic", Font.BOLD, 16)); // Use a video game font
+        pauseLabel.setColor(java.awt.Color.WHITE); // White text
+        round.add(pauseLabel);
+    }
+
+    public boolean isPauseButtonClicked(int x, int y) {
+        // Check if the pause button is clicked
+        return pauseButton.contains(x, y);
+    }
 }
+
+
