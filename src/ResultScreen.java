@@ -1,5 +1,5 @@
 
-public class ResultScreen {
+/*public class ResultScreen {
 	
 	public void ShowResult(Player user, Player cpu) {
 		
@@ -46,6 +46,8 @@ public class ResultScreen {
         }
     }
 }
+*/
+/*
 // tester 
 // demo placerholder 
 class Player {

@@ -49,8 +49,12 @@ public class Round1 extends Round {
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        if (pauseButton.contains(e.getX(), e.getY())) {
-            togglePause(); // Toggle pause when the button is clicked
+        if (isPaused) {
+            // Resume the game if it's paused and the user clicks anywhere
+            togglePause();
+        } else if (pauseButton.contains(e.getX(), e.getY())) {
+            // Pause the game if the user clicks the pause button
+            togglePause();
         }
     }
 
@@ -73,7 +77,7 @@ public class Round1 extends Round {
         add(overlay);
 
         // Add pause message
-        pauseMessage = new GLabel("Game Paused. Click Pause to Resume.", getWidth() / 2 - 200, getHeight() / 2);
+        pauseMessage = new GLabel("Game Paused. Click anywhere to resume.", getWidth() / 2 - 200, getHeight() / 2);
         pauseMessage.setFont("Arial-bold-18");
         pauseMessage.setColor(java.awt.Color.WHITE);
         add(pauseMessage);
@@ -130,4 +134,5 @@ public class Round1 extends Round {
         new Round1().start(); // Start the ACM Graphics Program
     }
 }
+
 
