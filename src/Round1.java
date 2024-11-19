@@ -1,7 +1,7 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-
+// tester
 public class Round1 extends Round {
     private GImage hornetImage; // Hornet character
     private GImage backgroundImage; // Background image
@@ -24,7 +24,7 @@ public class Round1 extends Round {
 
     private void showWelcomeScreen() {
         // Load and display the welcome GIF
-        welcomeGif = new GImage("media/BurnsTowerWelcome.gif", 0, 0);
+        welcomeGif = new GImage("media/BurnsWelcome.gif", 0, 0);
         welcomeGif.setSize(1280, 720); // Scale to fit the screen
         add(welcomeGif);
 
