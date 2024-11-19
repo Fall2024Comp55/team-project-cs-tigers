@@ -5,6 +5,7 @@ import java.util.TimerTask;
 public class Round1 extends Round {
     private GImage hornetImage; // Hornet character
     private GImage backgroundImage; // Background image
+    private GImage welcomeGif; // Welcome GIF
     private GRect pauseButton; // Pause button rectangle
     private GLabel pauseLabel; // Pause button text
     private boolean isPaused = false; // Tracks whether the game is paused
@@ -18,8 +19,25 @@ public class Round1 extends Round {
     @Override
     public void init() {
         setSize(1280, 720); // Set the size of the game window
-        setupContent(); // Set up all the elements
-        startHornetMovement(); // Start the Hornet movement as soon as the game starts
+        showWelcomeScreen(); // Show the welcome GIF before gameplay starts
+    }
+
+    private void showWelcomeScreen() {
+        // Load and display the welcome GIF
+        welcomeGif = new GImage("media/BurnsWelcome.gif", 0, 0);
+        welcomeGif.setSize(1280, 720); // Scale to fit the screen
+        add(welcomeGif);
+
+        // Add a timer to remove the welcome screen and start the round
+        Timer welcomeTimer = new Timer();
+        welcomeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                remove(welcomeGif); // Remove the welcome GIF
+                setupContent(); // Set up the main content
+                startHornetMovement(); // Start the Hornet movement
+            }
+        }, 3000); // Display the GIF for 3 seconds
     }
 
     private void setupContent() {
@@ -50,7 +68,7 @@ public class Round1 extends Round {
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         if (isPaused) {
-            //click anywhwere to resume instead of having to click pause again!!!!
+            // Resume the game if it's paused and the user clicks anywhere
             togglePause();
         } else if (pauseButton.contains(e.getX(), e.getY())) {
             // Pause the game if the user clicks the pause button
