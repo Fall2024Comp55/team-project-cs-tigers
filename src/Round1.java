@@ -24,7 +24,7 @@ public class Round1 extends Round {
 
     private void showWelcomeScreen() {
         // Load and display the welcome GIF
-        welcomeGif = new GImage("media/BurnsWelcome.gif", 0, 0);
+        welcomeGif = new GImage("media/BurnsTowerWelcome.gif", 0, 0);
         welcomeGif.setSize(1280, 720); // Scale to fit the screen
         add(welcomeGif);
 
@@ -41,6 +41,12 @@ public class Round1 extends Round {
     }
 
     private void setupContent() {
+        // Add a black background
+        GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
+        blackBackground.setFilled(true);
+        blackBackground.setFillColor(java.awt.Color.BLACK);
+        add(blackBackground);
+
         // Add background image
         backgroundImage = new GImage("media/BurnsBackground.png", 0, 0);
         backgroundImage.setSize(1280, 720); // Scale to the window size
@@ -59,6 +65,7 @@ public class Round1 extends Round {
 
         pauseLabel = new GLabel("Pause", 1175, 45);
         pauseLabel.setFont("Arial-bold-16");
+        pauseLabel.setColor(java.awt.Color.WHITE); // Set pause label color to white
         add(pauseLabel);
 
         // Add Mouse Listener for pause
@@ -152,5 +159,4 @@ public class Round1 extends Round {
         new Round1().start(); // Start the ACM Graphics Program
     }
 }
-
 
