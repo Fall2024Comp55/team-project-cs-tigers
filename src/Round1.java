@@ -50,7 +50,7 @@ public class Round1 extends Round {
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         if (isPaused) {
-            // Resume the game if it's paused and the user clicks anywhere
+            //click anywhwere to resume instead of having to click pause again!!!!
             togglePause();
         } else if (pauseButton.contains(e.getX(), e.getY())) {
             // Pause the game if the user clicks the pause button
