@@ -1,26 +1,29 @@
-import javax.swing.*;
+import acm.graphics.*;
 
 public class PauseMenu {
+    private GRect overlay;
+    private GLabel resumeLabel;
 
-    // displays a pause menu with options to resume or exit the game
-    public void pauseGame(JDialog parentDialog, Runnable onResume) {
-        // show a modal dialog for the pause menu
-        int choice = JOptionPane.showOptionDialog(
-            parentDialog,
-            "Game Paused. Click Resume to continue or Exit to quit.",
-            "Pause Menu",
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.INFORMATION_MESSAGE,
-            null,
-            new String[]{"Resume", "Exit"},
-            "Resume" // default button
-        );
+    public void showPauseMenu(Round1 round) {
+        // Create a semi-transparent overlay
+        overlay = new GRect(0, 0, round.getWidth(), round.getHeight());
+        overlay.setFilled(true);
+        overlay.setColor(new java.awt.Color(0, 0, 0, 150)); // Semi-transparent black
+        round.add(overlay);
 
-        if (choice == 0) {
-            onResume.run(); // call the resume method
-        } else {
-            System.exit(0); // exit the game
+        // Add Resume Label
+        resumeLabel = new GLabel("Game Paused. Click to Resume.", round.getWidth() / 2 - 150, round.getHeight() / 2);
+        resumeLabel.setFont("Arial-bold-18");
+        resumeLabel.setColor(java.awt.Color.WHITE);
+        round.add(resumeLabel);
+
+        round.addMouseListeners(); // Enable interaction for resuming
+    }
+
+    public void removePauseMenu(Round1 round) {
+        if (overlay != null) {
+            round.remove(overlay);
+            round.remove(resumeLabel);
         }
     }
 }
-
