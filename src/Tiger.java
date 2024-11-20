@@ -11,6 +11,7 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	public static final int hp = 30; //temp hp value change later //default is 100
 	public static final int attack_val = 10; //temp attack value change later
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
+	private boolean spAttackUsed = false;
 	private GImage idle;
 	private GImage attack;
 	private GImage specialAttack;
@@ -64,8 +65,9 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	            System.out.println("Attacking"); // Debugging purpose
 	            break;
 	     case KeyEvent.VK_X: // Special Attack
-             if (getHP() <= 30) {
+             if (getHP() <= 30 && !spAttackUsed) {
                  specialAttack();
+                 spAttackUsed = true;
                  System.out.println("Special Attacking"); // Debugging purpose
              }
              break;
@@ -126,14 +128,19 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	    isJumping = true;
 	    velocityY = JUMP_STRENGTH;
 	    Timer specialAttackTimer = new Timer(20, new ActionListener() {
-	        private int horizontalVelocity = 10; 
+	    	private int horizontalVelocity = 10; 
 	        private boolean hitOpponent = false;
-
+	    
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            velocityY += GRAVITY; 
-	            test.move(horizontalVelocity, velocityY); // Move character in an arc
-
+	            if (opponent.getX() > test.getX()) {
+	            	test.move(horizontalVelocity, velocityY); // Move character in an arc to the left
+	            }
+	            else {
+	            	test.move(-horizontalVelocity, velocityY); // Move character in an arc to the right
+	            }
+	            
 	            // Check if character hits the opponent
 	            if (!hitOpponent && test.getBounds().intersects(opponent.getBounds())) {
 	                // Display boom image at opponent position
@@ -149,7 +156,7 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	                });
 	                boomTimer.start();
 	            }
-
+	        
 	            // Stop the jump if character reaches the ground
 	            if (test.getY() >= FLOOR) {
 	                test.setLocation(test.getX(), FLOOR);
@@ -161,7 +168,7 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	    specialAttackTimer.start();
 	}
 	
-	
+
 	
 	public void init() {
 		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT);
