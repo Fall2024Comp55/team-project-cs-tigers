@@ -1,4 +1,4 @@
-import acm.graphics.*;
+/*import acm.graphics.*;
 import java.awt.Font;
 
 public class PauseMenu {
@@ -48,6 +48,6 @@ public class PauseMenu {
         // Check if the pause button is clicked
         return pauseButton.contains(x, y);
     }
-}
+}*/
 
 
