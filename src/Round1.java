@@ -1,4 +1,4 @@
-/*import acm.graphics.*;
+import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -6,7 +6,7 @@ public class Round1 extends Round {
     private GImage backgroundImage; 
     private GImage welcomeGif; 
     private GRect pauseButton; 
-    private GLabel pauseLabel; t
+    private GLabel pauseLabel; 
     private boolean isPaused = false; //tracks whether the game is paused
     private GRect overlay; //pause overlay for semi-transparent effect
     private GLabel pauseMessage; //pause message label
@@ -45,7 +45,7 @@ public class Round1 extends Round {
         hornet = new Hornet();
         add(hornet.hornet); // Add the Hornet's GImage to the canvas
         hornet.setTigerLoc(640, 360); // Set the Tiger's position for attacks
-        hornet.startHornetBehavior(); // Start the Hornet's behavior (movement, attacks)
+       // hornet.startHornetBehavior(); // Start the Hornet's behavior (movement, attacks)
 
         //adds pause button
         pauseButton = new GRect(1150, 20, 100, 40);
@@ -129,7 +129,7 @@ public class Round1 extends Round {
 }
 
 
-*/
+
 
 
 
