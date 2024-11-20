@@ -139,7 +139,7 @@ public class Round1 extends Round {
 
 //--------
 
-
+// simplified commenting
 // my original code without incorperating rogelios hornet class (tester!)
 
 
@@ -288,20 +288,20 @@ public class Round1 extends Round {
 
     @Override
     public void run() {
-        // Start Round 1 gameplay
+        // Start Round 1 game play
         updateCaption("Welcome to Round 1: Tiger vs. Hornet at Burn's Tower!");
     }
 
     @Override
     public void startRound() {
         // Provide the required implementation for the abstract method
-        init(); // Initialize Round 1
-        run(); // Begin gameplay logic
+        init(); // initialize Round 1
+        run(); // begin game play logic
     }
 
     // Main method to launch the program
     public static void main(String[] args) {
-        new Round1().start(); // Start the ACM Graphics Program
+        new Round1().start(); //starts the ACM g m
     }
 }
 
