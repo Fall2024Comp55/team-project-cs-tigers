@@ -41,10 +41,10 @@ public class Round1 extends Round {
 
     private void setupContent() {
         //black background
-        GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
-        blackBackground.setFilled(true);
-        blackBackground.setFillColor(java.awt.Color.BLACK);
-        add(blackBackground);
+      //  GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
+      ///  blackBackground.setFilled(true);
+      //  blackBackground.setFillColor(java.awt.Color.BLACK);
+      //  add(blackBackground);
 
         //adds background image
         backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
