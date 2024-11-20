@@ -1,7 +1,7 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-
+// testing
 public class Round1 extends Round {
     private GImage hornetImage; 
     private GImage backgroundImage; 
@@ -18,7 +18,7 @@ public class Round1 extends Round {
 
     @Override
     public void init() {
-       // setSize(1280, 720); // size of the game window
+        setSize(1280, 720); // size of the game window
         showWelcomeScreen(); //show the welcome GIF before game play starts
     }
     private void showWelcomeScreen() {
