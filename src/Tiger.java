@@ -8,7 +8,7 @@ import acm.program.GraphicsProgram;
 
 public class Tiger extends GraphicsProgram implements ActionListener {
 	//variables for the tiger
-	public static final int hp = 100; //temp hp value change later
+	public static final int hp = 30; //temp hp value change later //default is 100
 	public static final int attack_val = 10; //temp attack value change later
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
 	private GImage idle;
@@ -25,6 +25,7 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	public static final int PROGRAM_HEIGHT = 1080; // temp values for testing
 	private GRect test = new GRect(100, 500 , 200, 200);
 	private static final int FLOOR = 500;
+	private GRect opponent = new GRect(800, FLOOR, 100, 100); // test opponent rectangle
 	
 	public int getHP() {
 		return hp;
@@ -42,13 +43,6 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 		return idle;
 	}
 	
-	public GImage getAttackAnimation() {
-		return attack;
-	}
-	
-	public GImage specialAttack() {
-		return specialAttack;
-	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -56,23 +50,27 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 		 case KeyEvent.VK_UP:
 		 	if (!isJumping) {
 		 		jump();
-		 		System.out.println("line30"); //for debug purposes 
+		 		System.out.println("up arrow"); //for debug purposes 
 		 		}
 		 		break;
-		
-		 		
-		 		//down arrow movement is temporarily disabled until the function of it is confirmed
-		 		
-		 		// case KeyEvent.VK_DOWN:  			
-			// tigerTesting.move(0, 5); // Move down
-            // break;
          case KeyEvent.VK_LEFT:
 	         test.move(-15, 0); // Move left
 	         break;
 	     case KeyEvent.VK_RIGHT:
 	         test.move(15, 0); // Move right
 	         break;
-	       
+	     case KeyEvent.VK_Z: // Attack
+	            normalAttack();
+	            System.out.println("Attacking"); // Debugging purpose
+	            break;
+	     case KeyEvent.VK_X: // Special Attack
+             if (getHP() <= 30) {
+                 specialAttack();
+                 System.out.println("Special Attacking"); // Debugging purpose
+             }
+             break;
+	     
+	     
 	     default:
 	    	 break;
 		}
@@ -82,7 +80,7 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 		isJumping = true;
 		velocityY = JUMP_STRENGTH;
 	    jumpTimer.start();
-	    System.out.println("	line67");
+	    System.out.println("jump()");
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -105,12 +103,73 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	}
 	
 	
+	public void normalAttack() {
+	    // Create an attack hitbox to the right of the character
+	    GRect attackHitbox = new GRect(test.getX() + test.getWidth(), test.getY(), 50, test.getHeight() / 2);
+	    attackHitbox.setFilled(true);
+	    attackHitbox.setFillColor(java.awt.Color.RED);
+	    add(attackHitbox);
+	    
+	    // Timer to remove attack hitbox after a short delay
+	    Timer attackTimer = new Timer(200, new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            remove(attackHitbox);
+	            ((Timer) e.getSource()).stop();
+	        }
+	    });
+	    attackTimer.start();
+	}
+	
+	public void specialAttack() {
+	    // Create an arc jump movement for the special attack
+	    isJumping = true;
+	    velocityY = JUMP_STRENGTH;
+	    Timer specialAttackTimer = new Timer(20, new ActionListener() {
+	        private int horizontalVelocity = 10; 
+	        private boolean hitOpponent = false;
+
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            velocityY += GRAVITY; 
+	            test.move(horizontalVelocity, velocityY); // Move character in an arc
+
+	            // Check if character hits the opponent
+	            if (!hitOpponent && test.getBounds().intersects(opponent.getBounds())) {
+	                // Display boom image at opponent position
+	                GImage boom = new GImage("explosion.png", opponent.getX(), opponent.getY() - 50);
+	                add(boom);
+	                hitOpponent = true;
+	                Timer boomTimer = new Timer(500, new ActionListener() {
+	                    @Override
+	                    public void actionPerformed(ActionEvent e) {
+	                        remove(boom);
+	                        ((Timer) e.getSource()).stop();
+	                    }
+	                });
+	                boomTimer.start();
+	            }
+
+	            // Stop the jump if character reaches the ground
+	            if (test.getY() >= FLOOR) {
+	                test.setLocation(test.getX(), FLOOR);
+	                isJumping = false;
+	                ((Timer) e.getSource()).stop();
+	            }
+	        }
+	    });
+	    specialAttackTimer.start();
+	}
+	
+	
+	
 	public void init() {
 		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT);
 		requestFocus();
         addKeyListeners();  
         add(test);
         test.setSize(test.getWidth(), test.getHeight());
+        add(opponent);
 	}	
 	
 	
@@ -127,4 +186,3 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	}
 
 }
-
