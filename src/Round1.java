@@ -140,7 +140,7 @@ public class Round1 extends Round {
 //--------
 
 // simplified commenting
-// my original code without incorperating rogelios hornet class (tester!)
+// my original code without incorporating rogelios hornet class (tester!)
 
 
 
