@@ -1,25 +1,29 @@
 import acm.graphics.*;
+import acm.program.*;
+import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Round1 extends Round {
-    private GImage hornetImage; 
-    private GImage backgroundImage; 
-    private GImage welcomeGif; 
-    private GRect pauseButton; 
-    private GLabel pauseLabel; 
+    private GImage hornetImage;
+    private GImage backgroundImage;
+    private GImage welcomeGif;
+    private GRect pauseButton;
+    private GLabel pauseLabel;
     private boolean isPaused = false; // tracks whether the game is paused
-    private Timer hornetMovementTimer; 
-    private double hornetX = 540; 
-    private double hornetY = 300; 
-    private static final double HORNET_SPEED = 5.0; 
+    private Timer hornetMovementTimer;
+    private double hornetX = 540;
+    private double hornetY = 300;
+    private static final double HORNET_SPEED = 5.0;
     private GRect overlay; // pause overlay for semi-transparent effect
     private GLabel pauseMessage; // pause message label
+    private boolean isGifPlaying = true; // tracks whether the welcome gif is playing
 
     @Override
     public void init() {
         setSize(1280, 720); // initial game window size
         showWelcomeScreen(); // show the welcome GIF before gameplay starts
+        addKeyListeners(); // listens for keypresses
     }
 
     private void showWelcomeScreen() {
@@ -28,27 +32,29 @@ public class Round1 extends Round {
         welcomeGif.setSize(getWidth(), getHeight()); // adjust size dynamically
         add(welcomeGif);
 
-        // timer to remove the welcome screen and start the round
+        // timer to replace the gif with a still image after playback
         Timer welcomeTimer = new Timer();
         welcomeTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 remove(welcomeGif);
-                setupContent(); // set up main content
-                startHornetMovement();
+                isGifPlaying = false; // gif is no longer playing
+                showBurnsBackground(); // show the burns tower background
             }
         }, 3000); // display the GIF for 3 seconds
     }
 
-    private void setupContent() {
-        // adds background image and adjusts dynamically
+    private void showBurnsBackground() {
+        // adds the Burns Tower background
         backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
         backgroundImage.setSize(getWidth(), getHeight());
         add(backgroundImage);
+    }
 
+    private void setupContent() {
         // hornet character
         hornetImage = new GImage("media/HornetPrototype.gif", hornetX, hornetY);
-        hornetImage.setSize(150, 150); 
+        hornetImage.setSize(150, 150);
         add(hornetImage);
 
         // pause button
@@ -66,10 +72,20 @@ public class Round1 extends Round {
     }
 
     @Override
+    public void keyPressed(KeyEvent e) {
+        if (!isGifPlaying && e.getKeyCode() == KeyEvent.VK_T) {
+            // user presses T to start gameplay
+            removeAll(); // clear the burns background
+            setupContent(); // set up main gameplay content
+            startHornetMovement(); // start hornet movement
+        }
+    }
+
+    @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         if (isPaused) {
             togglePause(); // resumes game
-        } else if (pauseButton.contains(e.getX(), e.getY())) {
+        } else if (pauseButton != null && pauseButton.contains(e.getX(), e.getY())) {
             togglePause(); // pauses game
         }
     }
@@ -89,7 +105,7 @@ public class Round1 extends Round {
         // creates a semi-transparent overlay
         overlay = new GRect(0, 0, getWidth(), getHeight());
         overlay.setFilled(true);
-        overlay.setColor(new java.awt.Color(0, 0, 0, 150)); 
+        overlay.setColor(new java.awt.Color(0, 0, 0, 150));
         add(overlay);
 
         // adds pause message
@@ -101,11 +117,11 @@ public class Round1 extends Round {
 
     private void removePauseOverlay() {
         if (overlay != null) {
-            remove(overlay); 
+            remove(overlay);
             overlay = null;
         }
         if (pauseMessage != null) {
-            remove(pauseMessage); 
+            remove(pauseMessage);
             pauseMessage = null;
         }
     }
@@ -118,17 +134,28 @@ public class Round1 extends Round {
                 if (!isPaused) {
                     hornetX += HORNET_SPEED;
                     if (hornetX > getWidth()) {
-                        hornetX = -150; 
+                        hornetX = -150;
                     }
                     hornetImage.setLocation(hornetX, hornetY);
                 }
             }
-        }, 0, 50); 
+        }, 0, 50);
     }
 
     private void stopHornetMovement() {
         if (hornetMovementTimer != null) {
             hornetMovementTimer.cancel();
+        }
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height); // dynamically adjust size
+        if (welcomeGif != null) {
+            welcomeGif.setSize(getWidth(), getHeight());
+        }
+        if (backgroundImage != null) {
+            backgroundImage.setSize(getWidth(), getHeight());
         }
     }
 
@@ -139,24 +166,14 @@ public class Round1 extends Round {
 
     @Override
     public void startRound() {
-        init(); 
-        run(); 
-    }
-
-    @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height); // dynamically adjust size
-        if (welcomeGif != null) {
-            welcomeGif.setSize(getWidth(), getHeight()); 
-        }
-        if (backgroundImage != null) {
-            backgroundImage.setSize(getWidth(), getHeight());
-        }
+        init();
+        run();
     }
 
     public static void main(String[] args) {
         new Round1().start();
     }
 }
+
 
 

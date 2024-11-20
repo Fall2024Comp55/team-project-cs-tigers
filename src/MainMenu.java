@@ -4,40 +4,32 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainMenu extends GraphicsProgram {
-    private GImage startScreenGif; // start screen gif
-
-    @Override
-    public void init() {
-        setSize(1280, 720); // set initial size of the window
-        showStartScreen(); // show the start screen gif
-    }
+    private GImage startScreenGif;
 
     @Override
     public void run() {
-        // This method must be implemented but is not used here
-        // All logic is handled in init()
+        showStartScreen(); // display the start screen
     }
 
     private void showStartScreen() {
         // load and display the start screen gif
         startScreenGif = new GImage("media/StartScreen.gif", 0, 0);
-        startScreenGif.setSize(getWidth(), getHeight()); // adjust gif size to screen size
+        startScreenGif.setSize(getWidth(), getHeight()); // adjust gif size dynamically
         add(startScreenGif);
 
-        // timer to remove the start screen and transition to round1
+        // wait for 3 seconds and transition to round1
         Timer startScreenTimer = new Timer();
         startScreenTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                remove(startScreenGif); // remove the gif
-                transitionToRound1(); // move to the next screen
+                remove(startScreenGif);
+                transitionToRound1(); // switch to round1
             }
-        }, 7000); // gif displays for 7 seconds
+        }, 5000); // delay for 3 seconds
     }
 
     private void transitionToRound1() {
         Round1 round1 = new Round1(); // create an instance of round1
-        round1.setSize((int) getWidth(), (int) getHeight()); // cast width and height to int
         round1.start(); // start the round1 game
     }
 
@@ -45,6 +37,7 @@ public class MainMenu extends GraphicsProgram {
         new MainMenu().start(); // start the main menu
     }
 }
+
 
 
 /* not letting me create a new class so i am taking over BallLauncher.java
