@@ -21,7 +21,7 @@ public class Round1 extends Round {
         setSize(1280, 720); // Set the size of the game window
         showWelcomeScreen(); // Show the welcome GIF before gameplay starts
     }
-
+// new background
     private void showWelcomeScreen() {
         // Load and display the welcome GIF
         welcomeGif = new GImage("media/BurnsWelcome.gif", 0, 0);
@@ -48,7 +48,7 @@ public class Round1 extends Round {
         add(blackBackground);
 
         // Add background image
-        backgroundImage = new GImage("media/BurnsBackground.png", 0, 0);
+        backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
         backgroundImage.setSize(1280, 720); // Scale to the window size
         add(backgroundImage);
 
