@@ -1,95 +1,87 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-// testing
+
 public class Round1 extends Round {
     private GImage hornetImage; 
     private GImage backgroundImage; 
     private GImage welcomeGif; 
     private GRect pauseButton; 
     private GLabel pauseLabel; 
-    private boolean isPaused = false; //tracks whether the game is paused
+    private boolean isPaused = false; // tracks whether the game is paused
     private Timer hornetMovementTimer; 
     private double hornetX = 540; 
     private double hornetY = 300; 
     private static final double HORNET_SPEED = 5.0; 
-    private GRect overlay; //pause overlay for semi-transparent effect
-    private GLabel pauseMessage; //pause message label
+    private GRect overlay; // pause overlay for semi-transparent effect
+    private GLabel pauseMessage; // pause message label
 
     @Override
     public void init() {
-        setSize(1280, 720); // size of the game window
-        showWelcomeScreen(); //show the welcome GIF before game play starts
+        setSize(1280, 720); // initial game window size
+        showWelcomeScreen(); // show the welcome GIF before gameplay starts
     }
+
     private void showWelcomeScreen() {
-        //load and display the welcome GIF
+        // load and display the welcome GIF
         welcomeGif = new GImage("media/BurnsTWelcome.gif", 0, 0);
-        welcomeGif.setSize(1280, 720); //scales to fit the screen
+        welcomeGif.setSize(getWidth(), getHeight()); // adjust size dynamically
         add(welcomeGif);
 
-        //adds a timer to remove the welcome screen and start the round
+        // timer to remove the welcome screen and start the round
         Timer welcomeTimer = new Timer();
         welcomeTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                remove(welcomeGif); 
-                setupContent(); //set up the main content
+                remove(welcomeGif);
+                setupContent(); // set up main content
                 startHornetMovement();
             }
-        }, 3000); //displays the GIF for 3 seconds
+        }, 3000); // display the GIF for 3 seconds
     }
 
     private void setupContent() {
-        //black background
-      //  GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
-      ///  blackBackground.setFilled(true);
-      //  blackBackground.setFillColor(java.awt.Color.BLACK);
-      //  add(blackBackground);
-
-        //adds background image
+        // adds background image and adjusts dynamically
         backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
-        backgroundImage.setSize(1280, 720); // Scale to the window size
+        backgroundImage.setSize(getWidth(), getHeight());
         add(backgroundImage);
 
-        //hornet character TESTER
+        // hornet character
         hornetImage = new GImage("media/HornetPrototype.gif", hornetX, hornetY);
-        hornetImage.setSize(150, 150); // Set Hornet image size
+        hornetImage.setSize(150, 150); 
         add(hornetImage);
 
-        //pause 
-        pauseButton = new GRect(1150, 20, 100, 40);
+        // pause button
+        pauseButton = new GRect(getWidth() - 130, 20, 100, 40);
         pauseButton.setFilled(true);
         pauseButton.setFillColor(java.awt.Color.BLACK);
         add(pauseButton);
 
-        pauseLabel = new GLabel("Pause", 1175, 45);
+        pauseLabel = new GLabel("Pause", getWidth() - 110, 45);
         pauseLabel.setFont("Monospaced-15");
-        pauseLabel.setColor(java.awt.Color.ORANGE); //sets pause label color to white
+        pauseLabel.setColor(java.awt.Color.ORANGE);
         add(pauseLabel);
 
-        //adds mouse listener for pause
-        addMouseListeners();
+        addMouseListeners(); // adds mouse listener for pause functionality
     }
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         if (isPaused) {
-            //resumes the game if it's paused and the user clicks anywhere
-            togglePause();
+            togglePause(); // resumes game
         } else if (pauseButton.contains(e.getX(), e.getY())) {
-            //pauses the game if the user clicks the pause button
-            togglePause();
+            togglePause(); // pauses game
         }
     }
 
     private void togglePause() {
-        isPaused = !isPaused; //toggles the pause state
+        isPaused = !isPaused; // toggles pause state
         if (isPaused) {
-            stopHornetMovement(); //
-            showPauseOverlay(); // displays
+            stopHornetMovement();
+            showPauseOverlay();
         } else {
-            removePauseOverlay(); // remove the pause overlay
-            startHornetMovement(); //resume Hornet movement
+            removePauseOverlay();
+            startHornetMovement();
         }
     }
 
@@ -97,10 +89,10 @@ public class Round1 extends Round {
         // creates a semi-transparent overlay
         overlay = new GRect(0, 0, getWidth(), getHeight());
         overlay.setFilled(true);
-        overlay.setColor(new java.awt.Color(0, 0, 0, 150)); // Semi-transparent black
+        overlay.setColor(new java.awt.Color(0, 0, 0, 150)); 
         add(overlay);
 
-        // Add pause message
+        // adds pause message
         pauseMessage = new GLabel("Game Paused. Click anywhere to resume.", getWidth() / 2 - 200, getHeight() / 2);
         pauseMessage.setFont("Monospaced-bold-25");
         pauseMessage.setColor(java.awt.Color.WHITE);
@@ -109,53 +101,61 @@ public class Round1 extends Round {
 
     private void removePauseOverlay() {
         if (overlay != null) {
-            remove(overlay); // remove the overlay
-            overlay = null; // resets overlay
+            remove(overlay); 
+            overlay = null;
         }
         if (pauseMessage != null) {
-            remove(pauseMessage); // removes the pause message
-            pauseMessage = null; //reset message
+            remove(pauseMessage); 
+            pauseMessage = null;
         }
     }
-/// pause movement notes here 
+
     private void startHornetMovement() {
         hornetMovementTimer = new Timer();
         hornetMovementTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!isPaused) { // only move the hornet if the game is not paused
+                if (!isPaused) {
                     hornetX += HORNET_SPEED;
                     if (hornetX > getWidth()) {
-                        hornetX = -150; // reset hornet to the left of the screen when it moves off the right edge
+                        hornetX = -150; 
                     }
-                    hornetImage.setLocation(hornetX, hornetY); // updates hornet's position
+                    hornetImage.setLocation(hornetX, hornetY);
                 }
             }
-        }, 0, 50); //move every 50ms
+        }, 0, 50); 
     }
 
     private void stopHornetMovement() {
         if (hornetMovementTimer != null) {
-            hornetMovementTimer.cancel(); // stops the timer
+            hornetMovementTimer.cancel();
         }
     }
 
     @Override
     public void run() {
-        // this starts round 1 game play
         updateCaption("Welcome to Round 1: Tiger vs. Hornet at Burn's Tower!");
     }
 
     @Override
     public void startRound() {
-        ///provide required implementation for the abstract method
-        init(); // initialize round 1
-        run(); // begin game play logic
+        init(); 
+        run(); 
     }
 
-    // main method to launch the program
+    @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height); // dynamically adjust size
+        if (welcomeGif != null) {
+            welcomeGif.setSize(getWidth(), getHeight()); 
+        }
+        if (backgroundImage != null) {
+            backgroundImage.setSize(getWidth(), getHeight());
+        }
+    }
+
     public static void main(String[] args) {
-        new Round1().start(); //starts the ACM g m
+        new Round1().start();
     }
 }
 
