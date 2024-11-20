@@ -25,6 +25,7 @@ public class Hornet extends GraphicsProgram {
     private static final double HONEYBOMBSPEED = 20.0;
     private static final double CHARGESPEED = 25.0;
     private TimerTask moveTask;
+    private TimerTask actionTask; // added for attack scheduling
 
 	
 	public Hornet() {
