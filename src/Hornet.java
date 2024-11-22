@@ -6,33 +6,41 @@ import acm.util.RandomGenerator;
 
 public class Hornet extends GraphicsProgram {
 	
-	private double hp = 100;
-	private String stageName = "Burn's Tower";
-	private int rangedAttackValue = 10;
-	private int meleeValue = 5;
-	private int honeyBombValue = 15;
-	Timer timer = new Timer();
-	private RandomGenerator rgen = RandomGenerator.getInstance();
 	GImage hornet = new GImage("HornetPrototype.gif",100,100);
+	private RandomGenerator rgen = RandomGenerator.getInstance();
+	private String stageName = "Burn's Tower";
+	private double hp = 100;
 	private boolean active;
     private double LocationX;
     private double LocationY;
     private double tigerLocX = 400;
     private double tigerLocY = 400;
+    private double tigerCornerX = 0.0;
+    private double tigerCornerY = 0.0;
+    private int damageGiven = 0;
     private static final double GROUNDLEVEL = 600.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
     private static final double HONEYBOMBSPEED = 20.0;
     private static final double CHARGESPEED = 25.0;
+    private static final double TIGERWIDTH = 200.0;
+    private static final double TIGERHEIGHT = 200.0;
+    private static final int RANGEATTACKVALUE = 5;
+	private static final int MELEEVALUE = 15;
+	private static final int HONEYBOMBVALUE = 20;
     private TimerTask moveTask;
+	Timer timer = new Timer();
+	private GImage tiger = new GImage("",0,0);
+	
+	public int tempHealth = 200;
+    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
 
 	
 	public Hornet() {
         setRandomTarget();
     }
-	public void setTigerLoc(double x, double y) {
-		tigerLocX = x;
-		tigerLocY = y;
+	public void setTigerLoc(GImage t) {
+		tiger = t;
 	}
 	public void setRandomTarget() {
 	        LocationX = rgen.nextDouble(0, 1400);
@@ -61,11 +69,11 @@ public class Hornet extends GraphicsProgram {
             s.move(speed * dx / distance, speed * dy / distance);
         } else {
             s.setLocation(LocationX, LocationY);
-            remove(s);
+            //remove(s);
         }
     }
 	public void checkSide() {
-		if(hornet.getX() > tigerLocX) {
+		if(hornet.getX() > tiger.getX()) {
 			hornet.setImage("HornetPrototype.gif");
 		}
 		else {
@@ -88,19 +96,25 @@ public class Hornet extends GraphicsProgram {
 		return active;
 	}
 	public int getRangedAttackValue() {
-		return rangedAttackValue;
+		return RANGEATTACKVALUE;
 	}
 	public int getMeleeValue() {
-		return meleeValue;
+		return MELEEVALUE;
 	}
 	public int getHoneyBombValue() {
-		return honeyBombValue;
+		return HONEYBOMBVALUE;
+	}
+	public void setDamageGiven(int i) {
+		damageGiven = damageGiven + i;
+	}
+	public int getDamageGiven() {
+		return tempHealth - damageGiven;
 	}
 	public double getCenterX() {
-		return hornet.getWidth()/2;
+		return (hornet.getX() + hornet.getWidth()) /2;
 	}
 	public double getCenterY() {
-		return hornet.getHeight()/2;
+		return (hornet.getY() + hornet.getHeight())/2;
 	}
 	public boolean isDead() {
 		if(hp <= 0) {
@@ -117,10 +131,23 @@ public class Hornet extends GraphicsProgram {
         hornet.move(SPEED * x / distance, SPEED * y / distance);
         		
 	}
+	private boolean imagesIntersect(GImage image1, GImage image2) {
+	    double x1 = image1.getX();
+	    double y1 = image1.getY();
+	    double w1 = image1.getWidth();
+	    double h1 = image1.getHeight();
+
+	    double x2 = image2.getX();
+	    double y2 = image2.getY();
+	    double w2 = image2.getWidth();
+	    double h2 = image2.getHeight();
+
+	    return (x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2);
+	}
+	
 	 public void stingerAttack() {
-	 	double tempX = tigerLocX;
-	 	double tempY = tigerLocY;
-	 	
+	 	double tempX = tiger.getX();
+	 	double tempY = tiger.getY();	 	
         GImage s = new GImage("robot.png", hornet.getX(), hornet.getY());
         
 //        if(getCenterX() > tigerLocX) {
@@ -150,17 +177,25 @@ public class Hornet extends GraphicsProgram {
             @Override
             public void run() {
                 glideToEnemy(s, tempX, tempY, STINGERSPEED);
+                
+                if (imagesIntersect(s, tiger)) {
+                    setDamageGiven(RANGEATTACKVALUE);
+                    remove(s);
+                    cancel();
+                }
+                
                 if (s.getX() == tempX && s.getY() == tempY) {
                     cancel();
                 }
-            }
+            }   
         };
         
-        timer.scheduleAtFixedRate(stingerTask, 0, 50);
+        timer.scheduleAtFixedRate(stingerTask, 0, 50);        
 	 }
 	 public void honeyBombAttack() {	
-		 	double tempX = tigerLocX;
+		 	double tempX = tiger.getX();
 	        GImage temp = new GImage("honeyBomb.png", hornet.getX(), hornet.getY());
+	        temp.scale(0.5);
 	        add(temp);
 	        
 	        TimerTask honeyBombTask = new TimerTask() {
@@ -180,7 +215,11 @@ public class Hornet extends GraphicsProgram {
 	                        @Override
 	                        public void run() {
 	                            temp.setImage("explosion.png");
-	                            temp.setSize(100, 100);
+	                            temp.scale(0.5);
+	                            
+	                            if(imagesIntersect(temp,tiger)) {
+	                            	setDamageGiven(HONEYBOMBVALUE);
+	                            }
 
 	                            new Timer().schedule(new TimerTask() {
 	                                @Override
@@ -200,8 +239,8 @@ public class Hornet extends GraphicsProgram {
 	        if (active) return;
 	        active = true;
 	        
-	        double tempX = tigerLocX;
-	        double tempY = tigerLocY;
+	        double tempX = tiger.getX();
+	        double tempY = tiger.getY();
 
 	        TimerTask chargeTask = new TimerTask() {
 	            @Override
@@ -214,11 +253,25 @@ public class Hornet extends GraphicsProgram {
 
 	                if (distance > CHARGESPEED) {
 	                    hornet.move(CHARGESPEED * dx / distance, CHARGESPEED * dy / distance);
+	                    
+	                    if(imagesIntersect(hornet,tiger)) {
+	                    	setDamageGiven(MELEEVALUE);
+	                    	hornet.setImage("HornetPrototype.gif");
+	                    	active = false;
+	                    	cancel();
+	                    }
 	                } else {
 	                    hornet.setLocation(tempX, tempY);
 	                    hornet.setImage("HornetPrototype.gif");
 	                    active = false;
-	                    cancel();
+	                    
+	                    if(imagesIntersect(hornet,tiger)) {
+	                    	setDamageGiven(MELEEVALUE);
+	                    	cancel();
+	                    }
+	                    else {
+	                    	cancel();
+	                    }
 	                }
 	            }
 	        };
@@ -250,9 +303,9 @@ public class Hornet extends GraphicsProgram {
         
         
         //everything below here is either temp which will get deleted or will go in game class.
-        GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
-        temp.setSize(200, 200);
-        add(temp);
+        //GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
+        tigerTemp.setSize(200, 200);
+        add(tigerTemp);
 
         TimerTask actionTask = new TimerTask() {
             @Override
@@ -271,11 +324,19 @@ public class Hornet extends GraphicsProgram {
         };
 
         timer.scheduleAtFixedRate(actionTask, 500, 2000);
+        
+        Timer t22 = new Timer();
+        t22.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		setTigerLoc(tigerTemp);
+        		System.out.println("Health: " + getDamageGiven());
+        	}
+        },0,500);
 	}
 	@Override
 	public void run() {
 		spawnHornet();
-		//
     }
 	public void init() {
 		setSize(1920,1080);
