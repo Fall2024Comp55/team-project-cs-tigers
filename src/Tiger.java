@@ -106,8 +106,14 @@ public class Tiger extends GraphicsProgram implements ActionListener {
 	
 	
 	public void normalAttack() {
-	    // Create an attack hitbox to the right of the character
-	    GRect attackHitbox = new GRect(test.getX() + test.getWidth(), test.getY(), 50, test.getHeight() / 2);
+	    // Create an attack hitbox to either the right or left of the character
+		double attackXCord = test.getX();
+		
+		if (test.getX() > opponent.getX()) {
+			attackXCord = test.getX() - 250;
+		}
+		
+		GRect attackHitbox = new GRect(attackXCord + test.getWidth(), test.getY(), 50, test.getHeight() / 2);
 	    attackHitbox.setFilled(true);
 	    attackHitbox.setFillColor(java.awt.Color.RED);
 	    add(attackHitbox);
