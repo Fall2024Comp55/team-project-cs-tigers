@@ -32,8 +32,8 @@ public class Hornet extends GraphicsProgram {
 	Timer timer = new Timer();
 	private GImage tiger = new GImage("",0,0);
 	
-	public int tempHealth = 200;
-    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
+//	public int tempHealth = 200;
+//    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
 
 	
 	public Hornet() {
@@ -41,6 +41,9 @@ public class Hornet extends GraphicsProgram {
     }
 	public void setTigerLoc(GImage t) {
 		tiger = t;
+	}
+	public GImage getHornetLoc() {
+		return hornet;
 	}
 	public void setRandomTarget() {
 	        LocationX = rgen.nextDouble(0, 1400);
@@ -108,7 +111,7 @@ public class Hornet extends GraphicsProgram {
 		damageGiven = damageGiven + i;
 	}
 	public int getDamageGiven() {
-		return tempHealth - damageGiven;
+		return damageGiven;
 	}
 	public double getCenterX() {
 		return (hornet.getX() + hornet.getWidth()) /2;
@@ -185,6 +188,7 @@ public class Hornet extends GraphicsProgram {
                 }
                 
                 if (s.getX() == tempX && s.getY() == tempY) {
+                	remove(s);
                     cancel();
                 }
             }   
@@ -302,10 +306,9 @@ public class Hornet extends GraphicsProgram {
         timer.scheduleAtFixedRate(moveTask, 0, 50);
         
         
-        //everything below here is either temp which will get deleted or will go in game class.
         //GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
-        tigerTemp.setSize(200, 200);
-        add(tigerTemp);
+//        tigerTemp.setSize(200, 200);
+//        add(tigerTemp);
 
         TimerTask actionTask = new TimerTask() {
             @Override
@@ -325,14 +328,15 @@ public class Hornet extends GraphicsProgram {
 
         timer.scheduleAtFixedRate(actionTask, 500, 2000);
         
-        Timer t22 = new Timer();
-        t22.scheduleAtFixedRate(new TimerTask() {
-        	@Override
-        	public void run() {
-        		setTigerLoc(tigerTemp);
-        		System.out.println("Health: " + getDamageGiven());
-        	}
-        },0,500);
+//        Timer t22 = new Timer();
+//        t22.scheduleAtFixedRate(new TimerTask() {
+//        	@Override
+//        	public void run() {
+//        		setTigerLoc(tigerTemp);
+//        		System.out.println("Health: " + (tempHealth - getDamageGiven()));
+//        	}
+//        },0,500);
+        
 	}
 	@Override
 	public void run() {

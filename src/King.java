@@ -7,11 +7,12 @@ import acm.util.RandomGenerator;
 public class King extends GraphicsProgram{
 	
 	private double hp = 100;
+	private int damageGiven = 0;
 	private String stageName = "Alex G. Spanos Center";
-	private int tridentAttackValue = 10;
-	private int meleeValue = 5;
-	private int grenadeAttackValue = 15;
-	private int lightingBoltValue = 15;
+	private static final int TRIDENTATTACKVALUE = 10;
+	private static final int MELEEVALUE = 5;
+	private static final int GRENADEATTACKVALUE = 15;
+	private static final int LIGHTINGBOLTVALUE = 15;
 	private double tigerLocX = 500;
 	private double tigerLocY = 800;
 	private static final double SPEED = 15.0;
@@ -20,15 +21,25 @@ public class King extends GraphicsProgram{
 	private static final double GRENADESPEED = 25.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
+	private boolean isFacingRight = false;
 	private static final double GROUNDLEVEL = 650;
 	private static final double KINGWIDTH = 300;
 	private static final double KINGHEIGHT = 324;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("tritonRight.png",0,GROUNDLEVEL - KINGHEIGHT);
+	private GImage tiger = new GImage("",0,0);
 	
-	public void setTigerLocation(double x, double y) {
-		tigerLocX = x;
-		tigerLocY = y;
+	public void setTigerLoc(GImage s) {
+		tiger = s;
+	}
+	public GImage getKingtLoc() {
+		return king;
+	}
+	public void setDamageGiven(int i) {
+		damageGiven = damageGiven + i;
+	}
+	public int getDamageGiven() {
+		return damageGiven;
 	}
 	public void setHP(double i) {
 		hp = i;
@@ -43,16 +54,16 @@ public class King extends GraphicsProgram{
 		setHP(getHP() - i);
 	}
 	public int getTridentAttackValue() {
-		return tridentAttackValue;
+		return TRIDENTATTACKVALUE;
 	}
 	public int getMeleeValue() {
-		return meleeValue;
+		return MELEEVALUE;
 	}
 	public int getGrenadeValue() {
-		return grenadeAttackValue;
+		return GRENADEATTACKVALUE;
 	}
 	public int getLightingValue() {
-		return lightingBoltValue;
+		return LIGHTINGBOLTVALUE;
 	}
 	public double getCenterX() {
 		return king.getX() + king.getWidth()/2;
@@ -71,14 +82,40 @@ public class King extends GraphicsProgram{
 	}
 	
 	public void checkSide() {
-		if(king.getX() > tigerLocX) {
+		if(king.getX() > tiger.getX()) {
 			king.setImage("tritonLeft.png");
 			//king.setSize(KINGWIDTH, KINGHEIGHT);
+			isFacingRight = false;
 		}
 		else {
 			king.setImage("tritonRight.png");
 			//king.setSize(KINGWIDTH, KINGHEIGHT);
+			isFacingRight = true;
 		}
+	}
+	
+	private boolean imagesIntersect(GImage image1, GImage image2, boolean t) {
+	    double x1 = image1.getX();
+	    double y1 = image1.getY();
+	    double w1 = image1.getWidth();
+	    double h1 = image1.getHeight();
+
+	    double x2 = image2.getX();
+	    double y2 = image2.getY();
+	    double w2 = image2.getWidth();
+	    double h2 = image2.getHeight();
+
+	    if(!t) {
+	    	return (x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2);
+	    }
+	    else {
+	    	if(isFacingRight) {
+	            return ((x1 < x2 + w2 + 10 && x1 + w1 + 10 > x2) && y1 < y2 + h2 && y1 + h1 > y2);
+	    	}
+	    	else {
+	            return ((x1 - 10 < x2 + w2 && x1 + w1 > x2 - 10) && y1 < y2 + h2 && y1 + h1 > y2);
+	    	}
+	    }
 	}
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
@@ -145,6 +182,10 @@ public class King extends GraphicsProgram{
                         public void run() {
                             temp.setImage("explosion.png");
                             temp.setSize(100, 100);
+                            
+                            if(imagesIntersect(temp,tiger,false)) {
+            					setDamageGiven(GRENADEATTACKVALUE);
+            				}
 
                             new Timer().schedule(new TimerTask() {
                                 @Override
@@ -171,7 +212,15 @@ public class King extends GraphicsProgram{
             @Override
             public void run() {
                 glideToEnemy(s, tempX, GROUNDLEVEL,LIGHTINGSPEED);
+                
+                if(imagesIntersect(s,tiger,false)) {
+					setDamageGiven(LIGHTINGBOLTVALUE);
+					remove(s);
+					cancel();
+				}
+                
                 if (s.getX() == tempX && s.getY() == GROUNDLEVEL) {
+                	remove(s);
                     cancel();
                 }
             }
@@ -182,8 +231,8 @@ public class King extends GraphicsProgram{
 	
 	public void tridentThrowAttack() {
 		isAttackActive = true;
-	 	double tempX = tigerLocX;
-	 	double tempY = tigerLocY;
+	 	double tempX = tiger.getX();
+	 	double tempY = tiger.getY();
         GImage s = new GImage("LightingTrident.gif", getCenterX(), getCenterY() - 100);
         s.setSize(200,200);
         add(s);
@@ -192,9 +241,17 @@ public class King extends GraphicsProgram{
             @Override
             public void run() {
                 glideToEnemy(s, tempX, tempY, THROWSPEED);
+                
+                if(imagesIntersect(s,tiger,false)) {
+					setDamageGiven(TRIDENTATTACKVALUE);
+					remove(s);
+					cancel();
+				}
+                
                 if (s.getX() == tempX && s.getY() == tempY) {
+                	isAttackActive = false;
+                	remove(s);
                     cancel();
-                    isAttackActive = false;
                 }
             }
         };
@@ -203,7 +260,16 @@ public class King extends GraphicsProgram{
 	 }
 	
 	public void tridentStab() {
-		king.setImage("robot.png");
+		if(isFacingRight) {
+			king.setImage("robot.png");
+		}
+		else {
+			king.setImage("robot.png");
+		}
+		
+		if(imagesIntersect(king,tiger,true)) {
+			setDamageGiven(MELEEVALUE);
+		}
 		
 		Timer temp = new Timer();
 		
@@ -211,10 +277,20 @@ public class King extends GraphicsProgram{
 			@Override
 			public void run() {
 				if(isWalkActive) {
-					king.setImage("robot.png");
+					if(isFacingRight) {
+						king.setImage("robot.png");
+					}
+					else {
+						king.setImage("robot.png");
+					}
 				}
 				else {
-					king.setImage("robot.png");
+					if(isFacingRight) {
+						king.setImage("robot.png");
+					}
+					else {
+						king.setImage("robot.png");
+					}
 				}
 			}
 		}, 300);
@@ -231,7 +307,7 @@ public class King extends GraphicsProgram{
 				if(!isWalkActive) {
 					if(!isAttackActive) {
 					
-						double tempX = tigerLocX;
+						double tempX = tiger.getX();
 						double tempY = GROUNDLEVEL - KINGHEIGHT;
 						
 						Timer t = new Timer();
@@ -250,6 +326,27 @@ public class King extends GraphicsProgram{
 			}
 		}, 0, 50);
 		
+		Timer attackTimer = new Timer();
+		attackTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+                    int choice = rgen.nextInt(1, 3);
+                    if (choice == 1) {
+                        lightingBolt();
+                        lightingBolt();
+                        lightingBolt();
+                    } else if (choice == 2) {
+                        grenadeAttack();
+                        grenadeAttack();
+                        grenadeAttack();
+                    } else if (choice == 3) {
+                        tridentThrowAttack();
+                    }else if(choice == 4) {
+                    	tridentStab();
+                    }
+			}
+		},500, 500);
+		
 		
 	}
 
@@ -257,19 +354,6 @@ public class King extends GraphicsProgram{
 	public void run() {
 		// TODO Auto-generated method stub
 		spawnKing();
-		
-		grenadeAttack();
-		grenadeAttack();
-		grenadeAttack();
-		
-		lightingBolt();
-		lightingBolt();
-		lightingBolt();
-		
-		tridentThrowAttack();
-		
-		//
-
 	}
 	
 	public void init() {
