@@ -1,7 +1,7 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-
+// testing
 public class Round1 extends Round {
     private GImage hornetImage; 
     private GImage backgroundImage; 
@@ -47,7 +47,7 @@ public class Round1 extends Round {
         add(blackBackground);
 
         //adds background image
-        backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
+        backgroundImage = new GImage("media/burnsTBackground.png", 0, 0);
         backgroundImage.setSize(1280, 720); // Scale to the window size
         add(backgroundImage);
 
@@ -159,8 +159,9 @@ public class Round1 extends Round {
     }
 }
 
-//how the pausing works
+//how the pausing  works
 //the bee moves because of TimerTask that updates its position every 50ms.
 //When the game is paused (isPaused is true), the bee should stop moving. 
 //used the stopHornetMovement() function to cancel the TimerTask and effectively "freeze" the bee
 //the bee resumes moving when startHornetMovement() is called, reinitializing the TimerTask
+//
