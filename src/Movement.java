@@ -7,8 +7,12 @@ import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 import javax.swing.*;
 
+/*
+								
+								this class is no longer used anymore	
+								functions of this class have been moved to the tiger class
 
-
+*/
 
 public class Movement extends GraphicsProgram implements ActionListener {
 	public static final int PROGRAM_HEIGHT = 600; //temp value for testing
