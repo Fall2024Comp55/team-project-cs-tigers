@@ -1,54 +1,105 @@
 import acm.graphics.*;
 import acm.program.*;
-import java.awt.event.KeyEvent;
+
+import java.awt.Dimension;
+import java.awt.event.*;
 
 public class MainMenu extends GraphicsProgram {
-    private GImage startGif;
+    private GImage startGif; // start screen gif
+    private GImage controlImage; // control screen image
+    private boolean showingControls = false; // tracks if controls screen is shown
 
     @Override
     public void init() {
-        setSize(1280, 720); // Set the window size
-        showStartScreen(); // Show the Start.gif
-        addKeyListeners(); // Add key listeners for keyboard input
+        // maximize the window on startup
+        this.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
+
+        // display start gif
+        showStartGif();
+        // add key listeners for user interaction
+        addKeyListeners();
     }
 
-    private void showStartScreen() {
-        // Display the Start.gif
+    private void setSize(Dimension screenSize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void showStartGif() {
+        // display the start gif
         startGif = new GImage("media/Start.gif", 0, 0);
-        startGif.setSize(getWidth(), getHeight()); // Scale to fit the screen
-        add(startGif);
-        System.out.println("Start screen displayed. Waiting for 'T'...");
+        scaleImageToWindow(startGif); // scale gif to window size
+        add(startGif); // add gif to screen
+    }
+
+    private void showControlScreen() {
+        // transition to controls screen
+        controlImage = new GImage("media/control.png", 0, 0);
+        scaleImageToWindow(controlImage); // scale controls to window size
+        add(controlImage); // add control screen
+    }
+
+    private void scaleImageToWindow(GImage image) {
+        // scale image to fit the current window size
+        image.setSize(getWidth(), getHeight());
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key pressed: " + e.getKeyChar()); // Debugging key press
         if (e.getKeyCode() == KeyEvent.VK_T) {
-            System.out.println("'T' detected. Proceeding to next screen...");
-            remove(startGif); // Remove the Start.gif
-            transitionToNextScreen(); // Placeholder for the next screen logic
+            if (!showingControls) {
+                // move from start screen to controls
+                remove(startGif); // remove start gif
+                showControlScreen(); // show control screen
+                showingControls = true; // update state
+            } else {
+                // move from controls to round 1
+                remove(controlImage); // remove controls
+                transitionToRound1(); // go to round 1
+            }
         }
     }
 
-    private void transitionToNextScreen() {
-        // Example logic for transitioning to the next screen
-        GLabel nextScreenMessage = new GLabel("Welcome to the next screen!", getWidth() / 2 - 100, getHeight() / 2);
-        nextScreenMessage.setFont("Monospaced-bold-20");
-        nextScreenMessage.setColor(java.awt.Color.RED);
-        add(nextScreenMessage);
+    private void transitionToRound1() {
+        // remove everything from the main menu
+        removeAll();
+
+        // create and initialize Round1
+        Round1 round1 = new Round1();
+        round1.setSize(getWidth(), getHeight()); // match the window size
+        round1.startRound(); // start the first round
+
+        // add the new Round1 to the program
+        add(round1);
     }
 
-    @Override
+    private void add(Round1 round1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
     public void run() {
-        // Required by GraphicsProgram; can remain empty for now
+        // ensures resizing works dynamically
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                // dynamically scale images to window size
+                if (startGif != null) scaleImageToWindow(startGif);
+                if (controlImage != null) scaleImageToWindow(controlImage);
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        new MainMenu().start();
+    private void addComponentListener(ComponentAdapter componentAdapter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void main(String[] args) {
+        new MainMenu().start(); // start main menu
     }
 }
-
-
 // ibrahims previous code 
 //import acm.graphics.*;
 //import acm.program.*;
