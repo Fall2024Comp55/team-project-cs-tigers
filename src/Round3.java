@@ -18,7 +18,7 @@ public class Round3 extends Round {
 
     @Override
     public void init() {
-        setSize(1280, 720); // size of the game window
+        setSize(1280, 720); // size of the game window 
         showWelcomeScreen(); // show the welcome GIF before gameplay starts
     }
 
@@ -142,7 +142,7 @@ public class Round3 extends Round {
     @Override
     public void startRound() {
         init(); // initialize round 3
-        run(); // begin gameplay logic
+        run(); // begin game play logic
     }
 
     // main method to launch the program
