@@ -1,7 +1,8 @@
 import acm.graphics.*;
 import java.util.Timer;
 import java.util.TimerTask;
-// testing
+// WILL EDIT THIS SO MAINMENU DIRECTS HERE
+// ADD BURNS T MAP
 public class Round1 extends Round {
     private GImage hornetImage; 
     private GImage backgroundImage; 
@@ -23,7 +24,7 @@ public class Round1 extends Round {
     }
     private void showWelcomeScreen() {
         //load and display the welcome GIF
-        welcomeGif = new GImage("media/start.gif", 0, 0);
+        welcomeGif = new GImage("media/BurnsTWelcome.gif", 0, 0);
         welcomeGif.setSize(1280, 720); //scales to fit the screen
         add(welcomeGif);
 

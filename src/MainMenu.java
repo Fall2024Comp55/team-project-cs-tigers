@@ -1,5 +1,55 @@
+import acm.graphics.*;
+import acm.program.*;
+import java.awt.event.KeyEvent;
+
+public class MainMenu extends GraphicsProgram {
+    private GImage startGif;
+
+    @Override
+    public void init() {
+        setSize(1280, 720); // Set the window size
+        showStartScreen(); // Show the Start.gif
+        addKeyListeners(); // Add key listeners for keyboard input
+    }
+
+    private void showStartScreen() {
+        // Display the Start.gif
+        startGif = new GImage("media/Start.gif", 0, 0);
+        startGif.setSize(getWidth(), getHeight()); // Scale to fit the screen
+        add(startGif);
+        System.out.println("Start screen displayed. Waiting for 'T'...");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("Key pressed: " + e.getKeyChar()); // Debugging key press
+        if (e.getKeyCode() == KeyEvent.VK_T) {
+            System.out.println("'T' detected. Proceeding to next screen...");
+            remove(startGif); // Remove the Start.gif
+            transitionToNextScreen(); // Placeholder for the next screen logic
+        }
+    }
+
+    private void transitionToNextScreen() {
+        // Example logic for transitioning to the next screen
+        GLabel nextScreenMessage = new GLabel("Welcome to the next screen!", getWidth() / 2 - 100, getHeight() / 2);
+        nextScreenMessage.setFont("Monospaced-bold-20");
+        nextScreenMessage.setColor(java.awt.Color.RED);
+        add(nextScreenMessage);
+    }
+
+    @Override
+    public void run() {
+        // Required by GraphicsProgram; can remain empty for now
+    }
+
+    public static void main(String[] args) {
+        new MainMenu().start();
+    }
+}
 
 
+// ibrahims previous code 
 //import acm.graphics.*;
 //import acm.program.*;
 //import java.awt.event.KeyEvent;
