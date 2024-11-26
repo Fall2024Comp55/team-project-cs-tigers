@@ -12,17 +12,20 @@ public class Round1 extends Round {
     private double hornetX = 540; 
     private double hornetY = 300; 
     private static final double HORNET_SPEED = 5.0;
+    private Hornet herkie;
+    private Tiger powerCat;
 
     @Override
     public void init() {
         setSize(1280, 720); // set game window size
+        herkie = new Hornet(this);
         showBurnsMap(); // show burns map
     }
 
     private void showBurnsMap() {
         // display burns map
         GImage burnsMap = new GImage("media/BurnsMap.png", 0, 0);
-        burnsMap.setSize(1280, 720);
+        burnsMap.setSize(1920, 1080);
         add(burnsMap);
 
         // transition to welcome screen
@@ -39,7 +42,7 @@ public class Round1 extends Round {
     private void showWelcomeScreen() {
         // display burns welcome gif
         welcomeGif = new GImage("media/BurnsTWelcome.gif", 0, 0);
-        welcomeGif.setSize(1280, 720);
+        welcomeGif.setSize(1920, 1080);
         add(welcomeGif);
 
         // setup game content after gif
@@ -49,7 +52,6 @@ public class Round1 extends Round {
             public void run() {
                 remove(welcomeGif);
                 setupContent();
-                startHornetMovement();
             }
         }, 3000); // show gif for 3 seconds
     }
@@ -63,13 +65,19 @@ public class Round1 extends Round {
 
         // burns tower background
         backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
-        backgroundImage.setSize(1280, 720);
+        backgroundImage.setSize(1920, 1080);
         add(backgroundImage);
 
         // hornet character
-        hornetImage = new GImage("media/HornetPrototype.gif", hornetX, hornetY);
-        hornetImage.setSize(150, 150);
-        add(hornetImage);
+        herkie.spawnHornet();
+        Timer startHerkie = new Timer();
+        startHerkie.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		herkie.setTigerLoc(new GImage("explosion.png",300,300));
+        		//herkie.setTigerLoc(powerCat.get);
+        	}
+        }, 0, 50);
 
         // add pause button
         pauseMenu.addPauseButton(this);
@@ -82,12 +90,11 @@ public class Round1 extends Round {
         if (isPaused) {
             pauseMenu.removePauseMenu(this);
             isPaused = false; 
-            startHornetMovement();
         } else if (pauseMenu.isPauseButtonClicked(e.getX(), e.getY())) {
             pauseMenu.showPauseMenu(this);
             isPaused = true; 
-            stopHornetMovement();
         }
+        herkie.checkPaused(isPaused);
     }
 
     private void startHornetMovement() {

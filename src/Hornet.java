@@ -4,7 +4,7 @@ import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-public class Hornet extends GraphicsProgram {
+public class Hornet {
 	
 	GImage hornet = new GImage("HornetPrototype.gif",100,100);
 	private RandomGenerator rgen = RandomGenerator.getInstance();
@@ -18,6 +18,7 @@ public class Hornet extends GraphicsProgram {
     private double tigerCornerX = 0.0;
     private double tigerCornerY = 0.0;
     private int damageGiven = 0;
+    private boolean isPaused = false;
     private static final double GROUNDLEVEL = 600.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
@@ -31,14 +32,26 @@ public class Hornet extends GraphicsProgram {
     private TimerTask moveTask;
 	Timer timer = new Timer();
 	private GImage tiger = new GImage("",0,0);
+	private GraphicsProgram parentProgram;
 	
 //	public int tempHealth = 200;
 //    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
 
 	
-	public Hornet() {
+	public Hornet(GraphicsProgram parentProgram) {
         setRandomTarget();
+//        hornet = new GImage("HornetPrototype.gif", 100, 100);
+        this.parentProgram = parentProgram;
+        this.hornet = hornet;
     }
+	
+	public void addToProgram(GraphicsProgram program) {
+        program.add(hornet);
+    }
+	public void checkPaused(boolean t) {
+		isPaused = t;
+	}
+	
 	public void setTigerLoc(GImage t) {
 		tiger = t;
 	}
@@ -174,7 +187,8 @@ public class Hornet extends GraphicsProgram {
         
         
         
-        add(s);
+        //add(s);
+        parentProgram.add(s);
         
         TimerTask stingerTask = new TimerTask() {
             @Override
@@ -183,12 +197,14 @@ public class Hornet extends GraphicsProgram {
                 
                 if (imagesIntersect(s, tiger)) {
                     setDamageGiven(RANGEATTACKVALUE);
-                    remove(s);
+                    parentProgram.remove(s);
+                   //remove(s);
                     cancel();
                 }
                 
                 if (s.getX() == tempX && s.getY() == tempY) {
-                	remove(s);
+                    parentProgram.remove(s);
+                	//remove(s);
                     cancel();
                 }
             }   
@@ -200,7 +216,8 @@ public class Hornet extends GraphicsProgram {
 		 	double tempX = tiger.getX();
 	        GImage temp = new GImage("honeyBomb.png", hornet.getX(), hornet.getY());
 	        temp.scale(0.5);
-	        add(temp);
+	        //add(temp);
+	        parentProgram.add(temp);
 	        
 	        TimerTask honeyBombTask = new TimerTask() {
 	            @Override
@@ -228,7 +245,8 @@ public class Hornet extends GraphicsProgram {
 	                            new Timer().schedule(new TimerTask() {
 	                                @Override
 	                                public void run() {
-	                                    remove(temp);
+	                                    //remove(temp);
+	                                    parentProgram.remove(temp);
 	                                }
 	                            }, 1000);
 	                        }
@@ -284,7 +302,8 @@ public class Hornet extends GraphicsProgram {
 	    }
 	 
 	public void spawnHornet() {
-		add(hornet);
+		//add(hornet);
+		parentProgram.add(hornet);
 		
 		Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
@@ -297,10 +316,14 @@ public class Hornet extends GraphicsProgram {
         moveTask = new TimerTask() {
             @Override
             public void run() {
-                if (!active) {
-                    glideToTarget();
-                    checkSide();
-                }
+            	if(!isDead()) {
+	            	if(!isPaused) {
+		                if (!active) {
+		                    glideToTarget();
+		                    checkSide();
+		                }
+	                }
+            	}
             }
         };
         timer.scheduleAtFixedRate(moveTask, 0, 50);
@@ -313,16 +336,20 @@ public class Hornet extends GraphicsProgram {
         TimerTask actionTask = new TimerTask() {
             @Override
             public void run() {
-                if (!getActive()) {
-                    int choice = rgen.nextInt(1, 3);
-                    if (choice == 1) {
-                        chargeAttack();
-                    } else if (choice == 2) {
-                        stingerAttack();
-                    } else if (choice == 3) {
-                        honeyBombAttack();
-                    }
-                }
+            	if(!isDead()) {
+	            	if(!isPaused) {
+	            		if (!getActive()) {
+	            			int choice = rgen.nextInt(1, 3);
+			                if (choice == 1) {
+			                    chargeAttack();
+			                } else if (choice == 2) {
+			                    stingerAttack();
+			                } else if (choice == 3) {
+			                    honeyBombAttack();
+			                }
+	                	}
+	                }
+            	}
             }
         };
 
@@ -338,17 +365,17 @@ public class Hornet extends GraphicsProgram {
 //        },0,500);
         
 	}
-	@Override
-	public void run() {
-		spawnHornet();
-    }
-	public void init() {
-		setSize(1920,1080);
-	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-			new Hornet().start();
-	}
+//	@Override
+//	public void run() {
+//		spawnHornet();
+//    }
+//	public void init() {
+//		setSize(1920,1080);
+//	}
+//	
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//			new Hornet().start();
+//	}
 
 }
