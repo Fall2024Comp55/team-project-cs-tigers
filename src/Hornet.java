@@ -193,20 +193,24 @@ public class Hornet {
         TimerTask stingerTask = new TimerTask() {
             @Override
             public void run() {
-                glideToEnemy(s, tempX, tempY, STINGERSPEED);
-                
-                if (imagesIntersect(s, tiger)) {
-                    setDamageGiven(RANGEATTACKVALUE);
-                    parentProgram.remove(s);
-                   //remove(s);
-                    cancel();
-                }
-                
-                if (s.getX() == tempX && s.getY() == tempY) {
-                    parentProgram.remove(s);
-                	//remove(s);
-                    cancel();
-                }
+            	if(!isPaused) {
+	                glideToEnemy(s, tempX, tempY, STINGERSPEED);
+	                
+	                if (imagesIntersect(s, tiger)) {
+	                	if(!isPaused) {
+		                    setDamageGiven(RANGEATTACKVALUE);
+		                    parentProgram.remove(s);
+		                   //remove(s);
+		                    cancel();
+	                	}
+	                }
+	                
+	                if (s.getX() == tempX && s.getY() == tempY) {
+	                    parentProgram.remove(s);
+	                	//remove(s);
+	                    cancel();
+	                }
+            	}
             }   
         };
         
@@ -222,36 +226,40 @@ public class Hornet {
 	        TimerTask honeyBombTask = new TimerTask() {
 	            @Override
 	            public void run() {
-	                double dx = tempX - temp.getX();
-	                double dy = GROUNDLEVEL - temp.getY();
-	                double distance = Math.sqrt(dx * dx + dy * dy);
-
-	                if (distance > HONEYBOMBSPEED) {
-	                    temp.move(HONEYBOMBSPEED * dx / distance, HONEYBOMBSPEED * dy / distance);
-	                } else {
-	                    temp.setLocation(tempX, GROUNDLEVEL);
-	                    cancel();
-
-	                    new Timer().schedule(new TimerTask() {
-	                        @Override
-	                        public void run() {
-	                            temp.setImage("explosion.png");
-	                            temp.scale(0.5);
-	                            
-	                            if(imagesIntersect(temp,tiger)) {
-	                            	setDamageGiven(HONEYBOMBVALUE);
-	                            }
-
-	                            new Timer().schedule(new TimerTask() {
-	                                @Override
-	                                public void run() {
-	                                    //remove(temp);
-	                                    parentProgram.remove(temp);
-	                                }
-	                            }, 1000);
-	                        }
-	                    }, 3000);
-	                }
+	            	if(!isPaused) {
+		                double dx = tempX - temp.getX();
+		                double dy = GROUNDLEVEL - temp.getY();
+		                double distance = Math.sqrt(dx * dx + dy * dy);
+	
+		                if (distance > HONEYBOMBSPEED) {
+		                    temp.move(HONEYBOMBSPEED * dx / distance, HONEYBOMBSPEED * dy / distance);
+		                } else {
+		                    temp.setLocation(tempX, GROUNDLEVEL);
+		                    cancel();
+	
+		                    new Timer().schedule(new TimerTask() {
+		                        @Override
+		                        public void run() {
+		                            temp.setImage("explosion.png");
+		                            temp.scale(0.5);
+		                            
+		                            if(imagesIntersect(temp,tiger)) {
+		                            	if(!isPaused) {
+		                            		setDamageGiven(HONEYBOMBVALUE);
+		                            	}
+		                            }
+	
+		                            new Timer().schedule(new TimerTask() {
+		                                @Override
+		                                public void run() {
+		                                    //remove(temp);
+		                                    parentProgram.remove(temp);
+		                                }
+		                            }, 1000);
+		                        }
+		                    }, 3000);
+		                }
+	            	}
 	            }
 	        };
 	        
@@ -267,34 +275,40 @@ public class Hornet {
 	        TimerTask chargeTask = new TimerTask() {
 	            @Override
 	            public void run() {
-	                double dx = tempX - hornet.getX();
-	                double dy = tempY - hornet.getY();
-	                double distance = Math.sqrt(dx * dx + dy * dy);
-
-	                hornet.setImage("robot.png");
-
-	                if (distance > CHARGESPEED) {
-	                    hornet.move(CHARGESPEED * dx / distance, CHARGESPEED * dy / distance);
-	                    
-	                    if(imagesIntersect(hornet,tiger)) {
-	                    	setDamageGiven(MELEEVALUE);
-	                    	hornet.setImage("HornetPrototype.gif");
-	                    	active = false;
-	                    	cancel();
-	                    }
-	                } else {
-	                    hornet.setLocation(tempX, tempY);
-	                    hornet.setImage("HornetPrototype.gif");
-	                    active = false;
-	                    
-	                    if(imagesIntersect(hornet,tiger)) {
-	                    	setDamageGiven(MELEEVALUE);
-	                    	cancel();
-	                    }
-	                    else {
-	                    	cancel();
-	                    }
-	                }
+	            	if(!isPaused) {
+		                double dx = tempX - hornet.getX();
+		                double dy = tempY - hornet.getY();
+		                double distance = Math.sqrt(dx * dx + dy * dy);
+	
+		                hornet.setImage("robot.png");
+	
+		                if (distance > CHARGESPEED) {
+		                    hornet.move(CHARGESPEED * dx / distance, CHARGESPEED * dy / distance);
+		                    
+		                    if(imagesIntersect(hornet,tiger)) {
+		                    	if(!isPaused) {
+			                    	setDamageGiven(MELEEVALUE);
+			                    	hornet.setImage("HornetPrototype.gif");
+			                    	active = false;
+			                    	cancel();
+		                    	}
+		                    }
+		                } else {
+		                    hornet.setLocation(tempX, tempY);
+		                    hornet.setImage("HornetPrototype.gif");
+		                    active = false;
+		                    
+		                    if(imagesIntersect(hornet,tiger)) {
+		                    	if(!isPaused) {
+			                    	setDamageGiven(MELEEVALUE);
+			                    	cancel();
+		                    	}
+		                    }
+		                    else {
+		                    	cancel();
+		                    }
+		                }
+	            	}
 	            }
 	        };
 

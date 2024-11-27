@@ -4,7 +4,7 @@ import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-public class Wave extends GraphicsProgram {
+public class Wave {
 	private GImage wave = new GImage("Robot.png",500,500);
 	private double hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
@@ -18,17 +18,28 @@ public class Wave extends GraphicsProgram {
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
 	private boolean isFacingRight = false;
+	private boolean isPaused = false;
 	private static final double GROUNDLEVEL = 700;
 	private int damageGiven = 0;
 	private GImage tiger = new GImage("",0,0);
 	private RandomGenerator rgen = RandomGenerator.getInstance();
+	private GraphicsProgram parentProgram;
 	
 //	public int tempHealth = 200;
 //    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 500 - 9, 500);
 
-	
+	public void Wave(GraphicsProgram parentProgram) {
+		this.parentProgram = parentProgram;
+        this.wave = wave;
+	}
+	public void addToProgram(GraphicsProgram program) {
+        program.add(wave);
+    }
 	public void setTigerLoc(GImage s) {
 		tiger = s;
+	}
+	public void checkPaused(boolean t) {
+		isPaused = t;
 	}
 	
 	public GImage getWavetLoc() {
@@ -143,23 +154,29 @@ public class Wave extends GraphicsProgram {
             s.move(WAVESPEED * dx / distance, WAVESPEED * dy / distance);
         } else {
         		s.setLocation(x, y);
-        		remove(s);
+        		//remove(s);
+        		parentProgram.remove(s);
         		isAttackActive = false;
         }
 	}
 	
 	private void waveAttack() {
 		GImage waveAttack = new GImage("Wave.gif",1800,GROUNDLEVEL);
-		add(waveAttack);
+		//add(waveAttack);
+		parentProgram.add(waveAttack);
 		isAttackActive = true;
 		
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				moveWaveAttack(waveAttack,0,GROUNDLEVEL);
-				if(imagesIntersect(waveAttack,tiger,false)) {
-					setDamageGiven(WAVEATTACKVALUE);
+				if(!isPaused) {
+					moveWaveAttack(waveAttack,0,GROUNDLEVEL);
+					if(imagesIntersect(waveAttack,tiger,false)) {
+						if(!isPaused) {
+							setDamageGiven(WAVEATTACKVALUE);
+						}
+					}
 				}
 			}
 		}, 0, 50);
@@ -174,18 +191,22 @@ public class Wave extends GraphicsProgram {
 			public void run() {
 				//wave.setImage();
 				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
-				add(seaweed);
+				//add(seaweed);
+				parentProgram.add(seaweed);
 				isAttackActive = true;
 				
 				if(imagesIntersect(seaweed,tiger,false)) {
-					setDamageGiven(SEAWEEDATTACKVALUE);
+					if(!isPaused) {
+						setDamageGiven(SEAWEEDATTACKVALUE);
+					}
 				}
 				
 				Timer t = new Timer();
 				t.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						remove(seaweed);
+						//remove(seaweed);
+						parentProgram.remove(seaweed);
 						isAttackActive = false;
 					}
 				}, 1000);
@@ -197,7 +218,9 @@ public class Wave extends GraphicsProgram {
 		wave.setImage("robot.png");
 		
 		if(imagesIntersect(wave,tiger,true)) {
-			setDamageGiven(MELEEATTACKVALUE);
+			if(!isPaused) {
+				setDamageGiven(MELEEATTACKVALUE);
+			}
 		}
 		
 		Timer temp = new Timer();
@@ -216,8 +239,8 @@ public class Wave extends GraphicsProgram {
 	}
 	
 	public void spawnWave() {
-		add(wave);
-		
+		//add(wave);
+		parentProgram.add(wave);
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -232,8 +255,10 @@ public class Wave extends GraphicsProgram {
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
+							if(!isPaused) {
 								walkToEnemy(wave,tempX,tempY);
 								isWalkActive = true;
+							}
 						}
 					};	
 					
@@ -246,6 +271,7 @@ public class Wave extends GraphicsProgram {
 		attackTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
+				if(!isPaused) {
                     int choice = rgen.nextInt(1, 3);
                     if (choice == 1) {
                         seaweedAttack();
@@ -254,6 +280,7 @@ public class Wave extends GraphicsProgram {
                     } else if (choice == 3) {
                         waterWhip();
                     }
+				}
 			}
 		},500, 500);
 		
@@ -263,27 +290,28 @@ public class Wave extends GraphicsProgram {
 //	        	public void run() {
 //	        		setTigerLoc(tigerTemp);
 //	        		System.out.println("Health: " + (tempHealth - getDamageGiven()));
+//	        		setDamageGiven(0);
 //	        	}
 //	        },0,500);
 		
 		
 	}
 	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		spawnWave();
-	}
-	
-	public void init() {
-		setSize(1920,1080);
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		new Wave().start();
-		
-	}
+//	@Override
+//	public void run() {
+//		// TODO Auto-generated method stub
+//		spawnWave();
+//	}
+//	
+//	public void init() {
+//		setSize(1920,1080);
+//	}
+//
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//		
+//		new Wave().start();
+//		
+//	}
 
 }

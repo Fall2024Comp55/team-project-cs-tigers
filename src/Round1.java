@@ -74,7 +74,7 @@ public class Round1 extends Round {
         startHerkie.scheduleAtFixedRate(new TimerTask() {
         	@Override
         	public void run() {
-        		herkie.setTigerLoc(new GImage("explosion.png",300,300));
+        		herkie.setTigerLoc(new GImage("HornetPrototype.gif",300,300));
         		//herkie.setTigerLoc(powerCat.get);
         	}
         }, 0, 50);
