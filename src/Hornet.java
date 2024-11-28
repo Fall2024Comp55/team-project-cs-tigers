@@ -19,6 +19,7 @@ public class Hornet {
     private double tigerCornerY = 0.0;
     private int damageGiven = 0;
     private boolean isPaused = false;
+    private boolean isFacingRight = false;
     private static final double GROUNDLEVEL = 600.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
@@ -91,9 +92,11 @@ public class Hornet {
 	public void checkSide() {
 		if(hornet.getX() > tiger.getX()) {
 			hornet.setImage("Hornet.gif");
+			isFacingRight = false;
 		}
 		else {
 			hornet.setImage("HornetFlipped.gif");
+			isFacingRight = true;
 		}
 	}
 	public void setHP(double i) {
@@ -285,7 +288,12 @@ public class Hornet {
 		                double dy = tempY - hornet.getY();
 		                double distance = Math.sqrt(dx * dx + dy * dy);
 	
-		                hornet.setImage("robot.png");
+		                if(isFacingRight) {
+		                	hornet.setImage("HornetChargeFlipped.gif");
+		                }
+		                else {
+		                	hornet.setImage("HornetCharge.gif");
+		                }
 	
 		                if (distance > CHARGESPEED) {
 		                    hornet.move(CHARGESPEED * dx / distance, CHARGESPEED * dy / distance);
@@ -293,14 +301,24 @@ public class Hornet {
 		                    if(imagesIntersect(hornet,tiger)) {
 		                    	if(!isPaused) {
 			                    	setDamageGiven(MELEEVALUE);
-			                    	hornet.setImage("Hornet.gif");
+			                    	if(!isFacingRight) {
+			                    		hornet.setImage("Hornet.gif");
+			                    	}
+			                    	else {
+			                    		hornet.setImage("HornetFlipped.gif");
+			                    	}
 			                    	active = false;
 			                    	cancel();
 		                    	}
 		                    }
 		                } else {
 		                    hornet.setLocation(tempX, tempY);
-		                    hornet.setImage("Hornet.gif");
+		                    if(!isFacingRight) {
+	                    		hornet.setImage("Hornet.gif");
+	                    	}
+	                    	else {
+	                    		hornet.setImage("HornetFlipped.gif");
+	                    	}
 		                    active = false;
 		                    
 		                    if(imagesIntersect(hornet,tiger)) {
