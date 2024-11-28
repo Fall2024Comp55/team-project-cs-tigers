@@ -78,10 +78,10 @@ public class King {
 		return LIGHTINGBOLTVALUE;
 	}
 	public double getCenterX() {
-		return king.getX() + king.getWidth()/2;
+		return (king.getX() + king.getWidth())/2;
 	}
 	public double getCenterY() {
-		return king.getY() + king.getHeight()/2;
+		return (king.getY() + king.getHeight())/2;
 	}
 	
 	public boolean isDead() {
@@ -195,8 +195,8 @@ public class King {
 	                    new Timer().schedule(new TimerTask() {
 	                        @Override
 	                        public void run() {
-	                            temp.setImage("explosion.png");
-	                            temp.setSize(100, 100);
+	                            temp.setImage("explosion.gif");
+	                            temp.setSize(120, 120);
 	                            
 	                            if(imagesIntersect(temp,tiger,false)) {
 	                            	if(!isPaused) {
@@ -259,7 +259,12 @@ public class King {
 		isAttackActive = true;
 	 	double tempX = tiger.getX();
 	 	double tempY = tiger.getY();
-        GImage s = new GImage("LightingTrident.gif", getCenterX(), getCenterY() - 100);
+ 		GImage s = new GImage("LightingTrident.gif", getCenterX(), getCenterY() - 100);
+ 		
+	 	if(king.getX() - tiger.getX() > 0) {
+	 		s.setImage("LightingTridentFlipped.gif");
+	 	}
+	 	
         s.setSize(200,200);
         parentProgram.add(s);
         //add(s);

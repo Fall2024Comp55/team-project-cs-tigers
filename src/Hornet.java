@@ -6,7 +6,7 @@ import acm.util.RandomGenerator;
 
 public class Hornet {
 	
-	GImage hornet = new GImage("HornetPrototype.gif",100,100);
+	GImage hornet = new GImage("Hornet.gif",100,100);
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private String stageName = "Burn's Tower";
 	private double hp = 100;
@@ -59,8 +59,8 @@ public class Hornet {
 		return hornet;
 	}
 	public void setRandomTarget() {
-	        LocationX = rgen.nextDouble(0, 1400);
-	        LocationY = rgen.nextDouble(0, 800);
+	        LocationX = rgen.nextDouble(0, 1920 - hornet.getWidth());
+	        LocationY = rgen.nextDouble(0, GROUNDLEVEL - hornet.getHeight());
     }
 	public void glideToTarget() {
         if (!active) {
@@ -90,10 +90,10 @@ public class Hornet {
     }
 	public void checkSide() {
 		if(hornet.getX() > tiger.getX()) {
-			hornet.setImage("HornetPrototype.gif");
+			hornet.setImage("Hornet.gif");
 		}
 		else {
-			hornet.setImage("HornetPrototypeFlipped.gif");
+			hornet.setImage("HornetFlipped.gif");
 		}
 	}
 	public void setHP(double i) {
@@ -163,28 +163,33 @@ public class Hornet {
 	
 	 public void stingerAttack() {
 	 	double tempX = tiger.getX();
-	 	double tempY = tiger.getY();	 	
-        GImage s = new GImage("robot.png", hornet.getX(), hornet.getY());
+	 	double tempY = tiger.getY();
+	 	GImage temp = new GImage("LeftCornerStinger.png", hornet.getX(), hornet.getY());
+        GImage s = new GImage("StraightRightStinger.png", hornet.getX(), hornet.getY());
+        s.setSize(temp.getWidth(),temp.getHeight());
         
-//        if(getCenterX() > tigerLocX) {
-//        	if(getCenterY() > tigerLocY) {
-//        		s.setImage("LeftCornerStinger.png");
-//        	}
-//        	else {
-//        		//s.setImage("");
-//        	}
-//        }
-//        else {
-//        	if(getCenterY() > tigerLocY) {
-//        		s.setImage("TopLeftCornerStinger.png");
-//        	}
-//        	else {
-//        		//s.setImage("BottomRightCornerStinger.png");
-//        	}
-//        }
+        double dx = tempX - hornet.getX();
+        double dy = tempY - hornet.getY();
         
+        if (dx > 0 && dy > 0) {
+            s.setImage("BottomRightCornerStinger.png");
+        } else if (dx > 0 && dy < 0) {
+            s.setImage("TopRightCornerStinger.png");
+        } else if (dx < 0 && dy > 0) {
+            s.setImage("BottomLeftCornerStinger.png");
+        } else if (dx < 0 && dy < 0) {
+            s.setImage("TopLeftCornerStinger.png");
+        } else if (dx > 0) {
+            s.setImage("StraightRightStinger.png");
+        } else if (dx < 0) {
+            s.setImage("StraightLeftStinger.png");
+        } else if (dy > 0) {
+            s.setImage("StraightDownStinger.png");
+        } else if (dy < 0) {
+            s.setImage("StraightUpStinger.png");
+        }
         
-        
+        s.scale(0.5);
         
         
         //add(s);
@@ -240,8 +245,8 @@ public class Hornet {
 		                    new Timer().schedule(new TimerTask() {
 		                        @Override
 		                        public void run() {
-		                            temp.setImage("explosion.png");
-		                            temp.scale(0.5);
+		                            temp.setImage("explosion.gif");
+		                            //temp.scale(0.5);
 		                            
 		                            if(imagesIntersect(temp,tiger)) {
 		                            	if(!isPaused) {
@@ -288,14 +293,14 @@ public class Hornet {
 		                    if(imagesIntersect(hornet,tiger)) {
 		                    	if(!isPaused) {
 			                    	setDamageGiven(MELEEVALUE);
-			                    	hornet.setImage("HornetPrototype.gif");
+			                    	hornet.setImage("Hornet.gif");
 			                    	active = false;
 			                    	cancel();
 		                    	}
 		                    }
 		                } else {
 		                    hornet.setLocation(tempX, tempY);
-		                    hornet.setImage("HornetPrototype.gif");
+		                    hornet.setImage("Hornet.gif");
 		                    active = false;
 		                    
 		                    if(imagesIntersect(hornet,tiger)) {

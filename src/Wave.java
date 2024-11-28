@@ -74,10 +74,10 @@ public class Wave {
 		return SEAWEEDATTACKVALUE;
 	}
 	public double getCenterX() {
-		return wave.getWidth()/2;
+		return (wave.getX() + wave.getWidth()) /2;
 	}
 	public double getCenterY() {
-		return wave.getHeight()/2;
+		return (wave.getY() + wave.getHeight())/2;
 	}
 	
 	public void setDamageGiven(int i) {
@@ -272,14 +272,27 @@ public class Wave {
 			@Override
 			public void run() {
 				if(!isPaused) {
-                    int choice = rgen.nextInt(1, 3);
-                    if (choice == 1) {
-                        seaweedAttack();
-                    } else if (choice == 2) {
-                        waveAttack();
-                    } else if (choice == 3) {
-                        waterWhip();
-                    }
+					double dx = getCenterX();
+			        double dy = getCenterY();
+			        double distance = Math.sqrt(dx * dx + dy * dy);
+			        if(distance <= 400) {
+	                    int choice = rgen.nextInt(1, 3);
+	                    if (choice == 1) {
+	                        seaweedAttack();
+	                    } else if (choice == 2) {
+	                        waveAttack();
+	                    } else if (choice == 3) {
+	                        waterWhip();
+	                    }
+			        }
+			        else {
+			        	int choice = rgen.nextInt(1, 2);
+	                    if (choice == 1) {
+	                        seaweedAttack();
+	                    } else if (choice == 2) {
+	                        waveAttack();
+	                    }
+			        }
 				}
 			}
 		},500, 500);
