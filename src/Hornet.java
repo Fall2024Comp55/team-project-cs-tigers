@@ -265,7 +265,7 @@ public class Hornet {
 		                                }
 		                            }, 1000);
 		                        }
-		                    }, 3000);
+		                    }, 1500);
 		                }
 	            	}
 	            }
@@ -376,12 +376,12 @@ public class Hornet {
             	if(!isDead()) {
 	            	if(!isPaused) {
 	            		if (!getActive()) {
-	            			int choice = rgen.nextInt(1, 3);
-			                if (choice == 1) {
+	            			int choice = rgen.nextInt(1, 10);
+			                if (choice >= 9 && choice <= 10) {
 			                    chargeAttack();
-			                } else if (choice == 2) {
+			                } else if (choice >= 1 && choice <= 4) {
 			                    stingerAttack();
-			                } else if (choice == 3) {
+			                } else if (choice >= 5 && choice <= 8) {
 			                    honeyBombAttack();
 			                }
 	                	}
@@ -390,7 +390,7 @@ public class Hornet {
             }
         };
 
-        timer.scheduleAtFixedRate(actionTask, 500, 2000);
+        timer.scheduleAtFixedRate(actionTask, 500, 1500);
         
 //        Timer t22 = new Timer();
 //        t22.scheduleAtFixedRate(new TimerTask() {

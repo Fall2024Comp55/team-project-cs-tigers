@@ -15,17 +15,19 @@ public class Round2 extends Round {
     private static final double WAVE_SPEED = 5.0; 
     private GRect overlay; // pause overlay for semi-transparent effect
     private GLabel pauseMessage; // pause message label
+    private Wave willie = new Wave(this);
+    private Tiger powerCat;
 
     @Override
     public void init() {
-        setSize(1280, 720); // size of the game window
+        setSize(1920, 1080); // size of the game window
         showWelcomeScreen(); // show the welcome GIF before gameplay starts
     }
 
     private void showWelcomeScreen() {
         // load and display the welcome GIF
         welcomeGif = new GImage("media/PoolWelcome.gif", 0, 0);
-        welcomeGif.setSize(1280, 720); // scales to fit the screen
+        welcomeGif.setSize(1920, 1080); // scales to fit the screen
         add(welcomeGif);
 
         // adds a timer to remove the welcome screen and start the round
@@ -35,7 +37,6 @@ public class Round2 extends Round {
             public void run() {
                 remove(welcomeGif); 
                 setupContent(); // set up the main content
-                startWaveMovement(); // starts wave movement
             }
         }, 3000); // displays the GIF for 3 seconds
     }
@@ -43,13 +44,19 @@ public class Round2 extends Round {
     private void setupContent() {
         // pool background
         backgroundImage = new GImage("media/PoolBackground.png", 0, 0);
-        backgroundImage.setSize(1280, 720); // scales to fit the screen
+        backgroundImage.setSize(1920, 1080); // scales to fit the screen
         add(backgroundImage);
 
         // wave character
-        waveImage = new GImage("media/WavePrototype.gif", waveX, waveY);
-        waveImage.setSize(150, 150); // set wave image size
-        add(waveImage);
+        willie.spawnWave();
+        Timer startWillie = new Timer();
+        startWillie.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		willie.setTigerLoc(new GImage("HornetPrototype.gif",600,500));
+        		//willie.setTigerLoc(powerCat.get);
+        	}
+        }, 0, 50);
 
         // pause button
         pauseButton = new GRect(1150, 20, 100, 40);
@@ -78,12 +85,11 @@ public class Round2 extends Round {
     private void togglePause() {
         isPaused = !isPaused; // toggles the pause state
         if (isPaused) {
-            stopWaveMovement();
-            showPauseOverlay(); 
+            showPauseOverlay();
         } else {
             removePauseOverlay(); 
-            startWaveMovement(); 
         }
+        willie.checkPaused(isPaused);
     }
 
     private void showPauseOverlay() {
@@ -108,28 +114,6 @@ public class Round2 extends Round {
         if (pauseMessage != null) {
             remove(pauseMessage); 
             pauseMessage = null; // reset message
-        }
-    }
-
-    private void startWaveMovement() {
-        waveMovementTimer = new Timer();
-        waveMovementTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (!isPaused) { // only move the wave if the game is not paused
-                    waveX += WAVE_SPEED;
-                    if (waveX > getWidth()) {
-                        waveX = -150; // reset wave to the left of the screen when it moves off the right edge
-                    }
-                    waveImage.setLocation(waveX, waveY); // updates wave's position
-                }
-            }
-        }, 0, 50); // move every 50ms
-    }
-
-    private void stopWaveMovement() {
-        if (waveMovementTimer != null) {
-            waveMovementTimer.cancel(); // stops the timer
         }
     }
 

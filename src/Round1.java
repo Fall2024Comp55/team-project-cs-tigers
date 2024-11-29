@@ -12,13 +12,12 @@ public class Round1 extends Round {
     private double hornetX = 540; 
     private double hornetY = 300; 
     private static final double HORNET_SPEED = 5.0;
-    private Hornet herkie;
+    private Hornet herkie = new Hornet(this);
     private Tiger powerCat;
 
     @Override
     public void init() {
         setSize(1280, 720); // set game window size
-        herkie = new Hornet(this);
         showBurnsMap(); // show burns map
     }
 

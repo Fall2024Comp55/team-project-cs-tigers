@@ -5,7 +5,7 @@ import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
 public class Wave {
-	private GImage wave = new GImage("Robot.png",500,500);
+	private GImage wave = new GImage("Willie.png",800,GROUNDLEVEL);
 	private double hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
 	private static final int WAVEATTACKVALUE = 10;
@@ -28,7 +28,7 @@ public class Wave {
 //	public int tempHealth = 200;
 //    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 500 - 9, 500);
 
-	public void Wave(GraphicsProgram parentProgram) {
+	public Wave(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
         this.wave = wave;
 	}
@@ -98,12 +98,16 @@ public class Wave {
 	
 	public void checkSide() {
 		if(wave.getX() > tiger.getX()) {
-			wave.setImage("HornetPrototype.gif");
-			isFacingRight = false;
+			//if(!isAttackActive) {
+				wave.setImage("Willie.png");
+				isFacingRight = false;
+			//}
 		}
 		else {
-			wave.setImage("HornetPrototypeFlipped.gif");
-			isFacingRight = true;
+			//if(!isAttackActive) {
+				wave.setImage("WillieFlipped.png");
+				isFacingRight = true;
+			//}
 		}
 	}
 	
@@ -132,6 +136,11 @@ public class Wave {
 	}
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
+		
+		if (isAttackActive) {
+	        return; 
+	    }
+		
         double dx = x - s.getX();
         double dy = y - s.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -156,7 +165,7 @@ public class Wave {
         		s.setLocation(x, y);
         		//remove(s);
         		parentProgram.remove(s);
-        		isAttackActive = false;
+        		//isAttackActive = false;
         }
 	}
 	
@@ -180,11 +189,26 @@ public class Wave {
 				}
 			}
 		}, 0, 50);
+		
+		Timer t2 = new Timer();
+		t2.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				isAttackActive = false;
+			}
+		}, 300);
 	}
 	
 	private void seaweedAttack() {
 		isAttackActive = true;
-		//wave.setImage();
+		
+		if(!isFacingRight) {
+			wave.setImage("SeaweedPose.png");
+		}
+		else {
+			wave.setImage("SeaweedPoseFlipped.png");
+		}
+		
 		Timer temp = new Timer();
 		temp.schedule(new TimerTask() {
 			@Override
@@ -193,7 +217,7 @@ public class Wave {
 				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
 				//add(seaweed);
 				parentProgram.add(seaweed);
-				isAttackActive = true;
+				isAttackActive = false;
 				
 				if(imagesIntersect(seaweed,tiger,false)) {
 					if(!isPaused) {
@@ -207,7 +231,7 @@ public class Wave {
 					public void run() {
 						//remove(seaweed);
 						parentProgram.remove(seaweed);
-						isAttackActive = false;
+						//isAttackActive = false;
 					}
 				}, 1000);
 			}
@@ -229,10 +253,20 @@ public class Wave {
 			@Override
 			public void run() {
 				if(isWalkActive) {
-					wave.setImage("robot.png");
+					if(!isFacingRight) {
+						wave.setImage("Willie.png");
+					}
+					else {
+						wave.setImage("WillieFlipped.png");
+					}
 				}
 				else {
-					wave.setImage("robot.png");
+					if(!isFacingRight) {
+						wave.setImage("Willie.png");
+					}
+					else {
+						wave.setImage("WillieFlipped.png");
+					}
 				}
 			}
 		}, 300);
@@ -240,29 +274,32 @@ public class Wave {
 	
 	public void spawnWave() {
 		//add(wave);
+		wave.scale(0.4);
+		wave.setLocation(800, GROUNDLEVEL - wave.getHeight());
 		parentProgram.add(wave);
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isWalkActive) {
-					
-					double tempX = tiger.getX();
-					double tempY = GROUNDLEVEL;
-					
-					Timer t = new Timer();
-					TimerTask t2 = new TimerTask() {
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							if(!isPaused) {
-								walkToEnemy(wave,tempX,tempY);
-								isWalkActive = true;
+				if(!isAttackActive) {
+					if(!isWalkActive) {
+						double tempX = tiger.getX();
+						double tempY = GROUNDLEVEL - wave.getHeight();
+						
+						Timer t = new Timer();
+						TimerTask t2 = new TimerTask() {
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								if(!isPaused) {
+									walkToEnemy(wave,tempX,tempY);
+									isWalkActive = true;
+								}
 							}
-						}
-					};	
-					
-					t.scheduleAtFixedRate(t2, 0, 50);
+						};	
+						
+						t.scheduleAtFixedRate(t2, 0, 50);
+					}
 				}
 			}
 		}, 0, 50);
@@ -286,16 +323,16 @@ public class Wave {
 	                    }
 			        }
 			        else {
-			        	int choice = rgen.nextInt(1, 2);
-	                    if (choice == 1) {
+			        	int choice = rgen.nextInt(1, 10);
+	                    if (choice >= 1 && choice <= 6) {
 	                        seaweedAttack();
-	                    } else if (choice == 2) {
+	                    } else if (choice >= 7 && choice <= 10) {
 	                        waveAttack();
 	                    }
 			        }
 				}
 			}
-		},500, 500);
+		},500, 1500);
 		
 //		 Timer t22 = new Timer();
 //	        t22.scheduleAtFixedRate(new TimerTask() {
