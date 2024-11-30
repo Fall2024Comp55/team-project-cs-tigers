@@ -49,14 +49,14 @@ public class Round2 extends Round {
 
         // wave character
         willie.spawnWave();
-        Timer startWillie = new Timer();
-        startWillie.scheduleAtFixedRate(new TimerTask() {
-        	@Override
-        	public void run() {
-        		willie.setTigerLoc(new GImage("HornetPrototype.gif",600,500));
-        		//willie.setTigerLoc(powerCat.get);
-        	}
-        }, 0, 50);
+//        Timer startWillie = new Timer();
+//        startWillie.scheduleAtFixedRate(new TimerTask() {
+//        	@Override
+//        	public void run() {
+//        		willie.setTigerLoc(new GImage("HornetPrototype.gif",600,500));
+//        		//willie.setTigerLoc(powerCat.get);
+//        	}
+//        }, 0, 50);
 
         // pause button
         pauseButton = new GRect(1150, 20, 100, 40);

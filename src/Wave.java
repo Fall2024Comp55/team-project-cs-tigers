@@ -11,6 +11,7 @@ public class Wave {
 	private static final int WAVEATTACKVALUE = 10;
 	private static final int MELEEATTACKVALUE = 5;
 	private static final int SEAWEEDATTACKVALUE = 15;
+	private int ATTACKSPEED = 1000;
 	private double tigerLocX = 1500;
 	private double tigerLocY = 800;
 	private static final double SPEED = 15.0;
@@ -26,7 +27,7 @@ public class Wave {
 	private GraphicsProgram parentProgram;
 	
 //	public int tempHealth = 200;
-//    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 500 - 9, 500);
+    GImage tigerTemp = new GImage("Hornet.gif", 500, GROUNDLEVEL - 320);
 
 	public Wave(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
@@ -36,7 +37,7 @@ public class Wave {
         program.add(wave);
     }
 	public void setTigerLoc(GImage s) {
-		tiger = s;
+		tiger = tigerTemp;
 	}
 	public void checkPaused(boolean t) {
 		isPaused = t;
@@ -215,6 +216,7 @@ public class Wave {
 			public void run() {
 				//wave.setImage();
 				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
+				seaweed.setLocation(tiger.getX(), GROUNDLEVEL - seaweed.getHeight());
 				//add(seaweed);
 				parentProgram.add(seaweed);
 				isAttackActive = false;
@@ -239,6 +241,7 @@ public class Wave {
 	}
 	
 	private void waterWhip() {
+		isAttackActive = true;
 		wave.setImage("robot.png");
 		
 		if(imagesIntersect(wave,tiger,true)) {
@@ -268,6 +271,8 @@ public class Wave {
 						wave.setImage("WillieFlipped.png");
 					}
 				}
+				
+				isAttackActive = false;
 			}
 		}, 300);
 	}
@@ -275,7 +280,9 @@ public class Wave {
 	public void spawnWave() {
 		//add(wave);
 		wave.scale(0.4);
-		wave.setLocation(800, GROUNDLEVEL - wave.getHeight());
+		setTigerLoc(tiger);
+		wave.setLocation(1700, GROUNDLEVEL - wave.getHeight());
+		parentProgram.add(tiger);
 		parentProgram.add(wave);
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
@@ -309,20 +316,22 @@ public class Wave {
 			@Override
 			public void run() {
 				if(!isPaused) {
-					double dx = getCenterX();
-			        double dy = getCenterY();
-			        double distance = Math.sqrt(dx * dx + dy * dy);
-			        if(distance <= 400) {
-	                    int choice = rgen.nextInt(1, 3);
-	                    if (choice == 1) {
+					 double dx = wave.getX() - tiger.getX();
+			         double dy = wave.getY() - tiger.getY();
+			         double distance = Math.sqrt(dx * dx + dy * dy);
+			        if(distance <= 200) {
+			        	ATTACKSPEED = 300;
+	                    int choice = rgen.nextInt(1, 10);
+	                    if (choice == 10) {
 	                        seaweedAttack();
-	                    } else if (choice == 2) {
+	                    } else if (choice == 9) {
 	                        waveAttack();
-	                    } else if (choice == 3) {
+	                    } else if (choice >= 1 && choice <= 8) {
 	                        waterWhip();
 	                    }
 			        }
 			        else {
+			        	ATTACKSPEED = 2000;
 			        	int choice = rgen.nextInt(1, 10);
 	                    if (choice >= 1 && choice <= 6) {
 	                        seaweedAttack();
@@ -332,7 +341,7 @@ public class Wave {
 			        }
 				}
 			}
-		},500, 1500);
+		},500, ATTACKSPEED);
 		
 //		 Timer t22 = new Timer();
 //	        t22.scheduleAtFixedRate(new TimerTask() {
