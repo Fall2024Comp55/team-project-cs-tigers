@@ -1,4 +1,6 @@
 import acm.graphics.*;
+
+import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,12 +18,14 @@ public class Round2 extends Round {
     private GRect overlay; // pause overlay for semi-transparent effect
     private GLabel pauseMessage; // pause message label
     private Wave willie = new Wave(this);
-    private Tiger powerCat;
+    private Tiger powerCat = new Tiger(this);
 
     @Override
     public void init() {
         setSize(1920, 1080); // size of the game window
+        addKeyListeners();
         showWelcomeScreen(); // show the welcome GIF before gameplay starts
+    
     }
 
     private void showWelcomeScreen() {
@@ -71,6 +75,22 @@ public class Round2 extends Round {
 
         // adds mouse listener for pause
         addMouseListeners();
+    
+        powerCat.spawnTiger();
+        
+        Timer positionCheckTimer = new Timer();
+        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                // Ensure both tiger and hornet are initialized
+                if (powerCat != null && willie != null) {
+                    GImage hornetLoc = willie.getWavetLoc();
+                    if (hornetLoc != null) {
+                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
+                    }
+                }
+            }
+        }, 0, 50); // Check every 50ms
     }
 
     @Override
@@ -117,6 +137,15 @@ public class Round2 extends Round {
         }
     }
 
+   
+    @Override
+    public void keyPressed(KeyEvent e) {
+        powerCat.keyPressed(e, this); // Pass the event to the Tiger object
+    }
+    
+    
+    
+    
     @Override
     public void run() {
         // starts round 2 gameplay
