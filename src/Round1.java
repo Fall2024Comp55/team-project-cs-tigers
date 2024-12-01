@@ -1,4 +1,6 @@
 import acm.graphics.*;
+
+import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,11 +15,12 @@ public class Round1 extends Round {
     private double hornetY = 300; 
     private static final double HORNET_SPEED = 5.0;
     private Hornet herkie = new Hornet(this);
-    private Tiger powerCat;
-
+    private Tiger powerCat = new Tiger(this);
+    
     @Override
     public void init() {
         setSize(1280, 720); // set game window size
+        addKeyListeners();
         showBurnsMap(); // show burns map
     }
 
@@ -78,10 +81,27 @@ public class Round1 extends Round {
         	}
         }, 0, 50);
 
+        powerCat.spawnTiger();
         // add pause button
         pauseMenu.addPauseButton(this);
 
         addMouseListeners(); // enable interactions
+        
+        Timer positionCheckTimer = new Timer();
+        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                // Ensure both tiger and hornet are initialized
+                if (powerCat != null && herkie != null) {
+                    GImage hornetLoc = herkie.getHornetLoc();
+                    if (hornetLoc != null) {
+                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
+                    }
+                }
+            }
+        }, 0, 50); // Check every 50ms
+
+    
     }
 
     @Override
@@ -115,6 +135,13 @@ public class Round1 extends Round {
     }
 
     @Override
+    public void keyPressed(KeyEvent e) {
+        powerCat.keyPressed(e, this); // Pass the event to the Tiger object
+    }
+
+   
+    
+    @Override
     public void run() {
         // start round 1
         updateCaption("welcome to round 1: tiger vs. hornet at burn's tower!");
@@ -134,6 +161,7 @@ public class Round1 extends Round {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
 
 
