@@ -27,11 +27,11 @@ public class King {
 	private static final double KINGWIDTH = 300;
 	private static final double KINGHEIGHT = 324;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
-	private GImage king = new GImage("tritonRight.png",0,GROUNDLEVEL - KINGHEIGHT);
+	private GImage king = new GImage("KingLeft.png",0,GROUNDLEVEL);
 	private GImage tiger = new GImage("",0,0);
 	private GraphicsProgram parentProgram;
 	
-	public void King(GraphicsProgram parentProgram) {
+	public King(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
         this.king = king;
 	}
@@ -95,12 +95,12 @@ public class King {
 	
 	public void checkSide() {
 		if(king.getX() > tiger.getX()) {
-			king.setImage("tritonLeft.png");
+			king.setImage("KingLeft.png");
 			//king.setSize(KINGWIDTH, KINGHEIGHT);
 			isFacingRight = false;
 		}
 		else {
-			king.setImage("tritonRight.png");
+			king.setImage("KingRight.png");
 			//king.setSize(KINGWIDTH, KINGHEIGHT);
 			isFacingRight = true;
 		}
@@ -339,6 +339,7 @@ public class King {
 	public void spawnKing() {
 		//king.setSize(KINGWIDTH, KINGHEIGHT);
 		//add(king);
+		king.setLocation(800, GROUNDLEVEL - king.getHeight());
 		parentProgram.add(king);
 		
 		Timer movementTimer = new Timer();
@@ -350,7 +351,7 @@ public class King {
 						if(!isAttackActive) {
 						
 							double tempX = tiger.getX();
-							double tempY = GROUNDLEVEL - KINGHEIGHT;
+							double tempY = GROUNDLEVEL - king.getHeight();
 							
 							Timer t = new Timer();
 							TimerTask t2 = new TimerTask() {
@@ -374,7 +375,7 @@ public class King {
 			@Override
 			public void run() {
 				if(!isPaused) {
-                    int choice = rgen.nextInt(1, 3);
+                    int choice = rgen.nextInt(1, 10);
                     if (choice == 1) {
                         lightingBolt();
                         lightingBolt();

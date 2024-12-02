@@ -14,7 +14,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
 	private double damageGiven = 0;
 	private boolean spAttackUsed = false;
-	GImage tiger = new GImage("media/tritonRight.png", 250, 500 );
+	GImage tiger = new GImage("KingRight.png", 250, 500 );
 	private GImage attack;
 	private GImage specialAttack;
 	private boolean isFacingRight = true;
@@ -85,11 +85,11 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	
 	public void checkSide(GImage opponent) {
 		if(opponent.getX() < tiger.getX()) {
-			tiger.setImage("media/tritonLeft.png");
+			tiger.setImage("KingLeft.png");
 			isFacingRight = false;
 		}
 		else {
-			tiger.setImage("media/tritonRight.png");
+			tiger.setImage("KingRight.png");
 			isFacingRight = true;
 		}
 	}
