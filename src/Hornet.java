@@ -27,9 +27,9 @@ public class Hornet {
     private static final double CHARGESPEED = 25.0;
     private static final double TIGERWIDTH = 200.0;
     private static final double TIGERHEIGHT = 200.0;
-    private static final int RANGEATTACKVALUE = 5;
-	private static final int MELEEVALUE = 15;
-	private static final int HONEYBOMBVALUE = 20;
+    private static final int RANGEATTACKVALUE = 2;
+	private static final int MELEEVALUE = 10;
+	private static final int HONEYBOMBVALUE = 5;
     private TimerTask moveTask;
 	Timer timer = new Timer();
 	private GImage tiger = new GImage("",0,0);
@@ -58,6 +58,9 @@ public class Hornet {
 	}
 	public GImage getHornetLoc() {
 		return hornet;
+	}
+	public double getGroundLevel() {
+		return GROUNDLEVEL;
 	}
 	public void setRandomTarget() {
 	        LocationX = rgen.nextDouble(0, 1920 - hornet.getWidth());
@@ -170,9 +173,9 @@ public class Hornet {
 	 public void stingerAttack() {
 	 	double tempX = tiger.getX();
 	 	double tempY = tiger.getY();
-	 	GImage temp = new GImage("LeftCornerStinger.png", hornet.getX(), hornet.getY());
+	 	//GImage temp = new GImage("LeftCornerStinger.png", hornet.getX(), hornet.getY());
         GImage s = new GImage("StraightRightStinger.png", hornet.getX(), hornet.getY());
-        s.setSize(temp.getWidth(),temp.getHeight());
+        //s.setSize(temp.getWidth(),temp.getHeight());
         
         double dx = tempX - hornet.getX();
         double dy = tempY - hornet.getY();
@@ -379,7 +382,7 @@ public class Hornet {
             	if(!isDead()) {
 	            	if(!isPaused) {
 	            		if (!getActive()) {
-	            			int choice = rgen.nextInt(1, 10);
+	            			int choice = rgen.nextInt(5, 10);
 			                if (choice >= 9 && choice <= 10) {
 			                    chargeAttack();
 			                } else if (choice >= 1 && choice <= 4) {

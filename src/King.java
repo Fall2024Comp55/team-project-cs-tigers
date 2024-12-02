@@ -50,6 +50,12 @@ public class King {
 	public void setDamageGiven(int i) {
 		damageGiven = damageGiven + i;
 	}
+	public void setDamageGivenToZero() {
+		damageGiven = 0;
+	}
+	public double getGroundLevel() {
+		return GROUNDLEVEL;
+	}
 	public int getDamageGiven() {
 		return damageGiven;
 	}

@@ -14,7 +14,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
 	private double damageGiven = 0;
 	private boolean spAttackUsed = false;
-	GImage tiger = new GImage("KingRight.png", 250, 500 );
+	//GImage tiger = new GImage("KingRight.png", 250, FLOOR );
 	private GImage attack;
 	private GImage specialAttack;
 	private boolean isFacingRight = true;
@@ -29,12 +29,15 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public static final int PROGRAM_WIDTH = 1920; //temp value for testing
 	public static final int PROGRAM_HEIGHT = 1080; // temp values for testing
 	private GRect test = new GRect(100, 500 , 200, 200);
-	private static final int FLOOR = 500;
-	private GRect opponent = new GRect(800, FLOOR, 100, 100); // test opponent rectangle
+	private double FLOOR = 500;
+	//private GRect opponent = new GRect(800, FLOOR, 100, 100); // test opponent rectangle
+	private GImage opponent = new GImage("",0,0);
 	private double opponentHP = 100;
+	GImage tiger = new GImage("KingRight.png", 250, FLOOR);
 	
 	
 	public void spawnTiger() {
+		tiger = new GImage("KingRight.png", 250, FLOOR - tiger.getHeight());
 		parentProgram.add(tiger);
 		
 	}
@@ -43,6 +46,12 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
         this.parentProgram = parentProgram;
     }
 	
+	public void setOpponent(GImage t) {
+		opponent = t;
+	}
+	public void setGroundLevel(double g) {
+		FLOOR = g;
+	}
 	
 	public double getHP() {
 		return hp;
@@ -114,10 +123,10 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 		 		}
 		 		break;
          case KeyEvent.VK_LEFT:
-	         tiger.move(-15, 0); // Move left
+	         tiger.move(-30, 0); // Move left
 	         break;
 	     case KeyEvent.VK_RIGHT:
-	         tiger.move(15, 0); // Move right
+	         tiger.move(30, 0); // Move right
 	         break;
 	     case KeyEvent.VK_Z: // Attack
 	            normalAttack(program);

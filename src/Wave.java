@@ -5,7 +5,6 @@ import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
 public class Wave {
-	private GImage wave = new GImage("Willie.png",800,GROUNDLEVEL);
 	private double hp = 100;
 	private String stageName = "Chris Kjeldsen Pool";
 	private static final int WAVEATTACKVALUE = 10;
@@ -25,9 +24,10 @@ public class Wave {
 	private GImage tiger = new GImage("",0,0);
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GraphicsProgram parentProgram;
+	private GImage wave = new GImage("Willie.png",800,GROUNDLEVEL);
 	
 //	public int tempHealth = 200;
-    GImage tigerTemp = new GImage("Hornet.gif", 500, GROUNDLEVEL - 320);
+    //GImage tigerTemp = new GImage("Hornet.gif", 500, GROUNDLEVEL - 320);
 
 	public Wave(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
@@ -37,18 +37,22 @@ public class Wave {
         program.add(wave);
     }
 	public void setTigerLoc(GImage s) {
-		tiger = tigerTemp;
+		tiger = s;
 	}
 	public void checkPaused(boolean t) {
 		isPaused = t;
 	}
 	
-	public GImage getWavetLoc() {
+	public GImage getWaveLoc() {
 		return wave;
 	}
 	
 	public String getStage() {
 		return stageName;
+	}
+	
+	public double getGroundLevel() {
+		return GROUNDLEVEL;
 	}
 	
 	public void setHP(double i) {
@@ -83,6 +87,9 @@ public class Wave {
 	
 	public void setDamageGiven(int i) {
 		damageGiven = damageGiven + i;
+	}
+	public void setDamageGivenToZero() {
+		damageGiven = 0;
 	}
 	public int getDamageGiven() {
 		return damageGiven;
@@ -138,9 +145,9 @@ public class Wave {
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
 		
-		if (isAttackActive) {
-	        return; 
-	    }
+//		if (isAttackActive) {
+//	        return; 
+//	    }
 		
         double dx = x - s.getX();
         double dy = y - s.getY();
@@ -151,7 +158,7 @@ public class Wave {
             checkSide();
         } else {
         		s.setLocation(x, y);
-        		isWalkActive = false;
+        		//isWalkActive = false;
         }
     }
 	
@@ -210,13 +217,15 @@ public class Wave {
 			wave.setImage("SeaweedPoseFlipped.png");
 		}
 		
+		double tempX = tiger.getX();
+		
 		Timer temp = new Timer();
 		temp.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				//wave.setImage();
 				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
-				seaweed.setLocation(tiger.getX(), GROUNDLEVEL - seaweed.getHeight());
+				seaweed.setLocation(tempX, GROUNDLEVEL - seaweed.getHeight());
 				//add(seaweed);
 				parentProgram.add(seaweed);
 				isAttackActive = false;
@@ -280,15 +289,15 @@ public class Wave {
 	public void spawnWave() {
 		//add(wave);
 		wave.scale(0.4);
-		setTigerLoc(tiger);
+		//setTigerLoc(tiger);
 		wave.setLocation(1700, GROUNDLEVEL - wave.getHeight());
-		parentProgram.add(tiger);
+		//parentProgram.add(tiger);
 		parentProgram.add(wave);
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isAttackActive) {
+				//if(!isAttackActive) {
 					if(!isWalkActive) {
 						double tempX = tiger.getX();
 						double tempY = GROUNDLEVEL - wave.getHeight();
@@ -301,6 +310,11 @@ public class Wave {
 								if(!isPaused) {
 									walkToEnemy(wave,tempX,tempY);
 									isWalkActive = true;
+									
+									if(wave.getX() == tempX && wave.getY() == tempY) {
+										isWalkActive = false;
+										cancel();
+									}
 								}
 							}
 						};	
@@ -308,8 +322,8 @@ public class Wave {
 						t.scheduleAtFixedRate(t2, 0, 50);
 					}
 				}
-			}
-		}, 0, 50);
+			//}
+		}, 0, 500);
 		
 		Timer attackTimer = new Timer();
 		attackTimer.scheduleAtFixedRate(new TimerTask() {
@@ -341,7 +355,7 @@ public class Wave {
 			        }
 				}
 			}
-		},500, ATTACKSPEED);
+		},500, 1000);
 		
 //		 Timer t22 = new Timer();
 //	        t22.scheduleAtFixedRate(new TimerTask() {

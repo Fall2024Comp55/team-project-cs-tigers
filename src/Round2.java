@@ -53,14 +53,33 @@ public class Round2 extends Round {
 
         // wave character
         willie.spawnWave();
-//        Timer startWillie = new Timer();
-//        startWillie.scheduleAtFixedRate(new TimerTask() {
-//        	@Override
-//        	public void run() {
-//        		willie.setTigerLoc(new GImage("HornetPrototype.gif",600,500));
-//        		//willie.setTigerLoc(powerCat.get);
-//        	}
-//        }, 0, 50);
+        Timer startWillie = new Timer();
+        startWillie.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		willie.setTigerLoc(powerCat.returnTiger());
+        		if (!isPaused && powerCat.getHP() > 0) {
+                    powerCat.damage(willie.getDamageGiven());
+                    willie.setDamageGivenToZero();
+                    System.out.println("Health: " + powerCat.getHP());
+                }
+                
+                if (!isPaused && willie.getHP() > 0) {
+                    willie.damage(powerCat.getDamageGiven());
+                    powerCat.setDamageGivenToZero();
+                    System.out.println("Health: " + willie.getHP());
+                }
+                
+                if (powerCat != null && willie != null) {
+                    GImage waveLoc = willie.getWaveLoc();
+                    if (waveLoc != null) {
+                        powerCat.checkSide(waveLoc); // Call Tiger's checkSide method
+                    }
+                }
+        	}
+        }, 0, 50);
+        
+        powerCat.setGroundLevel(willie.getGroundLevel());
 
         // pause button
         pauseButton = new GRect(1150, 20, 100, 40);
@@ -78,19 +97,19 @@ public class Round2 extends Round {
     
         powerCat.spawnTiger();
         
-        Timer positionCheckTimer = new Timer();
-        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Ensure both tiger and hornet are initialized
-                if (powerCat != null && willie != null) {
-                    GImage hornetLoc = willie.getWavetLoc();
-                    if (hornetLoc != null) {
-                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
-                    }
-                }
-            }
-        }, 0, 50); // Check every 50ms
+//        Timer positionCheckTimer = new Timer();
+//        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                // Ensure both tiger and hornet are initialized
+//                if (powerCat != null && willie != null) {
+//                    GImage hornetLoc = willie.getWaveLoc();
+//                    if (hornetLoc != null) {
+//                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
+//                    }
+//                }
+//            }
+//        }, 0, 50); // Check every 50ms
     }
 
     @Override

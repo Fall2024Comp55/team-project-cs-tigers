@@ -72,6 +72,7 @@ public class Round1 extends Round {
             @Override
             public void run() {
                 herkie.setTigerLoc(powerCat.returnTiger());
+                powerCat.setOpponent(herkie.getHornetLoc());
                 if (!isPaused && powerCat.getHP() > 0) {
                     powerCat.damage(herkie.getDamageGiven());
                     herkie.setDamageGivenToZero();
@@ -81,12 +82,20 @@ public class Round1 extends Round {
                     herkie.damage(powerCat.getDamageGiven());
                     powerCat.setDamageGivenToZero();
                 }
+                
+                if (powerCat != null && herkie != null) {
+                    GImage waveLoc = herkie.getHornetLoc();
+                    if (waveLoc != null) {
+                        powerCat.checkSide(waveLoc); // Call Tiger's checkSide method
+                    }
+                }
 
                 checkGameOver(); // Check if the game has ended
             }
         }, 0, 50);
 
         powerCat.spawnTiger();
+        powerCat.setGroundLevel(herkie.getGroundLevel());
         setupHealthBars();
         addMouseListeners(); // Enable interactions
     }
