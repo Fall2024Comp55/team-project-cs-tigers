@@ -1,69 +1,59 @@
+import acm.graphics.*;
+import acm.program.*;
 
-/*public class ResultScreen {
-	
-	public void ShowResult(Player user, Player cpu) {
-		
-		System.out.println("= = = = = Result Screen = = = = =\n\n"); //Main Heading 
-		if (user.score() > cpu.score()) {
-			System.out.println(user.getName() + " is the winer !!!\n"); //Congratulating the User on victory
-			System.out.println("User Score: " + user.score() + "\n"); //Display user score
-		}
-		else {
-			System.out.println("User did not win. Try again!!!\n"); //Try Again prompt for the user 
-			System.out.println("User Score: " + user.score() + "\n"); //Displaying user score  
-		}	
-		//Displaying the Creators of the game.
-		System.out.println("Creators:\n");
-		System.out.println("Ibrahim");
-		System.out.println("Paul");
-		System.out.println("Faizah");
-		System.out.println("Rogelio");
-		System.out.println("Thank you for playing.");
+public class ResultScreen extends GraphicsProgram {
+    private GImage resultBackground; // Holds the victory or defeat screen image
+    private GLabel resultMessage; // Message for the player
+    private GLabel creatorsLabel; // Credits for creators
+
+    @Override
+    public void run() {
+        // Default behavior when starting the program
+        // This can remain empty for now if you don't need specific behavior
+    }
+
+    // Method to show result screen
+    public void showResult(boolean playerWon) {
+        removeAll(); // Clear the screen to prepare for result display
+
+        if (playerWon) {
+            // Display victory screen
+            resultBackground = new GImage("media/vicScreen.gif", 0, 0);
+        } else {
+            // Display defeat screen
+            resultBackground = new GImage("media/dftScreen.gif", 0, 0);
+        }
+
+        // Scale the background to fit the window
+        resultBackground.setSize(getWidth(), getHeight());
+        add(resultBackground);
+
+        // Set up result message
+        resultMessage.setFont("Monospaced-bold-30");
+        add(resultMessage);
+
+        // Add creators' credits
+        showCredits();
+    }
+
+    private void showCredits() {
+        creatorsLabel = new GLabel("Game Created By: Ibrahim, Paul, Faizah, Rogelio", 50, getHeight() - 50);
+        creatorsLabel.setFont("Monospaced-20");
+        creatorsLabel.setColor(java.awt.Color.WHITE);
+        add(creatorsLabel);
+    }
+
+    // Main method for standalone testing
+    public static void main(String[] args) {
+        ResultScreen resultScreen = new ResultScreen();
+        resultScreen.start(); // Start the ACM program
+        resultScreen.showResult(true); // Replace with false to test defeat screen
+    }
+
+	public void setSize(double width, double height) {
+		// TODO Auto-generated method stub
 		
 	}
-	
 }
 
-/*
-    public static void main(String[] args) {
-        System.out.println("----- Result Screen -----");
 
-        Player user = new Player("User", 50); // placeholder  
-        Player cpu = new Player("CPU", 25);   //placeholder
-
-        if (user.score() > cpu.score()) {
-            System.out.println(user.getName() + " is the winner!!!");
-            System.out.println("User Score: " + user.score());
-        } else {
-            System.out.println("CPU wins! Try again!");
-            System.out.println("Score: " + cpu.score());
-            
-
-        	//Credits - Made by Ibrahim, Faizah, Paul, Rogelio
-            System.out.println("\n");
-        	System.out.println("Thank you for playing\n");
-        	System.out.println("This game was made by Ibrahim, Faizah, Paul and Rogelio\n");
-        }
-    }
-}
-*/
-/*
-// tester 
-// demo placerholder 
-class Player {
-    private String name;
-    private int score = 0;
-
-    public Player(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }
-
-    public int score() {
-        return score;
-    }
-
-    public String getName() {
-        return name;
-    }
-} */
