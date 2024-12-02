@@ -180,7 +180,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	    attackHitbox.setFilled(true);
 	    attackHitbox.setFillColor(java.awt.Color.RED);
 	    program.add(attackHitbox);
-	    
+	    Sound.playSound("media/punch.wav");
 	    if(attackHitbox.getBounds().intersects(opponent.getBounds())) {
         	setDamageGiven(attack_val);
         }
