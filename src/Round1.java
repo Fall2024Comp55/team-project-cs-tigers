@@ -21,14 +21,15 @@ public class Round1 extends Round {
 
     @Override
     public void init() {
-        setSize(1280, 720); // Set game window size
+        setSize(getWidth(), getHeight()); // Set game window size
         addKeyListeners();
         showBurnsMap(); // Show Burns map
     }
 
     private void showBurnsMap() {
         GImage burnsMap = new GImage("media/BurnsMap.png", 0, 0);
-        burnsMap.setSize(1920, 1080);
+        //burnsMap.setSize(1920, 1080);
+        burnsMap.setSize(getWidth(), getHeight());
         add(burnsMap);
 
         Timer mapTimer = new Timer();
@@ -43,7 +44,8 @@ public class Round1 extends Round {
 
     private void showWelcomeScreen() {
         welcomeGif = new GImage("media/BurnsTWelcome.gif", 0, 0);
-        welcomeGif.setSize(1920, 1080);
+        //welcomeGif.setSize(1920, 1080);
+        welcomeGif.setSize(getWidth(),getHeight());
         add(welcomeGif);
 
         Timer welcomeTimer = new Timer();

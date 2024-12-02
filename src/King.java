@@ -9,10 +9,10 @@ public class King {
 	private double hp = 100;
 	private int damageGiven = 0;
 	private String stageName = "Alex G. Spanos Center";
-	private static final int TRIDENTATTACKVALUE = 10;
-	private static final int MELEEVALUE = 5;
-	private static final int GRENADEATTACKVALUE = 15;
-	private static final int LIGHTINGBOLTVALUE = 15;
+	private static final int TRIDENTATTACKVALUE = 3;
+	private static final int MELEEVALUE = 2;
+	private static final int GRENADEATTACKVALUE = 5;
+	private static final int LIGHTINGBOLTVALUE = 8;
 	private double tigerLocX = 500;
 	private double tigerLocY = 800;
 	private static final double SPEED = 15.0;

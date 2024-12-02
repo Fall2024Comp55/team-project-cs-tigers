@@ -20,7 +20,7 @@ public class Hornet {
     private int damageGiven = 0;
     private boolean isPaused = false;
     private boolean isFacingRight = false;
-    private static final double GROUNDLEVEL = 600.0;
+    private static final double GROUNDLEVEL = 900.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
     private static final double HONEYBOMBSPEED = 20.0;
@@ -30,6 +30,7 @@ public class Hornet {
     private static final int RANGEATTACKVALUE = 2;
 	private static final int MELEEVALUE = 10;
 	private static final int HONEYBOMBVALUE = 5;
+	private int numOfStingers = 0; 
     private TimerTask moveTask;
 	Timer timer = new Timer();
 	private GImage tiger = new GImage("",0,0);
@@ -200,6 +201,8 @@ public class Hornet {
         
         s.scale(0.5);
         
+        numOfStingers = numOfStingers + 1;
+        
         //
         //add(s);
         parentProgram.add(s);
@@ -214,6 +217,7 @@ public class Hornet {
 	                	if(!isPaused) {
 		                    setDamageGiven(RANGEATTACKVALUE);
 		                    parentProgram.remove(s);
+		                    numOfStingers = numOfStingers - 1;
 		                   //remove(s);
 		                    cancel();
 	                	}
@@ -221,6 +225,7 @@ public class Hornet {
 	                
 	                if (s.getX() == tempX && s.getY() == tempY) {
 	                    parentProgram.remove(s);
+	                    numOfStingers = numOfStingers - 1;
 	                	//remove(s);
 	                    cancel();
 	                }
@@ -382,11 +387,13 @@ public class Hornet {
             	if(!isDead()) {
 	            	if(!isPaused) {
 	            		if (!getActive()) {
-	            			int choice = rgen.nextInt(5, 10);
+	            			int choice = rgen.nextInt(1, 10);
 			                if (choice >= 9 && choice <= 10) {
 			                    chargeAttack();
 			                } else if (choice >= 1 && choice <= 4) {
-			                    stingerAttack();
+			                	if(numOfStingers < 3) {
+			                		stingerAttack();
+			                	}
 			                } else if (choice >= 5 && choice <= 8) {
 			                    honeyBombAttack();
 			                }
