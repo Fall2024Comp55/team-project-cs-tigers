@@ -79,6 +79,7 @@ public class Round2 extends Round {
         	}
         }, 0, 50);
         
+        
         powerCat.setGroundLevel(willie.getGroundLevel());
 
         // pause button

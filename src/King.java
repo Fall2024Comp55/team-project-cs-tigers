@@ -111,7 +111,7 @@ public class King {
 			isFacingRight = true;
 		}
 	}
-	
+	//
 	private boolean imagesIntersect(GImage image1, GImage image2, boolean t) {
 	    double x1 = image1.getX();
 	    double y1 = image1.getY();

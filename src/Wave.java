@@ -289,10 +289,10 @@ public class Wave {
 	public void spawnWave() {
 		//add(wave);
 		wave.scale(0.4);
-		//setTigerLoc(tiger);
 		wave.setLocation(1700, GROUNDLEVEL - wave.getHeight());
-		//parentProgram.add(tiger);
 		parentProgram.add(wave);
+		
+		//
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override

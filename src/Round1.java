@@ -93,6 +93,7 @@ public class Round1 extends Round {
                 checkGameOver(); // Check if the game has ended
             }
         }, 0, 50);
+        
 
         powerCat.spawnTiger();
         powerCat.setGroundLevel(herkie.getGroundLevel());

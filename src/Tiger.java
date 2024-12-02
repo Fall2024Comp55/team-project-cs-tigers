@@ -39,7 +39,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public void spawnTiger() {
 		tiger = new GImage("KingRight.png", 250, FLOOR - tiger.getHeight());
 		parentProgram.add(tiger);
-		
+		//
 	}
 	
 	public Tiger(GraphicsProgram parentProgram) {
