@@ -126,6 +126,9 @@ public class Hornet {
 	public void setDamageGiven(int i) {
 		damageGiven = damageGiven + i;
 	}
+	public void setDamageGivenToZero() {
+		damageGiven = 0;
+	}
 	public int getDamageGiven() {
 		return damageGiven;
 	}

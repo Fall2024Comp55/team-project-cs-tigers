@@ -8,7 +8,7 @@ import acm.program.GraphicsProgram;
 
 public class Tiger  { // extends GraphicsProgram implements ActionListener
 	//variables for the tiger
-	public double hp = 30; //temp hp value change later //default is 100
+	public double hp = 100; //temp hp value change later //default is 100
 	public static final int attack_val = 10; //temp attack value change later
 	public static final int specialAttack_val = 30; // temp special attack value change later
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
@@ -57,6 +57,10 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	
 	public void setDamageGiven(double i) {
 		damageGiven = damageGiven + i;
+	}
+	
+	public void setDamageGivenToZero() {
+		damageGiven = 0;
 	}
 	
 	public double getDamageGiven() {

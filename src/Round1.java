@@ -76,10 +76,45 @@ public class Round1 extends Round {
         startHerkie.scheduleAtFixedRate(new TimerTask() {
         	@Override
         	public void run() {
-        		herkie.setTigerLoc(new GImage("HornetPrototype.gif",600,500));
-        		//herkie.setTigerLoc(powerCat.get);
+        		herkie.setTigerLoc(powerCat.returnTiger());
+        		if (!isPaused && powerCat.getHP() > 0) {
+                    powerCat.damage(herkie.getDamageGiven());
+                    herkie.setDamageGivenToZero();
+                    System.out.println("Health: " + powerCat.getHP());
+                }
+                
+                if (!isPaused && herkie.getHP() > 0) {
+                    herkie.damage(powerCat.getDamageGiven());
+                    powerCat.setDamageGivenToZero();
+                    System.out.println("Health: " + herkie.getHP());
+                }
+                
+                if (powerCat != null && herkie != null) {
+                    GImage hornetLoc = herkie.getHornetLoc();
+                    if (hornetLoc != null) {
+                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
+                    }
+                }
         	}
         }, 0, 50);
+        
+//        Timer damageCheck = new Timer();
+//        damageCheck.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (!isPaused && powerCat.getHP() > 0) {
+//                    powerCat.damage(herkie.getDamageGiven());
+//                    herkie.setDamageGivenToZero();
+//                    System.out.println("Health: " + powerCat.getHP());
+//                }
+//                
+//                if (!isPaused && herkie.getHP() > 0) {
+//                    herkie.damage(powerCat.getDamageGiven());
+//                    powerCat.setDamageGivenToZero();
+//                    System.out.println("Health: " + herkie.getHP());
+//                }
+//            }
+//        }, 0, 500); 
 
         powerCat.spawnTiger();
         // add pause button
@@ -87,19 +122,19 @@ public class Round1 extends Round {
 
         addMouseListeners(); // enable interactions
         
-        Timer positionCheckTimer = new Timer();
-        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Ensure both tiger and hornet are initialized
-                if (powerCat != null && herkie != null) {
-                    GImage hornetLoc = herkie.getHornetLoc();
-                    if (hornetLoc != null) {
-                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
-                    }
-                }
-            }
-        }, 0, 50); // Check every 50ms
+//        Timer positionCheckTimer = new Timer();
+//        positionCheckTimer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                // Ensure both tiger and hornet are initialized
+//                if (powerCat != null && herkie != null) {
+//                    GImage hornetLoc = herkie.getHornetLoc();
+//                    if (hornetLoc != null) {
+//                        powerCat.checkSide(hornetLoc); // Call Tiger's checkSide method
+//                    }
+//                }
+//            }
+//        }, 0, 50); // Check every 50ms
 
     
     }
@@ -114,24 +149,6 @@ public class Round1 extends Round {
             isPaused = true; 
         }
         herkie.checkPaused(isPaused);
-    }
-
-    private void startHornetMovement() {
-        hornetMovementTimer = new Timer();
-        hornetMovementTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (!isPaused) {
-                    hornetX += HORNET_SPEED;
-                    if (hornetX > getWidth()) hornetX = -150;
-                    hornetImage.setLocation(hornetX, hornetY);
-                }
-            }
-        }, 0, 50);
-    }
-
-    private void stopHornetMovement() {
-        if (hornetMovementTimer != null) hornetMovementTimer.cancel();
     }
 
     @Override
