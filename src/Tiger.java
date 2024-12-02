@@ -9,7 +9,7 @@ import acm.program.GraphicsProgram;
 public class Tiger  { // extends GraphicsProgram implements ActionListener
 	//variables for the tiger
 	public double hp = 100; //temp hp value change later //default is 100
-	public static final int attack_val = 10; //temp attack value change later
+	public static final int attack_val = 5; //temp attack value change later
 	public static final int specialAttack_val = 30; // temp special attack value change later
 	public static final int speed = 1; //temp value that affects the character's movement speed if movement logic changes remove this
 	private double damageGiven = 0;
@@ -29,17 +29,18 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public static final int PROGRAM_WIDTH = 1920; //temp value for testing
 	public static final int PROGRAM_HEIGHT = 1080; // temp values for testing
 	private GRect test = new GRect(100, 500 , 200, 200);
-	private double FLOOR = 500;
+	private double FLOOR = 1400;
 	//private GRect opponent = new GRect(800, FLOOR, 100, 100); // test opponent rectangle
 	private GImage opponent = new GImage("",0,0);
 	private double opponentHP = 100;
-	GImage tiger = new GImage("KingRight.png", 250, FLOOR);
+	GImage tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR);
 	
 	
 	public void spawnTiger() {
-		tiger = new GImage("KingRight.png", 250, FLOOR - tiger.getHeight());
+		tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR - tiger.getHeight());
+		tiger.scale(0.4);
 		parentProgram.add(tiger);
-		//
+		
 	}
 	
 	public Tiger(GraphicsProgram parentProgram) {
@@ -94,11 +95,11 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	
 	public void checkSide(GImage opponent) {
 		if(opponent.getX() < tiger.getX()) {
-			tiger.setImage("KingLeft.png");
+			tiger.setImage("tigerPoseLeftCrop.png");
 			isFacingRight = false;
 		}
 		else {
-			tiger.setImage("KingRight.png");
+			tiger.setImage("tigerPoseRightCrop.png");
 			isFacingRight = true;
 		}
 	}
