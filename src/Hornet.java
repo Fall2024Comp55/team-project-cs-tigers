@@ -20,7 +20,7 @@ public class Hornet {
     private int damageGiven = 0;
     private boolean isPaused = false;
     private boolean isFacingRight = false;
-    private static final double GROUNDLEVEL = 900.0;
+    private static final double GROUNDLEVEL = 700.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
     private static final double HONEYBOMBSPEED = 20.0;
@@ -172,14 +172,20 @@ public class Hornet {
 	}
 	
 	 public void stingerAttack() {
-	 	double tempX = tiger.getX();
-	 	double tempY = tiger.getY();
-	 	//GImage temp = new GImage("LeftCornerStinger.png", hornet.getX(), hornet.getY());
-        GImage s = new GImage("StraightRightStinger.png", hornet.getX(), hornet.getY());
-        //s.setSize(temp.getWidth(),temp.getHeight());
+		 
+		 if (numOfStingers >= 3) {
+			    return;  
+		}
+		 
+		double tempX = tiger.getX();
+		double tempY = tiger.getY();
+		double hornetX = hornet.getX();
+		double hornetY = hornet.getY();
+		 
+        GImage s = new GImage("StraightRightStinger.png", hornetX, hornetY);
         
-        double dx = tempX - hornet.getX();
-        double dy = tempY - hornet.getY();
+        double dx = tempX - hornetX;
+        double dy = tempY - hornetY;
         
         if (dx > 0 && dy > 0) {
             s.setImage("BottomRightCornerStinger.png");
@@ -211,24 +217,41 @@ public class Hornet {
             @Override
             public void run() {
             	if(!isPaused) {
-	                glideToEnemy(s, tempX, tempY, STINGERSPEED);
-	                
-	                if (imagesIntersect(s, tiger)) {
-	                	if(!isPaused) {
-		                    setDamageGiven(RANGEATTACKVALUE);
+	                //glideToEnemy(s, tempX, tempY, STINGERSPEED);
+            		
+            		if(!isPaused) {
+		                double dx = tempX - s.getX();
+		                double dy = GROUNDLEVEL - s.getY();
+		                double distance = Math.sqrt(dx * dx + dy * dy);
+	
+		                if (distance > STINGERSPEED) {
+		                    s.move(STINGERSPEED * dx / distance, STINGERSPEED * dy / distance);
+		                    if (imagesIntersect(s, tiger)) {
+			                	if(!isPaused) {
+				                    setDamageGiven(RANGEATTACKVALUE);
+				                    parentProgram.remove(s);
+				                    numOfStingers = numOfStingers - 1;
+				                   //remove(s);
+				                    cancel();
+			                	}
+			                }
+		                    
+		                } else {
+		                    s.setLocation(tempX, GROUNDLEVEL);
+		                    if (imagesIntersect(s, tiger)) {
+			                	if(!isPaused) {
+				                    setDamageGiven(RANGEATTACKVALUE);
+				                    parentProgram.remove(s);
+				                    numOfStingers = numOfStingers - 1;
+				                   //remove(s);
+				                    cancel();
+			                	}
+			                }
 		                    parentProgram.remove(s);
 		                    numOfStingers = numOfStingers - 1;
-		                   //remove(s);
 		                    cancel();
-	                	}
-	                }
-	                
-	                if (s.getX() == tempX && s.getY() == tempY) {
-	                    parentProgram.remove(s);
-	                    numOfStingers = numOfStingers - 1;
-	                	//remove(s);
-	                    cancel();
-	                }
+		                }
+            		}
             	}
             }   
         };
