@@ -29,12 +29,12 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	public static final int PROGRAM_WIDTH = 1920; //temp value for testing
 	public static final int PROGRAM_HEIGHT = 1080; // temp values for testing
 	private GRect test = new GRect(100, 500 , 200, 200);
-	private double FLOOR = 1400;
+	private double FLOOR = 1400; 
 	//private GRect opponent = new GRect(800, FLOOR, 100, 100); // test opponent rectangle
 	private GImage opponent = new GImage("",0,0);
 	private double opponentHP = 100;
 	GImage tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR);
-	
+	private int FLOORBOUNDARY = 541;
 	
 	public void spawnTiger() {
 		tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR - tiger.getHeight());
@@ -123,15 +123,20 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 		 		System.out.println("up arrow"); //for debug purposes 
 		 		}
 		 		break;
-         case KeyEvent.VK_LEFT:
-	         tiger.move(-30, 0); // Move left
-	         break;
-	     case KeyEvent.VK_RIGHT:
-	         tiger.move(30, 0); // Move right
-	         break;
+		 case KeyEvent.VK_LEFT:
+			    if (tiger.getX() > 0) { // Ensure Tiger doesn't go off the left edge
+			        tiger.move(-30, 0); // Move left
+			    }
+			    break;
+		 case KeyEvent.VK_RIGHT:
+			    if (tiger.getX() + tiger.getWidth() < parentProgram.getWidth()) { // Ensure Tiger doesn't go off the right edge
+			        tiger.move(30, 0); // Move right
+			    }
+			    break;
 	     case KeyEvent.VK_Z: // Attack
 	            normalAttack(program);
 	            System.out.println("Attacking"); // Debugging purpose
+	            System.out.println(tiger.getY()); // Debugging purpose
 	            break;
 	     case KeyEvent.VK_X: // Special Attack
              if (getHP() <= 30 && !spAttackUsed) {
@@ -167,16 +172,17 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 		if (isJumping) {
             velocityY += GRAVITY; // Apply gravity
             tiger.move(0, velocityY); // Move character
-
+            
             // Stop the jump if character reaches the ground
-            if (tiger.getY() >= FLOOR) {
-                tiger.setLocation(tiger.getX(), FLOOR);
+            if (tiger.getY() >= FLOORBOUNDARY) {
+                tiger.setLocation(tiger.getX(), FLOORBOUNDARY);
                 isJumping = false;
                 jumpTimer.stop();
             }
         }
 	}
-	
+
+
 	
 	public void normalAttack(GraphicsProgram program) {
 	    // Create an attack hitbox to either the right or left of the character
@@ -242,8 +248,8 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	            }
 	        
 	            // Stop the jump if character reaches the ground
-	            if (tiger.getY() >= FLOOR) {
-	                tiger.setLocation(tiger.getX(), FLOOR);
+	            if (tiger.getY() >= FLOORBOUNDARY) {
+	                tiger.setLocation(tiger.getX(), FLOORBOUNDARY);
 	                isJumping = false;
 	                ((Timer) e.getSource()).stop();
 	            }
