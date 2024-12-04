@@ -190,7 +190,7 @@ public class Hornet {
         if (dx > 0 && dy > 0) {
             s.setImage("BottomRightCornerStinger.png");
         } else if (dx > 0 && dy < 0) {
-            s.setImage("TopRightCornerStinger.png");
+            s.setImage("TopRightStinger.png");
         } else if (dx < 0 && dy > 0) {
             s.setImage("BottomLeftCornerStinger.png");
         } else if (dx < 0 && dy < 0) {
