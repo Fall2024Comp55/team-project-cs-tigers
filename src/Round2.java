@@ -50,7 +50,8 @@ public class Round2 extends Round {
         backgroundImage = new GImage("media/PoolBackground.png", 0, 0);
         backgroundImage.setSize(1920, 1080); // scales to fit the screen
         add(backgroundImage);
-
+ 
+        
         // wave character
         willie.setWindowHeight(getHeight());
         willie.setWindowWidth(getWidth());

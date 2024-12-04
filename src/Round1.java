@@ -58,6 +58,7 @@ public class Round1 extends Round {
         }, 3000); // Show GIF for 3 seconds
     }
 
+    
     private void setupContent() {
         GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
         blackBackground.setFilled(true);
