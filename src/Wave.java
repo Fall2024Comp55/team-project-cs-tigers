@@ -1,6 +1,7 @@
 import java.util.Timer;
 import java.util.TimerTask;
 import acm.graphics.GImage;
+import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
@@ -10,11 +11,12 @@ public class Wave {
 	private static final int WAVEATTACKVALUE = 10;
 	private static final int MELEEATTACKVALUE = 5;
 	private static final int SEAWEEDATTACKVALUE = 15;
+	private static final int BUBBLEBOMBVALUE = 15;
 	private int ATTACKSPEED = 1000;
-	private double tigerLocX = 1500;
-	private double tigerLocY = 800;
 	private static final double SPEED = 15.0;
 	private static final double WAVESPEED = 20.0;
+	private double WINDOWHEIGHT = 20.0;
+	private double WINDOWWIDTH = 20.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
 	private boolean isFacingRight = false;
@@ -25,6 +27,7 @@ public class Wave {
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GraphicsProgram parentProgram;
 	private GImage wave = new GImage("Willie.png",800,GROUNDLEVEL);
+	private GRect rect = new GRect(wave.getX(),wave.getY());
 	
 //	public int tempHealth = 200;
     //GImage tigerTemp = new GImage("Hornet.gif", 500, GROUNDLEVEL - 320);
@@ -53,6 +56,13 @@ public class Wave {
 	
 	public double getGroundLevel() {
 		return GROUNDLEVEL;
+	}
+	
+	public void setWindowHeight(double h) {
+		WINDOWHEIGHT = h;
+	}
+	public void setWindowWidth(double h) {
+		WINDOWWIDTH = h;
 	}
 	
 	public void setHP(double i) {
@@ -180,6 +190,8 @@ public class Wave {
 	private void waveAttack() {
 		GImage waveAttack = new GImage("Wave.gif",1800,GROUNDLEVEL);
 		//add(waveAttack);
+		waveAttack.scale(0.7);;
+		waveAttack.setLocation(WINDOWWIDTH - waveAttack.getWidth(), GROUNDLEVEL - waveAttack.getHeight());
 		parentProgram.add(waveAttack);
 		isAttackActive = true;
 		
@@ -188,7 +200,7 @@ public class Wave {
 			@Override
 			public void run() {
 				if(!isPaused) {
-					moveWaveAttack(waveAttack,0,GROUNDLEVEL);
+					moveWaveAttack(waveAttack,0,GROUNDLEVEL - waveAttack.getHeight());
 					if(imagesIntersect(waveAttack,tiger,false)) {
 						if(!isPaused) {
 							setDamageGiven(WAVEATTACKVALUE);
@@ -225,8 +237,10 @@ public class Wave {
 			public void run() {
 				//wave.setImage();
 				GImage seaweed = new GImage("Seaweed.gif",500,GROUNDLEVEL);
-				seaweed.setLocation(tempX, GROUNDLEVEL - seaweed.getHeight());
+				//seaweed.setLocation(tempX, GROUNDLEVEL - seaweed.getHeight());
 				//add(seaweed);
+				seaweed.scale(0.5);
+				seaweed.setLocation(tempX, GROUNDLEVEL - seaweed.getHeight());
 				parentProgram.add(seaweed);
 				isAttackActive = false;
 				
@@ -248,6 +262,45 @@ public class Wave {
 			}
 		}, 500);
 	}
+	
+	public void bubbleBombAttack() {	
+        GImage temp = new GImage("bubble.gif",0,0);
+        temp.scale(0.5);
+        temp.setLocation(rgen.nextDouble(0,WINDOWWIDTH - temp.getWidth()), rgen.nextDouble(GROUNDLEVEL - temp.getHeight()));
+        //add(temp);
+        parentProgram.add(temp);
+        
+        TimerTask bubbleBombTask = new TimerTask() {
+            @Override
+            public void run() {
+            	if(!isPaused) {
+            		new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            temp.setImage("explosion.gif");
+                            //temp.scale(0.5);
+                            
+                            if(imagesIntersect(temp,tiger,false)) {
+                            	if(!isPaused) {
+                            		setDamageGiven(BUBBLEBOMBVALUE);
+                            	}
+                            }
+
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    //remove(temp);
+                                    parentProgram.remove(temp);
+                                }
+                            }, 1000);
+                        }
+                    }, 1500);
+            	}
+            }
+        };
+        
+        new Timer().scheduleAtFixedRate(bubbleBombTask, 0, 50);
+    }
 	
 	private void waterWhip() {
 		isAttackActive = true;
@@ -291,6 +344,10 @@ public class Wave {
 		wave.scale(0.4);
 		wave.setLocation(1700, GROUNDLEVEL - wave.getHeight());
 		parentProgram.add(wave);
+//		rect.setLocation(wave.getX(), wave.getY());
+//		rect.setSize(wave.getWidth(), wave.getHeight());
+//		rect.setFilled(true);
+//		parentProgram.add(rect);
 		
 		//
 		Timer movementTimer = new Timer();
@@ -299,7 +356,7 @@ public class Wave {
 			public void run() {
 				//if(!isAttackActive) {
 					if(!isWalkActive) {
-						double tempX = tiger.getX();
+						double tempX = rgen.nextDouble(0,WINDOWHEIGHT - wave.getHeight());
 						double tempY = GROUNDLEVEL - wave.getHeight();
 						
 						Timer t = new Timer();
@@ -340,22 +397,30 @@ public class Wave {
 	                        seaweedAttack();
 	                    } else if (choice == 9) {
 	                        waveAttack();
-	                    } else if (choice >= 1 && choice <= 8) {
+	                    } else if (choice >= 1 && choice <= 7) {
 	                        waterWhip();
+	                    } else if(choice == 8) {
+	                    	bubbleBombAttack();
+	                    	bubbleBombAttack();
+	                    	bubbleBombAttack();
 	                    }
 			        }
 			        else {
 			        	ATTACKSPEED = 2000;
 			        	int choice = rgen.nextInt(1, 10);
-	                    if (choice >= 1 && choice <= 6) {
+	                    if (choice >= 1 && choice <= 3) {
 	                        seaweedAttack();
-	                    } else if (choice >= 7 && choice <= 10) {
+	                    } else if (choice >= 8 && choice <= 10) {
 	                        waveAttack();
+	                    }else if(choice >= 4 && choice <= 7 ) {
+	                    	bubbleBombAttack();
+	                    	bubbleBombAttack();
+	                    	bubbleBombAttack();
 	                    }
 			        }
 				}
 			}
-		},500, 1000);
+		},500, 1500);
 		
 //		 Timer t22 = new Timer();
 //	        t22.scheduleAtFixedRate(new TimerTask() {

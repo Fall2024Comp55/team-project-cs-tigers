@@ -52,6 +52,9 @@ public class Round2 extends Round {
         add(backgroundImage);
 
         // wave character
+        willie.setWindowHeight(getHeight());
+        willie.setWindowWidth(getWidth());
+        powerCat.setGroundLevel(willie.getGroundLevel());
         willie.spawnWave();
         Timer startWillie = new Timer();
         startWillie.scheduleAtFixedRate(new TimerTask() {
@@ -61,13 +64,13 @@ public class Round2 extends Round {
         		if (!isPaused && powerCat.getHP() > 0) {
                     powerCat.damage(willie.getDamageGiven());
                     willie.setDamageGivenToZero();
-                    System.out.println("Health: " + powerCat.getHP());
+                    //zSystem.out.println("Health: " + powerCat.getHP());
                 }
                 
                 if (!isPaused && willie.getHP() > 0) {
                     willie.damage(powerCat.getDamageGiven());
                     powerCat.setDamageGivenToZero();
-                    System.out.println("Health: " + willie.getHP());
+                    //System.out.println("Health: " + willie.getHP());
                 }
                 
                 if (powerCat != null && willie != null) {
@@ -80,8 +83,6 @@ public class Round2 extends Round {
         }, 0, 50);
         
         
-        powerCat.setGroundLevel(willie.getGroundLevel());
-
         // pause button
         pauseButton = new GRect(1150, 20, 100, 40);
         pauseButton.setFilled(true);
