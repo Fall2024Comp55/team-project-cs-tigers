@@ -35,6 +35,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	private double opponentHP = 100;
 	GImage tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR);
 	private int FLOORBOUNDARY = 541;
+	private boolean isAttacking = false;
 	
 	public void spawnTiger() {
 		tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR - tiger.getHeight());
@@ -94,16 +95,17 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
     }
 	
 	public void checkSide(GImage opponent) {
-		if(opponent.getX() < tiger.getX()) {
-			tiger.setImage("tigerPoseLeftCrop.png");
-			isFacingRight = false;
-		}
-		else {
-			tiger.setImage("tigerPoseRightCrop.png");
-			isFacingRight = true;
+		if (isAttacking == false) {
+			if(opponent.getX() < tiger.getX()) {
+				tiger.setImage("tigerPoseLeftCrop.png");
+				isFacingRight = false;
+			}
+			else {
+				tiger.setImage("tigerPoseRightCrop.png");
+				isFacingRight = true;
+			}
 		}
 	}
-	
 	public boolean isDead() {
 		if(hp <= 0) {
 			return true;
@@ -186,16 +188,22 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	
 	public void normalAttack(GraphicsProgram program) {
 	    // Create an attack hitbox to either the right or left of the character
+		
+		isAttacking = true;
+		
 		double attackXCord = tiger.getX();
+		tiger.setImage("punchRightCrop.png");
 		
 		if (tiger.getX() > opponent.getX()) {
 			attackXCord = tiger.getX() - 250;
+			tiger.setImage("punchLeftCrop.png");
 		}
 		
 		GRect attackHitbox = new GRect(attackXCord + tiger.getWidth(), tiger.getY(), 50, tiger.getHeight() / 2);
-	    attackHitbox.setFilled(true);
-	    attackHitbox.setFillColor(java.awt.Color.RED);
-	    program.add(attackHitbox);
+	    //attackHitbox.setFilled(true);
+	   // attackHitbox.setFillColor(java.awt.Color.RED);
+	    attackHitbox.setVisible(false);
+		program.add(attackHitbox);
 	    Sound.playSound("media/punch.wav");
 	    if(attackHitbox.getBounds().intersects(opponent.getBounds())) {
         	setDamageGiven(attack_val);
@@ -207,7 +215,16 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	        public void actionPerformed(ActionEvent e) {
 	        	
 	        	program.remove(attackHitbox);
-	            ((Timer) e.getSource()).stop();
+	    		
+	    		if (tiger.getX() > opponent.getX()) {
+	    			tiger.setImage("tigerPoseLeftCrop.png");
+	    		}
+	        	
+	    		else {
+	    			tiger.setImage("tigerPoseRightCrop.png");
+	    		}
+	    		
+	    		((Timer) e.getSource()).stop();
 	        }
 	    });
 	    attackTimer.start();
