@@ -211,7 +211,7 @@ public class Wave {
 					}
 				}
 			}
-		}, 0, 500);
+		}, 0, 50);
 		
 		Timer t2 = new Timer();
 		t2.schedule(new TimerTask() {
@@ -379,7 +379,7 @@ public class Wave {
 							}
 						};	
 						
-						t.scheduleAtFixedRate(t2, 0, 200);
+						t.scheduleAtFixedRate(t2, 0, 50);
 					}
 				}
 			//}
