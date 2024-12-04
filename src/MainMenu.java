@@ -1,46 +1,37 @@
 import acm.graphics.*;
 import acm.program.*;
-
-import java.awt.Dimension;
 import java.awt.event.*;
 
 public class MainMenu extends GraphicsProgram {
-    private GImage startGif; // start screen gif
-    private GImage controlImage; // control screen image
-    private boolean showingControls = false; // tracks if controls screen is shown
+    private GImage startGif;
+    private GImage controlImage;
+    private boolean showingControls = false;
 
     @Override
     public void init() {
-        // maximize the window on startup
-        this.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
+        // Set the window to full-screen size
+        this.setSize(1280, 720);
 
-        // display start gif
+        // Display start GIF
         showStartGif();
-        // add key listeners for user interaction
+
+        // Add key listeners for user interaction
         addKeyListeners();
     }
 
-    private void setSize(Dimension screenSize) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void showStartGif() {
-        // display the start gif
+    private void showStartGif() {
         startGif = new GImage("media/Start.gif", 0, 0);
-        scaleImageToWindow(startGif); // scale gif to window size
-        add(startGif); // add gif to screen
+        scaleImageToWindow(startGif);
+        add(startGif);
     }
 
     private void showControlScreen() {
-        // transition to controls screen
         controlImage = new GImage("media/control.png", 0, 0);
-        scaleImageToWindow(controlImage); // scale controls to window size
-        add(controlImage); // add control screen
+        scaleImageToWindow(controlImage);
+        add(controlImage);
     }
 
     private void scaleImageToWindow(GImage image) {
-        // scale image to fit the current window size
         image.setSize(getWidth(), getHeight());
     }
 
@@ -48,43 +39,24 @@ public class MainMenu extends GraphicsProgram {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_T) {
             if (!showingControls) {
-                // move from start screen to controls
-                remove(startGif); // remove start gif
-                showControlScreen(); // show control screen
-                showingControls = true; // update state
+                // Transition from start screen to controls
+                remove(startGif);
+                showControlScreen();
+                showingControls = true;
             } else {
-                // move from controls to round 1
-                remove(controlImage); // remove controls
-                transitionToRound1(); // go to round 1
+                // Transition from controls to Round1
+                remove(controlImage);
+                GameClass.transitionToRound1(); // Move to Round1 after control screen
             }
         }
     }
 
-    private void transitionToRound1() {
-        // remove everything from the main menu
-        removeAll();
-
-        // create and initialize Round1
-        Round1 round1 = new Round1();
-        round1.setSize(getWidth(), getHeight()); // match the window size
-        round1.startRound(); // start the first round
-
-        // add the new Round1 to the program
-        add(round1);
-    }
-
-    private void add(Round1 round1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+    @Override
     public void run() {
-        // ensures resizing works dynamically
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                // dynamically scale images to window size
+                // Dynamically scale images to fit the window size
                 if (startGif != null) scaleImageToWindow(startGif);
                 if (controlImage != null) scaleImageToWindow(controlImage);
             }
@@ -97,9 +69,10 @@ public class MainMenu extends GraphicsProgram {
 	}
 
 	public static void main(String[] args) {
-        new MainMenu().start(); // start main menu
+        new MainMenu().start();
     }
 }
+
 // ibrahims previous code 
 //import acm.graphics.*;
 //import acm.program.*;
