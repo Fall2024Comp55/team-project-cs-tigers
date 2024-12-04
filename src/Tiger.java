@@ -314,6 +314,16 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	    });
 	    specialAttackTimer.start();
 	}
+// round1
+	public void stopMovement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void startMovement() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	
