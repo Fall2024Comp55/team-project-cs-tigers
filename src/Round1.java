@@ -1,5 +1,4 @@
 import acm.graphics.*;
-
 import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,7 +6,6 @@ import java.util.TimerTask;
 public class Round1 extends Round {
     private GImage backgroundImage;
     private GImage welcomeGif;
-    private PauseMenu pauseMenu = new PauseMenu(); // pause menu helper
     private boolean isPaused = false;
     private Timer hornetMovementTimer;
     private static final double HORNET_SPEED = 5.0;
@@ -19,16 +17,19 @@ public class Round1 extends Round {
     private GRect cpuHealthBar, cpuHealthBarBg; // Hornet's health
     private GLabel playerHealthLabel, cpuHealthLabel;
 
+    // Pause feature elements
+    private GRect overlay;
+    private GLabel pauseMessage;
+
     @Override
     public void init() {
-        setSize(getWidth(), getHeight()); // Set game window size
+        setSize(1280, 720); // Set game window size
         addKeyListeners();
         showBurnsMap(); // Show Burns map
     }
 
     private void showBurnsMap() {
         GImage burnsMap = new GImage("media/BurnsMap.png", 0, 0);
-        //burnsMap.setSize(1920, 1080);
         burnsMap.setSize(getWidth(), getHeight());
         add(burnsMap);
 
@@ -44,8 +45,7 @@ public class Round1 extends Round {
 
     private void showWelcomeScreen() {
         welcomeGif = new GImage("media/BurnsTWelcome.gif", 0, 0);
-        //welcomeGif.setSize(1920, 1080);
-        welcomeGif.setSize(getWidth(),getHeight());
+        welcomeGif.setSize(getWidth(), getHeight());
         add(welcomeGif);
 
         Timer welcomeTimer = new Timer();
@@ -58,7 +58,6 @@ public class Round1 extends Round {
         }, 3000); // Show GIF for 3 seconds
     }
 
-    
     private void setupContent() {
         GRect blackBackground = new GRect(0, 0, getWidth(), getHeight());
         blackBackground.setFilled(true);
@@ -66,31 +65,11 @@ public class Round1 extends Round {
         add(blackBackground);
 
         backgroundImage = new GImage("media/BurnsTBackground.png", 0, 0);
-        backgroundImage.setSize(1920, 1080);
+        backgroundImage.setSize(getWidth(), getHeight());
         add(backgroundImage);
 
         herkie.spawnHornet();
-        Timer startHerkie = new Timer();
-        startHerkie.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                herkie.setTigerLoc(powerCat.returnTiger());
-                powerCat.setOpponent(herkie.getHornetLoc());
-                if (!isPaused && powerCat.getHP() > 0) {
-                    powerCat.damage(herkie.getDamageGiven());
-                    herkie.setDamageGivenToZero();
-                }
-
-                if (!isPaused && herkie.getHP() > 0) {
-                    herkie.damage(powerCat.getDamageGiven());
-                    powerCat.setDamageGivenToZero();
-                }
-                
-
-                checkGameOver(); // Check if the game has ended
-            }
-        }, 0, 50);
-        
+        startHerkieMovement(); // Start Hornet's movement when content is set up
 
         powerCat.spawnTiger();
         powerCat.setGroundLevel(herkie.getGroundLevel());
@@ -98,8 +77,38 @@ public class Round1 extends Round {
         addMouseListeners(); // Enable interactions
     }
 
+    private void startHerkieMovement() {
+        hornetMovementTimer = new Timer();
+        hornetMovementTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (!isPaused) { // Movement is only updated when not paused
+                    herkie.setTigerLoc(powerCat.returnTiger());
+                    powerCat.setOpponent(herkie.getHornetLoc());
+                    if (powerCat.getHP() > 0) {
+                        powerCat.damage(herkie.getDamageGiven());
+                        herkie.setDamageGivenToZero();
+                    }
+
+                    if (herkie.getHP() > 0) {
+                        herkie.damage(powerCat.getDamageGiven());
+                        powerCat.setDamageGivenToZero();
+                    }
+
+                    if (powerCat != null && herkie != null) {
+                        GImage waveLoc = herkie.getHornetLoc();
+                        if (waveLoc != null) {
+                            powerCat.checkSide(waveLoc); // Call Tiger's checkSide method
+                        }
+                    }
+
+                    checkGameOver(); // Check if the game has ended
+                }
+            }
+        }, 0, 50); // Updates every 50ms
+    }
+
     private void setupHealthBars() {
-        // Player (Tiger) health bar
         playerHealthBarBg = new GRect(50, 20, 300, 25); // Background
         playerHealthBarBg.setFilled(true);
         playerHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
@@ -115,7 +124,6 @@ public class Round1 extends Round {
         playerHealthLabel.setColor(java.awt.Color.WHITE);
         add(playerHealthLabel);
 
-        // CPU (Hornet) health bar
         cpuHealthBarBg = new GRect(getWidth() - 350, 20, 300, 25); // Background
         cpuHealthBarBg.setFilled(true);
         cpuHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
@@ -160,29 +168,87 @@ public class Round1 extends Round {
 
     private void showResultScreen(boolean playerWon) {
         removeAll(); // Clear the current game screen
+        if (playerWon) {
+            GameClass.nextLevel();  // Transition to Round2
+        } else {
+            // If Tiger loses, show defeat screen
+            GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
+            dftScreen.setSize(1920, 1080);
+            add(dftScreen);
 
-        ResultScreen resultScreen = new ResultScreen();
-        resultScreen.setSize(getWidth(), getHeight()); // Match current screen size
-        resultScreen.start(); // Start the result screen
-        resultScreen.showResult(playerWon);
+            // Timer to go back to Main Menu after 3 seconds of showing defeat screen
+            Timer restartTimer = new Timer();
+            restartTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    remove(dftScreen); // Remove defeat screen
+                    GameClass.startGame(); // Go back to the main menu
+                }
+            }, 3000); // Wait for 3 seconds before transitioning
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_P) { // Pause toggled via 'P'
-            isPaused = !isPaused;
-            if (isPaused) {
-                pauseMenu.showPauseMenu(this);
-            } else {
-                pauseMenu.removePauseMenu(this);
-            }
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            togglePause(); // Toggle pause/unpause with 'P' key
         }
-        powerCat.keyPressed(e, this); // Forward key event to Tiger
+        if (!isPaused) { // Only handle keypress if not paused
+            powerCat.keyPressed(e, this); // Forward key event to Tiger
+        }
+    }
+
+    private void togglePause() {
+        isPaused = !isPaused;
+        if (isPaused) {
+            showPauseOverlay(); // Display pause overlay
+            pauseGame(); // Pause the game
+        } else {
+            removePauseOverlay(); // Remove pause overlay
+            resumeGame(); // Resume the game
+        }
+    }
+
+    private void showPauseOverlay() {
+        overlay = new GRect(0, 0, getWidth(), getHeight());
+        overlay.setFilled(true);
+        overlay.setColor(new java.awt.Color(0, 0, 0, 150)); // Semi-transparent black
+        add(overlay);
+
+        pauseMessage = new GLabel("Game Paused. Press 'P' to Resume.", getWidth() / 2 - 200, getHeight() / 2);
+        pauseMessage.setFont("Monospaced-bold-25");
+        pauseMessage.setColor(java.awt.Color.WHITE);
+        add(pauseMessage);
+    }
+
+    private void removePauseOverlay() {
+        if (overlay != null) {
+            remove(overlay);
+            overlay = null;
+        }
+        if (pauseMessage != null) {
+            remove(pauseMessage);
+            pauseMessage = null;
+        }
+    }
+
+    private void pauseGame() {
+        // Pauses movement and action by stopping the timers and interactions
+        hornetMovementTimer.cancel();
+        powerCat.stopMovement();
+        herkie.stopMovement();
+    }
+
+    private void resumeGame() {
+        // Resumes movement and action by starting the timers and interactions
+        startHerkieMovement();
+        powerCat.startMovement();
+        herkie.startMovement();
     }
 
     @Override
     public void run() {
-        updateCaption("welcome to round 1: tiger vs. hornet at burn's tower!");
+        updateCaption("Welcome to Round 1: Tiger vs. Hornet at Burn's Tower!");
     }
 
     @Override
@@ -192,14 +258,13 @@ public class Round1 extends Round {
     }
 
     public static void main(String[] args) {
-        new Round1().start(); // Launch round 1
+        new Round1().start(); // Launch Round 1
     }
 
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void setSize(double width, double height) {
+    }
 }
+
 
 
 /*import acm.graphics.*;

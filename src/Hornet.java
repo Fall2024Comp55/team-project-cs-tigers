@@ -450,5 +450,15 @@ public class Hornet {
 //		// TODO Auto-generated method stub
 //			new Hornet().start();
 //	}
+// round1
+	public void stopMovement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void startMovement() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
