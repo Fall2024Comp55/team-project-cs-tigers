@@ -119,13 +119,13 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	//@Override
 	public void keyPressed(KeyEvent e, GraphicsProgram program) {
 		 switch (e.getKeyCode()) {
-		 case KeyEvent.VK_UP:
+		 case KeyEvent.VK_UP, KeyEvent.VK_W :
 		 	if (!isJumping) {
 		 		jump();
 		 		System.out.println("up arrow"); //for debug purposes 
 		 		}
 		 		break;
-		 case KeyEvent.VK_LEFT:
+		 case KeyEvent.VK_LEFT, KeyEvent.VK_A:
 			    if (tiger.getX() > 0) { // Ensure Tiger doesn't go off the left edge
 			        tiger.move(-30, 0); // Move left
 			    }
@@ -138,7 +138,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 					isFacingRight = true;
 			    }
 			    break;
-		 case KeyEvent.VK_RIGHT:
+		 case KeyEvent.VK_RIGHT, KeyEvent.VK_D:
 			    if (tiger.getX() + tiger.getWidth() < parentProgram.getWidth()) { // Ensure Tiger doesn't go off the right edge
 			        tiger.move(30, 0); // Move right
 			    }
@@ -151,12 +151,12 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 					isFacingRight = true;
 				}
 				break;
-	     case KeyEvent.VK_Z: // Attack
+	     case KeyEvent.VK_Z, KeyEvent.VK_J: // Attack
 	            normalAttack(program);
 	            System.out.println("Attacking"); // Debugging purpose
 	            System.out.println(tiger.getY()); // Debugging purpose
 	            break;
-	     case KeyEvent.VK_X: // Special Attack
+	     case KeyEvent.VK_X, KeyEvent.VK_K: // Special Attack
            //if (getHP() <= 30 && !spAttackUsed) {
                  specialAttack(program);
                  spAttackUsed = true;
