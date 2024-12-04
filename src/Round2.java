@@ -55,6 +55,7 @@ public class Round2 extends Round {
         willie.setWindowHeight(getHeight());
         willie.setWindowWidth(getWidth());
         powerCat.setGroundLevel(willie.getGroundLevel());
+        powerCat.setOpponent(willie.getWaveLoc());
         willie.spawnWave();
         Timer startWillie = new Timer();
         startWillie.scheduleAtFixedRate(new TimerTask() {
