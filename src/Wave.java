@@ -34,7 +34,6 @@ public class Wave {
 
 	public Wave(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
-        this.wave = wave;
 	}
 	public void addToProgram(GraphicsProgram program) {
         program.add(wave);
@@ -212,7 +211,7 @@ public class Wave {
 					}
 				}
 			}
-		}, 0, 50);
+		}, 0, 500);
 		
 		Timer t2 = new Timer();
 		t2.schedule(new TimerTask() {
@@ -303,7 +302,7 @@ public class Wave {
             }
         };
         
-        new Timer().scheduleAtFixedRate(bubbleBombTask, 0, 50);
+        new Timer().schedule(bubbleBombTask,0);
     }
 	
 	private void waterWhip() {
@@ -380,7 +379,7 @@ public class Wave {
 							}
 						};	
 						
-						t.scheduleAtFixedRate(t2, 0, 50);
+						t.scheduleAtFixedRate(t2, 0, 200);
 					}
 				}
 			//}
