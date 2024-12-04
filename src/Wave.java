@@ -206,6 +206,10 @@ public class Wave {
 							setDamageGiven(WAVEATTACKVALUE);
 						}
 					}
+					
+					if(waveAttack.getX() == 0) {
+						cancel();
+					}
 				}
 			}
 		}, 0, 50);
