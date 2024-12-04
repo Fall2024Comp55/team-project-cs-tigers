@@ -73,14 +73,7 @@ public class Round2 extends Round {
                     powerCat.setDamageGivenToZero();
                     //System.out.println("Health: " + willie.getHP());
                 }
-                
-                if (powerCat != null && willie != null) {
-                    GImage waveLoc = willie.getWaveLoc();
-                    if (waveLoc != null) {
-                        powerCat.checkSide(waveLoc); // Call Tiger's checkSide method
-                    }
-                }
-        	}
+                        	}
         }, 0, 50);
         
         

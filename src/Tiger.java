@@ -129,23 +129,39 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 			    if (tiger.getX() > 0) { // Ensure Tiger doesn't go off the left edge
 			        tiger.move(-30, 0); // Move left
 			    }
+			    if(opponent.getX() < tiger.getX()) {
+					tiger.setImage("tigerPoseLeftCrop.png");
+					isFacingRight = false;
+				}
+				else {
+					tiger.setImage("tigerPoseRightCrop.png");
+					isFacingRight = true;
+			    }
 			    break;
 		 case KeyEvent.VK_RIGHT:
 			    if (tiger.getX() + tiger.getWidth() < parentProgram.getWidth()) { // Ensure Tiger doesn't go off the right edge
 			        tiger.move(30, 0); // Move right
 			    }
-			    break;
+			    if(opponent.getX() < tiger.getX()) {
+					tiger.setImage("tigerPoseLeftCrop.png");
+					isFacingRight = false;
+				}
+				else {
+					tiger.setImage("tigerPoseRightCrop.png");
+					isFacingRight = true;
+				}
+				break;
 	     case KeyEvent.VK_Z: // Attack
 	            normalAttack(program);
 	            System.out.println("Attacking"); // Debugging purpose
 	            System.out.println(tiger.getY()); // Debugging purpose
 	            break;
 	     case KeyEvent.VK_X: // Special Attack
-             if (getHP() <= 30 && !spAttackUsed) {
+           //if (getHP() <= 30 && !spAttackUsed) {
                  specialAttack(program);
                  spAttackUsed = true;
                  System.out.println("Special Attacking"); // Debugging purpose
-             }
+             //}
              break;
 	     
 	     
@@ -240,7 +256,16 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	    
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
-	            velocityY += GRAVITY; 
+	            
+	    	tiger.setImage("punchRightCrop.png");	
+	    	
+	    	if (tiger.getX() > opponent.getX()) {
+	    		tiger.setImage("punchLeftCrop.png");
+	    	}
+	        	
+	        	
+	        	
+	        	velocityY += GRAVITY; 
 	            if (opponent.getX() > tiger.getX()) {
 	            	tiger.move(horizontalVelocity, velocityY); // Move character in an arc to the left
 	            }
@@ -252,13 +277,28 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	            if (!hitOpponent && tiger.getBounds().intersects(opponent.getBounds())) {
 	                // Display boom image at opponent position
 	                GImage boom = new GImage("explosion.png", opponent.getX(), opponent.getY() - 50);
+	                boom.scale(0.4);
 	                program.add(boom);
 	                hitOpponent = true;
+	                if(boom.getBounds().intersects(opponent.getBounds())) {
+	                	setDamageGiven(specialAttack_val);
+	                }
+	                if (tiger.getX() > opponent.getX()) {
+    	    			tiger.setImage("tigerPoseLeftCrop.png");
+    	    		}
+    	        	
+    	    		else {
+    	    			tiger.setImage("tigerPoseRightCrop.png");
+    	    		}
+	                
+	                isAttacking = false;
+	                
 	                Timer boomTimer = new Timer(500, new ActionListener() {
 	                    @Override
 	                    public void actionPerformed(ActionEvent e) {
 	                        program.remove(boom);
 	                        ((Timer) e.getSource()).stop();
+	                       
 	                    }
 	                });
 	                boomTimer.start();

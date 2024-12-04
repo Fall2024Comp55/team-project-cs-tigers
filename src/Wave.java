@@ -227,10 +227,10 @@ public class Wave {
 		isAttackActive = true;
 		
 		if(!isFacingRight) {
-			wave.setImage("SeaweedPose.png");
+			wave.setImage("SeaweedPoseCropped.png");
 		}
 		else {
-			wave.setImage("SeaweedPoseFlipped.png");
+			wave.setImage("SeaweedPoseCroppedFlipped.png");
 		}
 		
 		double tempX = tiger.getX();

@@ -85,12 +85,6 @@ public class Round1 extends Round {
                     powerCat.setDamageGivenToZero();
                 }
                 
-                if (powerCat != null && herkie != null) {
-                    GImage waveLoc = herkie.getHornetLoc();
-                    if (waveLoc != null) {
-                        powerCat.checkSide(waveLoc); // Call Tiger's checkSide method
-                    }
-                }
 
                 checkGameOver(); // Check if the game has ended
             }
