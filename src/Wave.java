@@ -442,6 +442,14 @@ public class Wave {
 //	        	}
 //	        },0,500);
 		
+	//for round1
+	}
+	public void startMovement() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void stopMovement() {
+		// TODO Auto-generated method stub
 		
 	}
 	
