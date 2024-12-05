@@ -71,8 +71,8 @@ public class Round1 extends Round {
         herkie.spawnHornet();
         startHerkieMovement(); // Start Hornet's movement when content is set up
 
-        powerCat.spawnTiger();
         powerCat.setGroundLevel(herkie.getGroundLevel());
+        powerCat.spawnTiger();
         setupHealthBars();
         addMouseListeners(); // Enable interactions
     }

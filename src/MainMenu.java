@@ -61,6 +61,7 @@ public class MainMenu extends GraphicsProgram {
                 if (controlImage != null) scaleImageToWindow(controlImage);
             }
         });
+        requestFocus();
     }
 
     private void addComponentListener(ComponentAdapter componentAdapter) {
