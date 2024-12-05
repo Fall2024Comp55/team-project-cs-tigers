@@ -38,8 +38,10 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	private boolean isAttacking = false;
 	
 	public void spawnTiger() {
-		tiger = new GImage("tigerPoseLeftCrop.png", 250, FLOOR - tiger.getHeight());
+		tiger = new GImage("tigerPoseLeftCrop.png",250,FLOOR);
+		//tiger.setLocation(250,FLOOR - tiger.getHeight());
 		tiger.scale(0.4);
+		tiger.setLocation(250,FLOOR - tiger.getHeight());
 		parentProgram.add(tiger);
 		
 	}
@@ -192,8 +194,8 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
             tiger.move(0, velocityY); // Move character
             
             // Stop the jump if character reaches the ground
-            if (tiger.getY() >= FLOORBOUNDARY) {
-                tiger.setLocation(tiger.getX(), FLOORBOUNDARY);
+            if (tiger.getY() >= FLOOR - tiger.getHeight()) {
+                tiger.setLocation(tiger.getX(), FLOOR - tiger.getHeight());
                 isJumping = false;
                 jumpTimer.stop();
             }
@@ -305,8 +307,8 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	            }
 	        
 	            // Stop the jump if character reaches the ground
-	            if (tiger.getY() >= FLOORBOUNDARY) {
-	                tiger.setLocation(tiger.getX(), FLOORBOUNDARY);
+	            if (tiger.getY() >= FLOOR - tiger.getHeight()) {
+	                tiger.setLocation(tiger.getX(), FLOOR - tiger.getHeight());
 	                isJumping = false;
 	                ((Timer) e.getSource()).stop();
 	            }
