@@ -177,14 +177,14 @@ public class Round1 extends Round {
             add(dftScreen);
 
             // Timer to go back to Main Menu after 3 seconds of showing defeat screen
-            Timer restartTimer = new Timer();
-            restartTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    remove(dftScreen); // Remove defeat screen
-                    GameClass.startGame(); // Go back to the main menu
-                }
-            }, 3000); // Wait for 3 seconds before transitioning
+//            Timer restartTimer = new Timer();
+//            restartTimer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    remove(dftScreen); // Remove defeat screen
+//                    startRound(); // Go back to the main menu
+//                }
+//            }, 3000); // Wait for 3 seconds before transitioning
         }
     }
 
