@@ -22,7 +22,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	//variables for the movement
 	private int velocityY = 0; // Vertical velocity (used for jump and gravity)
 	private static final int GRAVITY = 1; // Gravity constant (affects velocity)
-	private static final int JUMP_STRENGTH = -25; // Strength of the jump // must be a negative number// value to be determined
+	private static final int JUMP_STRENGTH = -30; // Strength of the jump // must be a negative number// value to be determined
 	private boolean isJumping = false;
 	private Timer jumpTimer = new Timer(20, e -> updateJump());
 	//variables for testing
