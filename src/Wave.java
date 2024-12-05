@@ -14,13 +14,14 @@ public class Wave {
 	private static final int BUBBLEBOMBVALUE = 15;
 	private int ATTACKSPEED = 1000;
 	private static final double SPEED = 15.0;
-	private static final double WAVESPEED = 20.0;
+	private static final double WAVESPEED = 10.0;
 	private double WINDOWHEIGHT = 20.0;
 	private double WINDOWWIDTH = 20.0;
 	private boolean isWalkActive = false;
 	private boolean isAttackActive = false;
 	private boolean isFacingRight = false;
 	private boolean isPaused = false;
+	private boolean isWaveActive = false;
 	private static final double GROUNDLEVEL = 700;
 	private int damageGiven = 0;
 	private GImage tiger = new GImage("",0,0);
@@ -154,9 +155,9 @@ public class Wave {
 	
 	private void walkToEnemy(GImage s,double x, double y) {	
 		
-//		if (isAttackActive) {
-//	        return; 
-//	    }
+		if (isAttackActive) {
+	        return; 
+	    }
 		
         double dx = x - s.getX();
         double dy = y - s.getY();
@@ -189,10 +190,11 @@ public class Wave {
 	private void waveAttack() {
 		GImage waveAttack = new GImage("Wave.gif",1800,GROUNDLEVEL);
 		//add(waveAttack);
-		waveAttack.scale(0.7);;
-		waveAttack.setLocation(WINDOWWIDTH - waveAttack.getWidth(), GROUNDLEVEL - waveAttack.getHeight());
+		waveAttack.scale(0.550);;
+		waveAttack.setLocation(WINDOWWIDTH, GROUNDLEVEL - waveAttack.getHeight());
 		parentProgram.add(waveAttack);
-		isAttackActive = true;
+		//isAttackActive = true;
+		isWaveActive = true;
 		
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
@@ -217,9 +219,10 @@ public class Wave {
 		t2.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				isAttackActive = false;
+				//isAttackActive = false;
+				isWaveActive = false;
 			}
-		}, 300);
+		}, 1000);
 	}
 	
 	private void seaweedAttack() {
@@ -259,7 +262,7 @@ public class Wave {
 					public void run() {
 						//remove(seaweed);
 						parentProgram.remove(seaweed);
-						//isAttackActive = false;
+						isAttackActive = false;
 					}
 				}, 1000);
 			}
@@ -268,7 +271,7 @@ public class Wave {
 	
 	public void bubbleBombAttack() {	
         GImage temp = new GImage("bubble.gif",0,0);
-        temp.scale(0.5);
+        temp.scale(0.3);
         temp.setLocation(rgen.nextDouble(0,WINDOWWIDTH - temp.getWidth()), rgen.nextDouble(GROUNDLEVEL - temp.getHeight()));
         //add(temp);
         parentProgram.add(temp);
@@ -357,7 +360,7 @@ public class Wave {
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				//if(!isAttackActive) {
+				if(!isAttackActive) {
 					if(!isWalkActive) {
 						double tempX = rgen.nextDouble(0,WINDOWHEIGHT - wave.getHeight());
 						double tempY = GROUNDLEVEL - wave.getHeight();
@@ -382,7 +385,7 @@ public class Wave {
 						t.scheduleAtFixedRate(t2, 0, 50);
 					}
 				}
-			//}
+			}
 		}, 0, 500);
 		
 		Timer attackTimer = new Timer();
@@ -390,37 +393,41 @@ public class Wave {
 			@Override
 			public void run() {
 				if(!isPaused) {
-					 double dx = wave.getX() - tiger.getX();
-			         double dy = wave.getY() - tiger.getY();
-			         double distance = Math.sqrt(dx * dx + dy * dy);
-			        if(distance <= 200) {
-			        	ATTACKSPEED = 300;
-	                    int choice = rgen.nextInt(1, 10);
-	                    if (choice == 10) {
-	                        seaweedAttack();
-	                    } else if (choice == 9) {
-	                        waveAttack();
-	                    } else if (choice >= 1 && choice <= 7) {
-	                        waterWhip();
-	                    } else if(choice == 8) {
-	                    	bubbleBombAttack();
-	                    	bubbleBombAttack();
-	                    	bubbleBombAttack();
-	                    }
-			        }
-			        else {
-			        	ATTACKSPEED = 2000;
-			        	int choice = rgen.nextInt(1, 10);
-	                    if (choice >= 1 && choice <= 3) {
-	                        seaweedAttack();
-	                    } else if (choice >= 8 && choice <= 10) {
-	                        waveAttack();
-	                    }else if(choice >= 4 && choice <= 7 ) {
-	                    	bubbleBombAttack();
-	                    	bubbleBombAttack();
-	                    	bubbleBombAttack();
-	                    }
-			        }
+					if(!isAttackActive) {
+						 double dx = wave.getX() - tiger.getX();
+				         double dy = wave.getY() - tiger.getY();
+				         double distance = Math.sqrt(dx * dx + dy * dy);
+				        if(distance <= 200) {
+				        	ATTACKSPEED = 300;
+		                    int choice = rgen.nextInt(1, 10);
+		                    if (choice == 10) {
+		                        seaweedAttack();
+		                    } else if (choice == 9) {
+		                    	if(!isWaveActive) {
+		                    		waveAttack();
+		                    	}
+		                    } else if (choice >= 1 && choice <= 7) {
+		                        waterWhip();
+		                    } else if(choice == 8) {
+		                    	bubbleBombAttack();
+		                    	bubbleBombAttack();
+		                    	bubbleBombAttack();
+		                    }
+				        }
+				        else {
+				        	ATTACKSPEED = 2000;
+				        	int choice = rgen.nextInt(1, 10);
+		                    if (choice >= 1 && choice <= 3) {
+		                        seaweedAttack();
+		                    } else if (choice >= 8 && choice <= 10) {
+		                        waveAttack();
+		                    }else if(choice >= 4 && choice <= 7 ) {
+		                    	bubbleBombAttack();
+		                    	bubbleBombAttack();
+		                    	bubbleBombAttack();
+		                    }
+				        }
+					}
 				}
 			}
 		},500, 1500);

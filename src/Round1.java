@@ -23,7 +23,7 @@ public class Round1 extends Round {
 
     @Override
     public void init() {
-        setSize(1280, 720); // Set game window size
+        setSize(getWidth(), getHeight()); // Set game window size
         addKeyListeners();
         showBurnsMap(); // Show Burns map
     }
@@ -102,7 +102,11 @@ public class Round1 extends Round {
                         }
                     }
 
-                    checkGameOver(); // Check if the game has ended
+                    //checkGameOver(); // Check if the game has ended
+                    
+                    if(checkGameOver()) {
+                    	cancel();
+                    }
                 }
             }
         }, 0, 50); // Updates every 50ms
@@ -158,12 +162,15 @@ public class Round1 extends Round {
         cpuHealthLabel.setLabel(String.valueOf((int) herkie.getHP()));
     }
 
-    private void checkGameOver() {
+    private boolean checkGameOver() {
         if (powerCat.getHP() <= 0) {
             showResultScreen(false); // Player lost
+            return true;
         } else if (herkie.getHP() <= 0) {
             showResultScreen(true); // Player won
+            return true;
         }
+        return false;
     }
 
     private void showResultScreen(boolean playerWon) {
@@ -250,6 +257,7 @@ public class Round1 extends Round {
     @Override
     public void run() {
         updateCaption("Welcome to Round 1: Tiger vs. Hornet at Burn's Tower!");
+        requestFocus();
     }
 
     @Override

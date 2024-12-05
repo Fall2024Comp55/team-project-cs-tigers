@@ -11,7 +11,6 @@ public class Round2 extends Round {
     private GRect pauseButton; 
     private GLabel pauseLabel; 
     private boolean isPaused = false; // tracks whether the game is paused
-    private Timer waveMovementTimer; 
     private double waveX = 540; 
     private double waveY = 300; 
     private static final double WAVE_SPEED = 5.0; 
@@ -166,6 +165,7 @@ public class Round2 extends Round {
     public void run() {
         // starts round 2 gameplay
         updateCaption("Welcome to Round 2: Tiger vs. Wave at Chris Kjeldsen Pool!");
+        requestFocus();
     }
 
     @Override
