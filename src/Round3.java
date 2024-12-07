@@ -8,7 +8,9 @@ public class Round3 extends Round {
     private GImage welcomeGif; // Welcome GIF
     private boolean isPaused = false; // Tracks whether the game is paused
     private Timer roundTimer;
+    private Timer kingMovementTimer;
     private Tiger powerCat = new Tiger(this);
+    private King triton = new King(this);
 
     // Health bar elements
     private GRect playerHealthBar, playerHealthBarBg; // Tiger's health
@@ -22,14 +24,14 @@ public class Round3 extends Round {
 
     @Override
     public void init() {
-        setSize(1920, 1080); // Set game window size
+        setSize((int) getWidth(), (int) getHeight()); // Set game window size
         addKeyListeners();
         showSpanMap(); // Show the map before starting the round
     }
 
     private void showSpanMap() {
         GImage spanMap = new GImage("media/SpanMap.png", 0, 0);
-        spanMap.setSize(1920, 1080);
+        spanMap.setSize(getWidth(), getHeight());
         add(spanMap);
 
         Timer mapTimer = new Timer();
@@ -45,7 +47,7 @@ public class Round3 extends Round {
     private void showWelcomeScreen() {
         // Load and display the welcome GIF
         welcomeGif = new GImage("media/SpanosWelcome.gif", 0, 0);
-        welcomeGif.setSize(1920, 1080); // Scales to fit the screen
+        welcomeGif.setSize(getWidth(), getHeight()); // Scales to fit the screen
         add(welcomeGif);
 
         // Add a timer to remove the welcome screen and start the round
@@ -62,14 +64,42 @@ public class Round3 extends Round {
     private void setupContent() {
         // Span map background
         backgroundImage = new GImage("media/SpanosBackground.png", 0, 0);
-        backgroundImage.setSize(1920, 1080); // Scales to fit the screen
+        backgroundImage.setSize(getWidth(), getHeight()); // Scales to fit the screen
         add(backgroundImage);
 
         // Add Tiger
-        powerCat.setGroundLevel(750); // Set ground level for Tiger
+        triton.setWindowHeight(getHeight());
+        triton.setWindowWidth(getWidth());
+        powerCat.setGroundLevel(triton.getGroundLevel());
+        powerCat.setOpponent(triton.getKingLoc());
+        triton.spawnKing();
         powerCat.spawnTiger();
-
+        
+        startKingMovement();
         setupHealthBars(); // Set up health bars
+    }
+    
+    private void startKingMovement() {
+        kingMovementTimer = new Timer();
+        kingMovementTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (!isPaused) { // Movement is only updated when not paused
+                    triton.setTigerLoc(powerCat.returnTiger());
+                    if (powerCat.getHP() > 0) {
+                        powerCat.damage(triton.getDamageGiven());
+                        triton.setDamageGivenToZero();
+                    }
+
+                    if (triton.getHP() > 0) {
+                        triton.damage(powerCat.getDamageGiven());
+                        powerCat.setDamageGivenToZero();
+                    }
+
+                    checkGameOver(); // Check if the game has ended
+                }
+            }
+        }, 0, 50); // Updates every 50ms
     }
 
     private void setupHealthBars() {
@@ -117,7 +147,7 @@ public class Round3 extends Round {
         }
         removeAll(); // Clear the current game screen
         GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
-        dftScreen.setSize(1920, 1080);
+        dftScreen.setSize(getWidth(), getHeight());
         add(dftScreen);
     }
 

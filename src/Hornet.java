@@ -6,17 +6,12 @@ import acm.util.RandomGenerator;
 
 public class Hornet {
 	
-	GImage hornet = new GImage("Hornet.gif",100,100);
+	GImage hornet = new GImage("Hornet.gif",800,100);
 	private RandomGenerator rgen = RandomGenerator.getInstance();
-	private String stageName = "Burn's Tower";
 	private double hp = 100;
 	private boolean active;
     private double LocationX;
     private double LocationY;
-    private double tigerLocX = 400;
-    private double tigerLocY = 400;
-    private double tigerCornerX = 0.0;
-    private double tigerCornerY = 0.0;
     private int damageGiven = 0;
     private boolean isPaused = false;
     private boolean isFacingRight = false;
@@ -25,8 +20,6 @@ public class Hornet {
     private static final double STINGERSPEED = 20.0;
     private static final double HONEYBOMBSPEED = 20.0;
     private static final double CHARGESPEED = 25.0;
-    private static final double TIGERWIDTH = 200.0;
-    private static final double TIGERHEIGHT = 200.0;
     private static final int RANGEATTACKVALUE = 2;
 	private static final int MELEEVALUE = 10;
 	private static final int HONEYBOMBVALUE = 5;
@@ -35,6 +28,7 @@ public class Hornet {
 	Timer timer = new Timer();
 	private GImage tiger = new GImage("",0,0);
 	private GraphicsProgram parentProgram;
+	private double WINDOWWIDTH = 20.0;
 	
 //	public int tempHealth = 200;
 //    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
@@ -44,7 +38,6 @@ public class Hornet {
         setRandomTarget();
 //        hornet = new GImage("HornetPrototype.gif", 100, 100);
         this.parentProgram = parentProgram;
-        this.hornet = hornet;
     }
 	
 	public void addToProgram(GraphicsProgram program) {
@@ -52,6 +45,9 @@ public class Hornet {
     }
 	public void checkPaused(boolean t) {
 		isPaused = t;
+	}
+	public void setWindowWidth(double h) {
+		WINDOWWIDTH = h;
 	}
 	
 	public void setTigerLoc(GImage t) {
@@ -64,7 +60,7 @@ public class Hornet {
 		return GROUNDLEVEL;
 	}
 	public void setRandomTarget() {
-	        LocationX = rgen.nextDouble(0, 1920 - hornet.getWidth());
+	        LocationX = rgen.nextDouble(0, WINDOWWIDTH - hornet.getWidth());
 	        LocationY = rgen.nextDouble(0, GROUNDLEVEL - hornet.getHeight());
     }
 	public void glideToTarget() {
@@ -112,9 +108,6 @@ public class Hornet {
 	public double getHP() {
 		return hp;
 	}
-	public String getStageName() {
-		return stageName;
-	}
 	public boolean getActive() {
 		return active;
 	}
@@ -149,13 +142,6 @@ public class Hornet {
 		else {
 			return false;
 		}
-	}
-	public void move(double x,double y) {
-        double distance = Math.sqrt(x * x + y * y);
-        double SPEED = 20.0;
-        
-        hornet.move(SPEED * x / distance, SPEED * y / distance);
-        		
 	}
 	private boolean imagesIntersect(GImage image1, GImage image2) {
 	    double x1 = image1.getX();
@@ -209,16 +195,11 @@ public class Hornet {
         
         numOfStingers = numOfStingers + 1;
         
-        //
-        //add(s);
         parentProgram.add(s);
         
         TimerTask stingerTask = new TimerTask() {
             @Override
             public void run() {
-            	if(!isPaused) {
-	                //glideToEnemy(s, tempX, tempY, STINGERSPEED);
-            		
             		if(!isPaused) {
 		                double dx = tempX - s.getX();
 		                double dy = GROUNDLEVEL - s.getY();
@@ -251,7 +232,6 @@ public class Hornet {
 		                    numOfStingers = numOfStingers - 1;
 		                    cancel();
 		                }
-            		}
             	}
             }   
         };
@@ -262,7 +242,6 @@ public class Hornet {
 		 	double tempX = tiger.getX();
 	        GImage temp = new GImage("honeyBomb.png", hornet.getX(), hornet.getY());
 	        temp.scale(0.5);
-	        //add(temp);
 	        parentProgram.add(temp);
 	        
 	        TimerTask honeyBombTask = new TimerTask() {
@@ -270,20 +249,19 @@ public class Hornet {
 	            public void run() {
 	            	if(!isPaused) {
 		                double dx = tempX - temp.getX();
-		                double dy = GROUNDLEVEL - temp.getY();
+		                double dy = (GROUNDLEVEL - temp.getHeight()) - temp.getY();
 		                double distance = Math.sqrt(dx * dx + dy * dy);
 	
 		                if (distance > HONEYBOMBSPEED) {
 		                    temp.move(HONEYBOMBSPEED * dx / distance, HONEYBOMBSPEED * dy / distance);
 		                } else {
-		                    temp.setLocation(tempX, GROUNDLEVEL);
+		                    temp.setLocation(tempX, GROUNDLEVEL - temp.getHeight());
 		                    cancel();
 	
 		                    new Timer().schedule(new TimerTask() {
 		                        @Override
 		                        public void run() {
 		                            temp.setImage("explosion.gif");
-		                            //temp.scale(0.5);
 		                            
 		                            if(imagesIntersect(temp,tiger)) {
 		                            	if(!isPaused) {
@@ -294,7 +272,6 @@ public class Hornet {
 		                            new Timer().schedule(new TimerTask() {
 		                                @Override
 		                                public void run() {
-		                                    //remove(temp);
 		                                    parentProgram.remove(temp);
 		                                }
 		                            }, 1000);

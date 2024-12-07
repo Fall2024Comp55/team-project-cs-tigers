@@ -6,15 +6,14 @@ import acm.util.RandomGenerator;
 
 public class King {
 	
-	private double hp = 100;
+	private double hp = 150;
 	private int damageGiven = 0;
-	private String stageName = "Alex G. Spanos Center";
 	private static final int TRIDENTATTACKVALUE = 3;
 	private static final int MELEEVALUE = 2;
 	private static final int GRENADEATTACKVALUE = 5;
 	private static final int LIGHTINGBOLTVALUE = 8;
-	private double tigerLocX = 500;
-	private double tigerLocY = 800;
+	private double WINDOWHEIGHT = 20.0;
+	private double WINDOWWIDTH = 20.0;
 	private static final double SPEED = 15.0;
 	private static final double THROWSPEED = 20.0;
 	private static final double LIGHTINGSPEED = 25.0;
@@ -23,17 +22,17 @@ public class King {
 	private boolean isAttackActive = false;
 	private boolean isFacingRight = false;
 	private boolean isPaused = false;
-	private static final double GROUNDLEVEL = 650;
-	private static final double KINGWIDTH = 300;
-	private static final double KINGHEIGHT = 324;
+	private boolean isTridentThrowActive = false;
+	private static final double GROUNDLEVEL = 800;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("KingLeft.png",0,GROUNDLEVEL);
 	private GImage tiger = new GImage("",0,0);
 	private GraphicsProgram parentProgram;
+	private double kingWidth = 0;
+	private double kingHeight = 0;
 	
 	public King(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
-        this.king = king;
 	}
 	public void addToProgram(GraphicsProgram program) {
         program.add(king);
@@ -44,7 +43,13 @@ public class King {
 	public void setTigerLoc(GImage s) {
 		tiger = s;
 	}
-	public GImage getKingtLoc() {
+	public void setWindowHeight(double h) {
+		WINDOWHEIGHT = h;
+	}
+	public void setWindowWidth(double h) {
+		WINDOWWIDTH = h;
+	}
+	public GImage getKingLoc() {
 		return king;
 	}
 	public void setDamageGiven(int i) {
@@ -61,9 +66,6 @@ public class King {
 	}
 	public void setHP(double i) {
 		hp = i;
-	}
-	public String getStage() {
-		return stageName;
 	}
 	public double getHP() {
 		return hp;
@@ -101,7 +103,7 @@ public class King {
 	
 	public void checkSide() {
 		if(king.getX() > tiger.getX()) {
-			king.setImage("KingLeft.png");
+			king.setImage("tritonLeft.png");
 			//king.setSize(KINGWIDTH, KINGHEIGHT);
 			isFacingRight = false;
 		}
@@ -159,23 +161,8 @@ public class King {
             s.move(speed * dx / distance, speed * dy / distance);
         } else {
             s.setLocation(x, y);
-            //parentProgram.remove(s);
-            //remove(s);
         }
     }
-	
-//	public void throwToEnemy(GImage s, double x, double y) {
-//        double dx = x - s.getX();
-//        double dy = y - s.getY();
-//        double distance = Math.sqrt(dx * dx + dy * dy);
-//
-//        if (distance > THROWSPEED) {
-//            s.move(THROWSPEED * dx / distance, THROWSPEED * dy / distance);
-//        } else {
-//            s.setLocation(x, y);
-//            remove(s);
-//        }
-//    }
 	
 	public void grenadeAttack() {	
         GImage temp = new GImage("LightingBall.gif", king.getX(), king.getY());
@@ -189,13 +176,13 @@ public class King {
             public void run() {
             	if(!isPaused) {
 	                double dx = tempX - temp.getX();
-	                double dy = GROUNDLEVEL - temp.getY();
+	                double dy = (GROUNDLEVEL - temp.getHeight()) - temp.getY();
 	                double distance = Math.sqrt(dx * dx + dy * dy);
 	
 	                if (distance > GRENADESPEED) {
 	                    temp.move(GRENADESPEED * dx / distance, GRENADESPEED * dy / distance);
 	                } else {
-	                    temp.setLocation(tempX, GROUNDLEVEL);
+	                    temp.setLocation(tempX, GROUNDLEVEL - temp.getHeight());
 	                    cancel();
 	
 	                    new Timer().schedule(new TimerTask() {
@@ -228,7 +215,7 @@ public class King {
     }
 	
 	public void lightingBolt() {
-		double tempX = rgen.nextDouble(0,1000);
+		double tempX = rgen.nextDouble(0,WINDOWWIDTH - 120);
         GImage s = new GImage("LightingBolt.gif", tempX, 0);
         s.setSize(120,120);
         parentProgram.add(s);
@@ -262,10 +249,10 @@ public class King {
 	}
 	
 	public void tridentThrowAttack() {
-		isAttackActive = true;
+		isTridentThrowActive = true;
 	 	double tempX = tiger.getX();
 	 	double tempY = tiger.getY();
- 		GImage s = new GImage("LightingTrident.gif", getCenterX(), getCenterY() - 100);
+ 		GImage s = new GImage("LightingTrident.gif", king.getX(), king.getY());
  		
 	 	if(king.getX() - tiger.getX() > 0) {
 	 		s.setImage("LightingTridentFlipped.gif");
@@ -273,7 +260,6 @@ public class King {
 	 	
         s.setSize(200,200);
         parentProgram.add(s);
-        //add(s);
         
         TimerTask tridentTask = new TimerTask() {
             @Override
@@ -285,15 +271,14 @@ public class King {
 	                	if(!isPaused) {
 							setDamageGiven(TRIDENTATTACKVALUE);
 							parentProgram.remove(s);
-							//remove(s);
+							isTridentThrowActive = false;
 							cancel();
 	                	}
 					}
 	                
 	                if (s.getX() == tempX && s.getY() == tempY) {
-	                	isAttackActive = false;
 						parentProgram.remove(s);
-	                	//remove(s);
+						isTridentThrowActive = false;
 	                    cancel();
 	                }
             	}
@@ -305,11 +290,13 @@ public class King {
 	
 	public void tridentStab() {
 		if(isFacingRight) {
-			king.setImage("robot.png");
+			king.setImage("tritonPunchR.png");
 		}
 		else {
-			king.setImage("robot.png");
+			king.setImage("tritonPunchL.png");
 		}
+		
+		//king.setSize(kingWidth, kingHeight);
 		
 		if(imagesIntersect(king,tiger,true)) {
 			if(!isPaused) {
@@ -324,18 +311,18 @@ public class King {
 			public void run() {
 				if(isWalkActive) {
 					if(isFacingRight) {
-						king.setImage("robot.png");
+						king.setImage("KingRight.png");
 					}
 					else {
-						king.setImage("robot.png");
+						king.setImage("tritonLeft.png");
 					}
 				}
 				else {
 					if(isFacingRight) {
-						king.setImage("robot.png");
+						king.setImage("KingRight.png");
 					}
 					else {
-						king.setImage("robot.png");
+						king.setImage("tritonLeft.png");
 					}
 				}
 			}
@@ -346,17 +333,18 @@ public class King {
 		//king.setSize(KINGWIDTH, KINGHEIGHT);
 		//add(king);
 		king.setLocation(800, GROUNDLEVEL - king.getHeight());
+		kingWidth = king.getWidth();
+		kingHeight = king.getHeight();
 		parentProgram.add(king);
 		
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isPaused) {
-					if(!isWalkActive) {
-						if(!isAttackActive) {
-						
-							double tempX = tiger.getX();
+				if(!isDead()) {
+					if(!isAttackActive) {
+						if(!isWalkActive) {
+							double tempX = rgen.nextDouble(0,WINDOWWIDTH - king.getWidth());
 							double tempY = GROUNDLEVEL - king.getHeight();
 							
 							Timer t = new Timer();
@@ -364,8 +352,15 @@ public class King {
 								@Override
 								public void run() {
 									// TODO Auto-generated method stub
+									if(!isPaused) {
 										walkToEnemy(king,tempX,tempY);
 										isWalkActive = true;
+										
+										if(king.getX() == tempX && king.getY() == tempY) {
+											isWalkActive = false;
+											cancel();
+										}
+									}
 								}
 							};	
 							
@@ -374,46 +369,58 @@ public class King {
 					}
 				}
 			}
-		}, 0, 50);
+		}, 0, 500);
 		
 		Timer attackTimer = new Timer();
 		attackTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isPaused) {
-                    int choice = rgen.nextInt(1, 10);
-                    if (choice == 1) {
-                        lightingBolt();
-                        lightingBolt();
-                        lightingBolt();
-                    } else if (choice == 2) {
-                        grenadeAttack();
-                        grenadeAttack();
-                        grenadeAttack();
-                    } else if (choice == 3) {
-                        tridentThrowAttack();
-                    }else if(choice == 4) {
-                    	tridentStab();
-                    }
+				if(!isDead()) {
+					if(!isPaused) {
+						if(!isAttackActive) {
+							 double dx = king.getX() - tiger.getX();
+					         double dy = king.getY() - tiger.getY();
+					         double distance = Math.sqrt(dx * dx + dy * dy);
+					        if(distance <= 200) {
+			                    int choice = rgen.nextInt(1, 10);
+			                    if (choice == 10) {
+			                    	grenadeAttack();
+			                    	grenadeAttack();
+			                    	grenadeAttack();
+			                    } else if (choice == 9) {
+			                    	if(!isTridentThrowActive) {
+			                    		tridentThrowAttack();
+			                    	}
+			                    } else if (choice >= 1 && choice <= 7) {
+			                        tridentStab();
+			                    } else if(choice == 8) {
+			                    	lightingBolt();
+			                    	lightingBolt();
+			                    	lightingBolt();
+			                    }
+					        }
+					        else {
+					        	int choice = rgen.nextInt(1, 10);
+			                    if (choice >= 1 && choice <= 3) {
+			                    	lightingBolt();
+			                    	lightingBolt();
+			                    	lightingBolt();
+			                    } else if (choice >= 7 && choice <= 10) {
+			                    	if(!isTridentThrowActive) {
+			                    		tridentThrowAttack();
+			                    	}
+			                    }else if(choice >= 4 && choice <= 6 ) {
+			                    	grenadeAttack();
+			                    	grenadeAttack();
+			                    	grenadeAttack();
+			                    }
+					        }
+						}
+					}
 				}
 			}
-		},500, 500);
+		},500, 1500);
 		
 		
 	}
-
-//	@Override
-//	public void run() {
-//		// TODO Auto-generated method stub
-//		spawnKing();
-//	}
-//	
-//	public void init() {
-//		setSize(1920,1080);
-//	}
-//	
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//		new King().start();
-//	}
 }

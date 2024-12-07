@@ -19,20 +19,20 @@ public class Round2 extends Round {
 
     // Pause feature elements
     private GRect overlay;
-    private GLabel pauseMessage;
+    private GLabel pauseMessage;;
 
     private boolean roundCompleted = false; // Prevents duplicate transitions
 
     @Override
     public void init() {
-        setSize(1920, 1080); // size of the game window
+        setSize((int) getWidth(), (int) getHeight()); // size of the game window
         addKeyListeners();
         showMapScreen(); // Show the map before gameplay starts
     }
 
     private void showMapScreen() {
         GImage kjPoolMap = new GImage("media/kjpoolMap.png", 0, 0);
-        kjPoolMap.setSize(1920, 1080); // Fit the window
+        kjPoolMap.setSize(getWidth(), getHeight()); // Fit the window
         add(kjPoolMap);
 
         // Timer to remove the map and proceed to the welcome screen
@@ -49,7 +49,7 @@ public class Round2 extends Round {
     private void showWelcomeScreen() {
         welcomeGif = new GImage("media/PoolWelcome.gif", 0, 0);
         welcomeGif.setSize
-        (1920, 1080); // scales to fit the screen
+        (getWidth(), getHeight()); // scales to fit the screen
         add(welcomeGif);
 
         // adds a timer to remove the welcome screen and start the round
@@ -66,7 +66,7 @@ public class Round2 extends Round {
     private void setupContent() {
         // pool background
         backgroundImage = new GImage("media/PoolBackground.png", 0, 0);
-        backgroundImage.setSize(1920, 1080); // scales to fit the screen
+        backgroundImage.setSize(getWidth(), getHeight()); // scales to fit the screen
         add(backgroundImage);
 
         // Add characters
@@ -160,6 +160,7 @@ public class Round2 extends Round {
         if (!roundCompleted) { // Prevent duplicate transitions
             if (powerCat.getHP() <= 0) {
                 roundCompleted = true;
+                willie.setTigerDeath();
                 showResultScreen(false); // Player lost
             } else if (willie.getHP() <= 0) {
                 roundCompleted = true;
@@ -177,7 +178,7 @@ public class Round2 extends Round {
         } else {
             // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
-            dftScreen.setSize(1920, 1080);
+            dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);
         }
     }
