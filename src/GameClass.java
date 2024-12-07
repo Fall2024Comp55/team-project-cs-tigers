@@ -80,7 +80,7 @@ public class GameClass {
                     @Override
                     public void run() {
                         GImage endScreen = new GImage("media/endScreen.png", 0, 0);
-                        endScreen.setSize(1920, 1080);
+                        endScreen.setSize(getWidth(), getHeight());
                         add(endScreen);
                     }
                 };

@@ -9,8 +9,7 @@ public class MainMenu extends GraphicsProgram {
 
     @Override
     public void init() {
-        // Set the window to full-screen size
-        this.setSize(1280, 720);
+        this.setSize(getWidth(), getHeight());
 
         // Display start GIF
         showStartGif();
@@ -19,15 +18,22 @@ public class MainMenu extends GraphicsProgram {
         addKeyListeners();
     }
 
-    private void showStartGif() {
+    private void setSize(double width, double height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void showStartGif() {
         startGif = new GImage("media/Start.gif", 0, 0);
-        scaleImageToWindow(startGif);
+        startGif.setSize(getWidth(), getHeight());
         add(startGif);
     }
 
+
+        
     private void showControlScreen() {
         controlImage = new GImage("media/control.png", 0, 0);
-        scaleImageToWindow(controlImage);
+        controlImage.setSize(getWidth(), getHeight());
         add(controlImage);
     }
 

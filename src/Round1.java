@@ -181,7 +181,8 @@ public class Round1 extends Round {
         } else {
             // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
-            dftScreen.setSize(1920, 1080);
+            dftScreen.setSize(getWidth(), getHeight());
+
             add(dftScreen);
 
             // Timer to go back to Main Menu after 3 seconds of showing defeat screen
