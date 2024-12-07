@@ -14,7 +14,8 @@ public class Round3 extends Round {
 
     // Health bar elements
     private GRect playerHealthBar, playerHealthBarBg; // Tiger's health
-    private GLabel playerHealthLabel;
+    private GRect tritonHealthBar, tritonHealthBarBg; // Triton's health
+    private GLabel playerHealthLabel, tritonHealthLabel;
 
     // Pause feature elements
     private GRect overlay;
@@ -67,18 +68,18 @@ public class Round3 extends Round {
         backgroundImage.setSize(getWidth(), getHeight()); // Scales to fit the screen
         add(backgroundImage);
 
-        // Add Tiger
+        // Add Tiger and Triton
         triton.setWindowHeight(getHeight());
         triton.setWindowWidth(getWidth());
         powerCat.setGroundLevel(triton.getGroundLevel());
         powerCat.setOpponent(triton.getKingLoc());
         triton.spawnKing();
         powerCat.spawnTiger();
-        
+
         startKingMovement();
         setupHealthBars(); // Set up health bars
     }
-    
+
     private void startKingMovement() {
         kingMovementTimer = new Timer();
         kingMovementTimer.scheduleAtFixedRate(new TimerTask() {
@@ -119,6 +120,22 @@ public class Round3 extends Round {
         playerHealthLabel.setColor(java.awt.Color.WHITE);
         add(playerHealthLabel);
 
+        // Triton health bar
+        tritonHealthBarBg = new GRect(getWidth() - 350, 20, 300, 25); // Background
+        tritonHealthBarBg.setFilled(true);
+        tritonHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
+        add(tritonHealthBarBg);
+
+        tritonHealthBar = new GRect(getWidth() - 350, 20, 300, 25); // Foreground (Health)
+        tritonHealthBar.setFilled(true);
+        tritonHealthBar.setFillColor(java.awt.Color.RED);
+        add(tritonHealthBar);
+
+        tritonHealthLabel = new GLabel("100", getWidth() - 400, 40); // Health value label
+        tritonHealthLabel.setFont("Monospaced-bold-20");
+        tritonHealthLabel.setColor(java.awt.Color.WHITE);
+        add(tritonHealthLabel);
+
         Timer healthBarUpdater = new Timer();
         healthBarUpdater.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -129,9 +146,21 @@ public class Round3 extends Round {
     }
 
     private void updateHealthBars() {
+        // Update Tiger health bar
         double playerHealthPercentage = Math.max(0, powerCat.getHP() / 100.0);
         playerHealthBar.setSize(300 * playerHealthPercentage, 25);
         playerHealthLabel.setLabel(String.valueOf((int) powerCat.getHP()));
+
+        // Update Triton health bar
+        double tritonHealthPercentage = Math.max(0, triton.getHP() / 100.0);
+        tritonHealthBar.setSize(300 * tritonHealthPercentage, 25);
+        tritonHealthLabel.setLabel(String.valueOf((int) triton.getHP()));
+
+        // Check for victory condition
+        if (triton.getHP() <= 0) { // Check if Triton's health is 0 or less
+            triton.setHP(0); // Clamp Triton's health to 0
+            showVictoryScreen(); // Trigger the victory screen
+        }
     }
 
     private void checkGameOver() {
@@ -142,13 +171,27 @@ public class Round3 extends Round {
 
     private void showDefeatScreen() {
         gameOver = true; // Mark game as over
-        if (roundTimer != null) {
-            roundTimer.cancel(); // Stop the timer
-        }
+        stopAllTimers(); // Stop all timers
         removeAll(); // Clear the current game screen
         GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
         dftScreen.setSize(getWidth(), getHeight());
         add(dftScreen);
+    }
+
+    private void showVictoryScreen() {
+        gameOver = true; // Mark game as over
+        stopAllTimers(); // Stop all active timers
+        removeAll(); // Clear the current game screen
+
+        // Display victory screen
+        GImage vicScreen = new GImage("media/vicScreen.gif", 0, 0);
+        vicScreen.setSize(getWidth(), getHeight()); // Scale to fit the screen
+        add(vicScreen);
+    }
+
+    private void stopAllTimers() {
+        if (kingMovementTimer != null) kingMovementTimer.cancel();
+        if (roundTimer != null) roundTimer.cancel();
     }
 
     @Override
@@ -236,5 +279,4 @@ public class Round3 extends Round {
         new Round3().start(); // Launch Round 3
     }
 }
-
 

@@ -33,7 +33,7 @@ public class GameClass {
         if (!isTransitioning) {
             isTransitioning = true;
             System.out.println("Transitioning to Round1...");
-            SwingUtilities.invokeLater(() -> { 
+            SwingUtilities.invokeLater(() -> {
                 Round1 round1 = new Round1();
                 round1.start();
                 currentRound = 1;  // Set to Round1
@@ -57,39 +57,19 @@ public class GameClass {
     }
 
     public static void transitionToRound3() {
-        if (!isTransitioning && currentRound == 2) { // Only transition from Round2
+        // Transition to Round3
+        if (!isTransitioning && currentRound == 2) {  // Only allow this if coming from Round2
             isTransitioning = true;
             System.out.println("Transitioning to Round3...");
             SwingUtilities.invokeLater(() -> {
-                Round3 round3 = new Round3(); // Create a new instance of Round3
-                round3.start(); // Start Round3
-                currentRound = 3; // Update the current round
+                Round3 round3 = new Round3();
+                round3.start();
+                currentRound = 3;  // Set to Round3
                 isTransitioning = false;
             });
         }
     }
 
-    public static void displayEndScreen() {
-        // Display the end screen after the final round
-        if (!isTransitioning && currentRound == 3 && !gameOver) {  // Only allow this if coming from Round3
-            isTransitioning = true;
-            gameOver = true; // Mark the game as finished
-            System.out.println("Displaying End Screen...");
-            SwingUtilities.invokeLater(() -> {
-                GraphicsProgram endProgram = new GraphicsProgram() {
-                    @Override
-                    public void run() {
-                        GImage endScreen = new GImage("media/endScreen.png", 0, 0);
-                        endScreen.setSize(getWidth(), getHeight());
-                        add(endScreen);
-                    }
-                };
-                endProgram.start();
-                currentRound = 4;  // Set to End Screen
-                isTransitioning = false;
-            });
-        }
-    }
 
     public static void nextLevel() {
         // Handles the transition to the next level based on the current round
@@ -111,7 +91,6 @@ public class GameClass {
                 transitionToRound3();
                 break;
             case 3:  // From Round3
-                displayEndScreen();
                 break;
             default:  // Unexpected case
                 System.out.println("Unexpected round. Resetting to Main Menu.");
