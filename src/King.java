@@ -12,10 +12,9 @@ public class King {
 	private static final int MELEEVALUE = 2;
 	private static final int GRENADEATTACKVALUE = 5;
 	private static final int LIGHTINGBOLTVALUE = 8;
-	private double WINDOWHEIGHT = 20.0;
 	private double WINDOWWIDTH = 20.0;
 	private static final double SPEED = 15.0;
-	private static final double THROWSPEED = 20.0;
+	private static final double THROWSPEED = 25.0;
 	private static final double LIGHTINGSPEED = 25.0;
 	private static final double GRENADESPEED = 25.0;
 	private boolean isWalkActive = false;
@@ -23,13 +22,11 @@ public class King {
 	private boolean isFacingRight = false;
 	private boolean isPaused = false;
 	private boolean isTridentThrowActive = false;
-	private static final double GROUNDLEVEL = 800;
+	private static final double GROUNDLEVEL = 900;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("KingLeft.png",0,GROUNDLEVEL);
 	private GImage tiger = new GImage("",0,0);
 	private GraphicsProgram parentProgram;
-	private double kingWidth = 0;
-	private double kingHeight = 0;
 	
 	public King(GraphicsProgram parentProgram) {
 		this.parentProgram = parentProgram;
@@ -42,9 +39,6 @@ public class King {
 	}
 	public void setTigerLoc(GImage s) {
 		tiger = s;
-	}
-	public void setWindowHeight(double h) {
-		WINDOWHEIGHT = h;
 	}
 	public void setWindowWidth(double h) {
 		WINDOWWIDTH = h;
@@ -104,12 +98,10 @@ public class King {
 	public void checkSide() {
 		if(king.getX() > tiger.getX()) {
 			king.setImage("tritonLeft.png");
-			//king.setSize(KINGWIDTH, KINGHEIGHT);
 			isFacingRight = false;
 		}
 		else {
 			king.setImage("KingRight.png");
-			//king.setSize(KINGWIDTH, KINGHEIGHT);
 			isFacingRight = true;
 		}
 	}
@@ -169,7 +161,6 @@ public class King {
         temp.setSize(120, 120);
         double tempX = rgen.nextDouble(0,1080 - 120);
         parentProgram.add(temp);
-        //add(temp);
         
         TimerTask lightingBombTask = new TimerTask() {
             @Override
@@ -200,7 +191,6 @@ public class King {
 	                            new Timer().schedule(new TimerTask() {
 	                                @Override
 	                                public void run() {
-	                                    //remove(temp);
 	                                    parentProgram.remove(temp);
 	                                }
 	                            }, 1000);
@@ -231,14 +221,12 @@ public class King {
 	                	if(!isPaused) {
 							setDamageGiven(LIGHTINGBOLTVALUE);
 							parentProgram.remove(s);
-							//remove(s);
 							cancel();
 	                	}
 					}
 	                
 	                if (s.getX() == tempX && s.getY() == GROUNDLEVEL) {
 						parentProgram.remove(s);
-	                	//remove(s);
 	                    cancel();
 	                }
             	}
@@ -258,7 +246,7 @@ public class King {
 	 		s.setImage("LightingTridentFlipped.gif");
 	 	}
 	 	
-        s.setSize(200,200);
+        s.setSize(250,250);
         parentProgram.add(s);
         
         TimerTask tridentTask = new TimerTask() {
@@ -289,6 +277,8 @@ public class King {
 	 }
 	
 	public void tridentStab() {
+		isAttackActive = true;
+		
 		if(isFacingRight) {
 			king.setImage("tritonPunchR.png");
 		}
@@ -296,7 +286,6 @@ public class King {
 			king.setImage("tritonPunchL.png");
 		}
 		
-		//king.setSize(kingWidth, kingHeight);
 		
 		if(imagesIntersect(king,tiger,true)) {
 			if(!isPaused) {
@@ -325,6 +314,8 @@ public class King {
 						king.setImage("tritonLeft.png");
 					}
 				}
+				
+				isAttackActive = false;
 			}
 		}, 300);
 	}
@@ -332,9 +323,8 @@ public class King {
 	public void spawnKing() {
 		//king.setSize(KINGWIDTH, KINGHEIGHT);
 		//add(king);
+		king.scale(1.5);
 		king.setLocation(800, GROUNDLEVEL - king.getHeight());
-		kingWidth = king.getWidth();
-		kingHeight = king.getHeight();
 		parentProgram.add(king);
 		
 		Timer movementTimer = new Timer();
@@ -353,12 +343,14 @@ public class King {
 								public void run() {
 									// TODO Auto-generated method stub
 									if(!isPaused) {
-										walkToEnemy(king,tempX,tempY);
-										isWalkActive = true;
-										
-										if(king.getX() == tempX && king.getY() == tempY) {
-											isWalkActive = false;
-											cancel();
+										if(!isAttackActive) {
+											walkToEnemy(king,tempX,tempY);
+											isWalkActive = true;
+											
+											if(king.getX() == tempX && king.getY() == tempY) {
+												isWalkActive = false;
+												cancel();
+											}
 										}
 									}
 								}

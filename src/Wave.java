@@ -318,7 +318,7 @@ public class Wave {
 		isAttackActive = true;
 		
 		if(isFacingRight) {
-			wave.setImage("WilliePunchR3.png");
+			wave.setImage("WilliePunchR.png");
 		}
 		else {
 			wave.setImage("WilliePunchL.png");

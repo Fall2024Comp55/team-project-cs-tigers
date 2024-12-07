@@ -67,8 +67,7 @@ public class Round3 extends Round {
         backgroundImage.setSize(getWidth(), getHeight()); // Scales to fit the screen
         add(backgroundImage);
 
-        // Add Tiger
-        triton.setWindowHeight(getHeight());
+        // Add Tiger and King
         triton.setWindowWidth(getWidth());
         powerCat.setGroundLevel(triton.getGroundLevel());
         powerCat.setOpponent(triton.getKingLoc());
