@@ -105,38 +105,51 @@ public class Round2 extends Round {
     }
 
     private void setupHealthBars() {
-        // Player (Tiger) health bar
-        playerHealthBarBg = new GRect(50, 20, 300, 25); // Background
+        int barYPosition = 80; // Lowered position for better visibility
+
+        // PLAYER Health Bar and Label
+        GLabel playerLabel = new GLabel("PLAYER", 50, barYPosition - 15); // Positioned above the bar
+        playerLabel.setFont("Monospaced-bold-20");
+        playerLabel.setColor(java.awt.Color.BLACK); // Black for visibility
+        add(playerLabel);
+
+        playerHealthBarBg = new GRect(50, barYPosition, 300, 25); // Background
         playerHealthBarBg.setFilled(true);
         playerHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
         add(playerHealthBarBg);
 
-        playerHealthBar = new GRect(50, 20, 300, 25); // Foreground (Health)
+        playerHealthBar = new GRect(50, barYPosition, 300, 25); // Foreground (Health)
         playerHealthBar.setFilled(true);
         playerHealthBar.setFillColor(java.awt.Color.GREEN);
         add(playerHealthBar);
 
-        playerHealthLabel = new GLabel("100", 360, 40); // Health value label
+        playerHealthLabel = new GLabel("51", 180, barYPosition + 18); // Centered on the bar
         playerHealthLabel.setFont("Monospaced-bold-20");
-        playerHealthLabel.setColor(java.awt.Color.WHITE);
+        playerHealthLabel.setColor(java.awt.Color.BLACK);
         add(playerHealthLabel);
 
-        // CPU (Wave) health bar
-        cpuHealthBarBg = new GRect(getWidth() - 350, 20, 300, 25); // Background
+        // CPU Health Bar and Label
+        GLabel cpuLabel = new GLabel("CPU", getWidth() - 400, barYPosition - 15); // Positioned above the bar
+        cpuLabel.setFont("Monospaced-bold-20");
+        cpuLabel.setColor(java.awt.Color.BLACK); // Black for visibility
+        add(cpuLabel);
+
+        cpuHealthBarBg = new GRect(getWidth() - 400, barYPosition, 325, 25); // Wider background for better fit
         cpuHealthBarBg.setFilled(true);
-        cpuHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
+        cpuHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY); // Ensure constant visibility
         add(cpuHealthBarBg);
 
-        cpuHealthBar = new GRect(getWidth() - 350, 20, 300, 25); // Foreground (Health)
+        cpuHealthBar = new GRect(getWidth() - 400, barYPosition, 300, 25); // Foreground (Health)
         cpuHealthBar.setFilled(true);
         cpuHealthBar.setFillColor(java.awt.Color.RED);
         add(cpuHealthBar);
 
-        cpuHealthLabel = new GLabel("100", getWidth() - 400, 40); // Health value label
+        cpuHealthLabel = new GLabel("125", getWidth() - 245, barYPosition + 18); // Adjusted for better centering
         cpuHealthLabel.setFont("Monospaced-bold-20");
-        cpuHealthLabel.setColor(java.awt.Color.WHITE);
+        cpuHealthLabel.setColor(java.awt.Color.BLACK);
         add(cpuHealthLabel);
 
+        // Timer for updating health values dynamically
         Timer healthBarUpdater = new Timer();
         healthBarUpdater.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -146,6 +159,7 @@ public class Round2 extends Round {
         }, 0, 50); // Refresh every 50ms
     }
 
+
     private void updateHealthBars() {
         double playerHealthPercentage = Math.max(0, powerCat.getHP() / 100.0);
         playerHealthBar.setSize(300 * playerHealthPercentage, 25);
@@ -154,6 +168,7 @@ public class Round2 extends Round {
         double cpuHealthPercentage = Math.max(0, willie.getHP() / 100.0);
         cpuHealthBar.setSize(300 * cpuHealthPercentage, 25);
         cpuHealthLabel.setLabel(String.valueOf((int) willie.getHP()));
+        
     }
 
     private void checkGameOver() {

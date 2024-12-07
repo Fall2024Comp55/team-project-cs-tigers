@@ -103,38 +103,52 @@ public class Round3 extends Round {
     }
 
     private void setupHealthBars() {
-        // Player (Tiger) health bar
-        playerHealthBarBg = new GRect(50, 20, 300, 25); // Background
+        int barYPosition = 50; // Y position for health bars
+        int barHeight = 25; // Height of the bars
+
+        // Player Health Bar and Label
+        GLabel playerLabel = new GLabel("PLAYER", 50, barYPosition - 10); // Label positioned above the bar
+        playerLabel.setFont("Monospaced-bold-18");
+        playerLabel.setColor(java.awt.Color.BLACK); // Black for better visibility
+        add(playerLabel);
+
+        playerHealthBarBg = new GRect(50, barYPosition, 300, barHeight); // Background
         playerHealthBarBg.setFilled(true);
         playerHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
         add(playerHealthBarBg);
 
-        playerHealthBar = new GRect(50, 20, 300, 25); // Foreground (Health)
+        playerHealthBar = new GRect(50, barYPosition, 300, barHeight); // Foreground (Health)
         playerHealthBar.setFilled(true);
         playerHealthBar.setFillColor(java.awt.Color.GREEN);
         add(playerHealthBar);
 
-        playerHealthLabel = new GLabel("100", 360, 40); // Health value label
-        playerHealthLabel.setFont("Monospaced-bold-20");
-        playerHealthLabel.setColor(java.awt.Color.WHITE);
+        playerHealthLabel = new GLabel("100", 175, barYPosition + 18); // Centered on the bar
+        playerHealthLabel.setFont("Monospaced-bold-18");
+        playerHealthLabel.setColor(java.awt.Color.BLACK);
         add(playerHealthLabel);
 
-        // Triton health bar
-        tritonHealthBarBg = new GRect(getWidth() - 350, 20, 300, 25); // Background
+        // Triton Health Bar and Label
+        GLabel tritonLabel = new GLabel("TRITON", getWidth() - 350, barYPosition - 10); // Label positioned above the bar
+        tritonLabel.setFont("Monospaced-bold-18");
+        tritonLabel.setColor(java.awt.Color.BLACK); // Black for better visibility
+        add(tritonLabel);
+
+        tritonHealthBarBg = new GRect(getWidth() - 350 - 25, barYPosition, 325, barHeight); // Adjusted position and width
         tritonHealthBarBg.setFilled(true);
         tritonHealthBarBg.setFillColor(java.awt.Color.DARK_GRAY);
         add(tritonHealthBarBg);
 
-        tritonHealthBar = new GRect(getWidth() - 350, 20, 300, 25); // Foreground (Health)
+        tritonHealthBar = new GRect(getWidth() - 350 - 25, barYPosition, 300, barHeight); // Foreground (Health)
         tritonHealthBar.setFilled(true);
         tritonHealthBar.setFillColor(java.awt.Color.RED);
         add(tritonHealthBar);
 
-        tritonHealthLabel = new GLabel("100", getWidth() - 400, 40); // Health value label
-        tritonHealthLabel.setFont("Monospaced-bold-20");
-        tritonHealthLabel.setColor(java.awt.Color.WHITE);
+        tritonHealthLabel = new GLabel("150", getWidth() - 170 - 25, barYPosition + 18); // Centered on the bar
+        tritonHealthLabel.setFont("Monospaced-bold-18");
+        tritonHealthLabel.setColor(java.awt.Color.BLACK);
         add(tritonHealthLabel);
 
+        // Timer for updating health dynamically
         Timer healthBarUpdater = new Timer();
         healthBarUpdater.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -143,6 +157,7 @@ public class Round3 extends Round {
             }
         }, 0, 50); // Refresh every 50ms
     }
+
 
     private void updateHealthBars() {
         // Update Tiger health bar

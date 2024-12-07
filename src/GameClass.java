@@ -68,7 +68,6 @@ public class GameClass {
             });
         }
     }
-
     public static void displayEndScreen() {
         // Display the end screen after the final round
         if (!isTransitioning && currentRound == 3 && !gameOver) {  // Only allow this if coming from Round3
@@ -120,4 +119,4 @@ public class GameClass {
         }
     }
 }
-
+// test
