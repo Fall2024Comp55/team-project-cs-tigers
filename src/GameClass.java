@@ -33,7 +33,7 @@ public class GameClass {
         if (!isTransitioning) {
             isTransitioning = true;
             System.out.println("Transitioning to Round1...");
-            SwingUtilities.invokeLater(() -> {
+            SwingUtilities.invokeLater(() -> { 
                 Round1 round1 = new Round1();
                 round1.start();
                 currentRound = 1;  // Set to Round1

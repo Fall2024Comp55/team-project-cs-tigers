@@ -1,17 +1,13 @@
-import acm.graphics.*;
 import acm.program.*;
 
 public abstract class Round extends GraphicsProgram {
     private int currentRound = 1; // Tracks the current round, starting with round 1
-    private boolean roundOver = false; // Tracks if the round is over
-    private String caption; // Stores the current round caption for display
-
+   
     // Abstract method to start the round (to be implemented by subclasses)
     public abstract void startRound();
 
     // Updates the caption for the round
     public void updateCaption(String caption) {
-        this.caption = caption; // Sets the caption
         System.out.println(caption); // Displays the caption in the console
     }
 
@@ -39,18 +35,14 @@ public abstract class Round extends GraphicsProgram {
     // Advances to the next round
     public void nextRound() {
         currentRound++;
-        roundOver = false;
     }
 
     // Ends the current round
     public void endRound() {
-        roundOver = true;
     }
 
     // Resets the game to the first round
     public void resetGame() {
         currentRound = 1;
-        roundOver = false;
     }
 }
-
