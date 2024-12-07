@@ -25,6 +25,7 @@ public class Round3 extends Round {
 
     @Override
     public void init() {
+        removeAll(); // Clear any lingering components
         setSize((int) getWidth(), (int) getHeight()); // Set game window size
         addKeyListeners();
         showSpanMap(); // Show the map before starting the round
@@ -293,4 +294,3 @@ public class Round3 extends Round {
         new Round3().start(); // Launch Round 3
     }
 }
-

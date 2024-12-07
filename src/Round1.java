@@ -21,12 +21,15 @@ public class Round1 extends Round {
     private GRect overlay;
     private GLabel pauseMessage;
 
+
     @Override
     public void init() {
+        removeAll(); // Clear any lingering components
         setSize(getWidth(), getHeight()); // Set game window size
-        addKeyListeners();
-        showBurnsMap(); // Show Burns map
+        addKeyListeners(); // Enable key listeners
+        showBurnsMap(); // Display Burns map
     }
+
 
     private void showBurnsMap() {
         GImage burnsMap = new GImage("media/BurnsMap.png", 0, 0);
@@ -193,7 +196,7 @@ public class Round1 extends Round {
     private void showResultScreen(boolean playerWon) {
         removeAll(); // Clear the current game screen
         if (playerWon) {
-            GameClass.nextLevel();  // Transition to Round2
+        	GameClass.transitionToRound2(true);  // Transition to Round2 after winning
         } else {
             // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
@@ -291,5 +294,4 @@ public class Round1 extends Round {
     public void setSize(double width, double height) {
     }
 }
-
 

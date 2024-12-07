@@ -25,6 +25,7 @@ public class Round2 extends Round {
 
     @Override
     public void init() {
+        removeAll(); // Clear any lingering components
         setSize((int) getWidth(), (int) getHeight()); // size of the game window
         addKeyListeners();
         showMapScreen(); // Show the map before gameplay starts
@@ -189,7 +190,7 @@ public class Round2 extends Round {
 
         removeAll(); // Clear the current game screen
         if (playerWon) {
-            GameClass.transitionToRound3(); // Transition to Round3
+        	GameClass.transitionToRound3(true);  // Transition to Round2 after winning
         } else {
             // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
@@ -278,4 +279,4 @@ public class Round2 extends Round {
     public static void main(String[] args) {
         new Round2().start(); // Launch Round 2
     }
-}
+} 
