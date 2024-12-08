@@ -1,5 +1,4 @@
 import acm.program.*;
-// tested 
 public class GameClass extends GraphicsProgram {
 
     private static GraphicsProgram currentScreen; // Active screen
@@ -80,5 +79,5 @@ public class GameClass extends GraphicsProgram {
         currentScreen.start();         // Start the new screen
     }
 }
-
+// tested
 
