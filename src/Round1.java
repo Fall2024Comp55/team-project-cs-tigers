@@ -76,6 +76,7 @@ public class Round1 extends Round {
         powerCat.spawnTiger();
         setupHealthBars();
         addMouseListeners(); // Enable interactions
+        Sound.playBackgroundMusic("media/youtube_LsIWRHBKeh0_audio (remux).wav");
     }
 
     private void startHerkieMovement() {
@@ -196,7 +197,8 @@ public class Round1 extends Round {
             GameClass.nextLevel();  // Transition to Round2
         } else {
             // If Tiger loses, show defeat screen
-            GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
+        	Sound.stopBackgroundMusic();
+        	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
 
             add(dftScreen);

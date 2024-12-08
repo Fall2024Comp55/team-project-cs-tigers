@@ -169,7 +169,7 @@ public class Hornet {
 		double hornetY = hornet.getY();
 		 
         GImage s = new GImage("StraightRightStinger.png", hornetX, hornetY);
-        
+        Sound.playSound("media/419341__wizardoz__swoosh.wav");
         double dx = tempX - hornetX;
         double dy = tempY - hornetY;
         
@@ -243,6 +243,7 @@ public class Hornet {
 	        GImage temp = new GImage("honeyBomb.png", hornet.getX(), hornet.getY());
 	        temp.scale(0.5);
 	        parentProgram.add(temp);
+	        Sound.playSound("media/419341__wizardoz__swoosh.wav");
 	        
 	        TimerTask honeyBombTask = new TimerTask() {
 	            @Override
@@ -262,7 +263,7 @@ public class Hornet {
 		                        @Override
 		                        public void run() {
 		                            temp.setImage("explosion.gif");
-		                            
+		                            Sound.playSound("media/155235__zangrutz__bomb-small.wav");
 		                            if(imagesIntersect(temp,tiger)) {
 		                            	if(!isPaused) {
 		                            		setDamageGiven(HONEYBOMBVALUE);

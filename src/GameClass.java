@@ -36,6 +36,7 @@ public class GameClass {
             SwingUtilities.invokeLater(() -> { 
                 Round1 round1 = new Round1();
                 round1.start();
+                Sound.stopBackgroundMusic();
                 currentRound = 1;  // Set to Round1
                 isTransitioning = false;
             });
@@ -50,6 +51,7 @@ public class GameClass {
             SwingUtilities.invokeLater(() -> {
                 Round2 round2 = new Round2();
                 round2.start();
+                Sound.stopBackgroundMusic();
                 currentRound = 2;  // Set to Round2
                 isTransitioning = false;
             });
@@ -63,6 +65,7 @@ public class GameClass {
             SwingUtilities.invokeLater(() -> {
                 Round3 round3 = new Round3(); // Create a new instance of Round3
                 round3.start(); // Start Round3
+                Sound.stopBackgroundMusic();
                 currentRound = 3; // Update the current round
                 isTransitioning = false;
             });

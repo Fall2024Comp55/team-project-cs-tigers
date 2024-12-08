@@ -159,11 +159,11 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	            System.out.println(tiger.getY()); // Debugging purpose
 	            break;
 	     case KeyEvent.VK_X, KeyEvent.VK_K: // Special Attack
-           //if (getHP() <= 30 && !spAttackUsed) {
+           if (getHP() <= 30 && !spAttackUsed) {
                  specialAttack(program);
                  spAttackUsed = true;
                  System.out.println("Special Attacking"); // Debugging purpose
-             //}
+             }
              break;
 	     
 	     
@@ -281,6 +281,7 @@ public class Tiger  { // extends GraphicsProgram implements ActionListener
 	                GImage boom = new GImage("explosion.png", opponent.getX(), opponent.getY() - 50);
 	                boom.scale(0.4);
 	                program.add(boom);
+	                Sound.playSound("media/155235__zangrutz__bomb-small.wav");
 	                hitOpponent = true;
 	                if(boom.getBounds().intersects(opponent.getBounds())) {
 	                	setDamageGiven(specialAttack_val);

@@ -187,6 +187,7 @@ public class Wave {
 	
 	private void waveAttack() {
 		GImage waveAttack = new GImage("Wave.gif",1800,GROUNDLEVEL);
+		Sound.playSound("media/51755__erkanozan__whip-01.wav");
 		//add(waveAttack);
 		waveAttack.scale(0.550);;
 		waveAttack.setLocation(WINDOWWIDTH, GROUNDLEVEL - waveAttack.getHeight());
@@ -235,7 +236,7 @@ public class Wave {
 	
 	private void seaweedAttack() {
 		isAttackActive = true;
-		
+		Sound.playSound("media/seaweed_edited.wav");
 		if(!isFacingRight) {
 			wave.setImage("SeaweedPoseCropped.png");
 		}
@@ -283,6 +284,7 @@ public class Wave {
         temp.setLocation(rgen.nextDouble(0,WINDOWWIDTH - temp.getWidth()), rgen.nextDouble(GROUNDLEVEL - temp.getHeight()));
         //add(temp);
         parentProgram.add(temp);
+        Sound.playSound("media/261568__kwahmah_02__bubbles6.wav");
         
         TimerTask bubbleBombTask = new TimerTask() {
             @Override
@@ -292,6 +294,7 @@ public class Wave {
                         @Override
                         public void run() {
                             temp.setImage("explosion.gif");
+                            Sound.playSound("media/155235__zangrutz__bomb-small.wav");
                             
                             if(imagesIntersect(temp,tiger,false)) {
                             	if(!isPaused) {
@@ -317,6 +320,7 @@ public class Wave {
 	private void waterWhip() {
 		isAttackActive = true;
 		
+		Sound.playSound("media/51755__erkanozan__whip-01.wav");
 		if(isFacingRight) {
 			wave.setImage("WilliePunchR.png");
 		}
@@ -361,6 +365,7 @@ public class Wave {
 		wave.scale(0.4);
 		wave.setLocation(1700, GROUNDLEVEL - wave.getHeight());
 		parentProgram.add(wave);
+		Sound.playSound("media/51755__erkanozan__whip-01.wav");
 		
 		Timer movementTimer = new Timer();
 		movementTimer.scheduleAtFixedRate(new TimerTask() {

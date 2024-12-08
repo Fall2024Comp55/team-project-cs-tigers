@@ -161,6 +161,7 @@ public class King {
         temp.setSize(120, 120);
         double tempX = rgen.nextDouble(0,1080 - 120);
         parentProgram.add(temp);
+        Sound.playSound("media/419341__wizardoz__swoosh.wav");
         
         TimerTask lightingBombTask = new TimerTask() {
             @Override
@@ -181,6 +182,7 @@ public class King {
 	                        public void run() {
 	                            temp.setImage("explosion.gif");
 	                            temp.setSize(120, 120);
+	                            Sound.playSound("media/155235__zangrutz__bomb-small.wav");
 	                            
 	                            if(imagesIntersect(temp,tiger,false)) {
 	                            	if(!isPaused) {
@@ -210,6 +212,7 @@ public class King {
         s.setSize(120,120);
         parentProgram.add(s);
         //add(s);
+        Sound.playSound("media/lightning_edited.wav");
         
         TimerTask lightingTask = new TimerTask() {
             @Override
@@ -248,6 +251,7 @@ public class King {
 	 	
         s.setSize(250,250);
         parentProgram.add(s);
+        Sound.playSound("media/419341__wizardoz__swooshEvenLouder.wav");
         
         TimerTask tridentTask = new TimerTask() {
             @Override
@@ -286,6 +290,7 @@ public class King {
 			king.setImage("tritonPunchL.png");
 		}
 		
+		Sound.playSound("media/king_punch.wav");
 		
 		if(imagesIntersect(king,tiger,true)) {
 			if(!isPaused) {

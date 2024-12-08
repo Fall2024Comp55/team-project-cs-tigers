@@ -77,6 +77,7 @@ public class Round3 extends Round {
 
         startKingMovement();
         setupHealthBars(); // Set up health bars
+        Sound.playBackgroundMusic("media/youtube_e9fhrU7YYcQ_audio (remux).wav");
     }
 //
     private void startKingMovement() {
@@ -184,7 +185,8 @@ public class Round3 extends Round {
     }
 
     private void showDefeatScreen() {
-        gameOver = true; // Mark game as over
+    	Sound.stopBackgroundMusic();
+    	gameOver = true; // Mark game as over
         stopAllTimers(); // Stop all timers
         removeAll(); // Clear the current game screen
         GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
@@ -193,11 +195,13 @@ public class Round3 extends Round {
     }
 
     private void showVictoryScreen() {
-        gameOver = true; // Mark game as over
+    	Sound.stopBackgroundMusic();
+    	gameOver = true; // Mark game as over
         stopAllTimers(); // Stop all active timers
         removeAll(); // Clear the current game screen
 
         // Display victory screen
+        //Sound.playSound("media/youtube_jC5IQkInhwM_audio (remux).wav");
         GImage vicScreen = new GImage("media/vicScreen.gif", 0, 0);
         vicScreen.setSize(getWidth(), getHeight()); // Scale to fit the screen
         add(vicScreen);

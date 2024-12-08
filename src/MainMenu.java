@@ -24,7 +24,8 @@ public class MainMenu extends GraphicsProgram {
 	}
 
 	private void showStartGif() {
-        startGif = new GImage("media/Start.gif", 0, 0);
+		Sound.playBackgroundMusic("media/youtube_ARJzWXXupeE_audio (remux).wav");
+		startGif = new GImage("media/Start.gif", 0, 0);
         startGif.setSize(getWidth(), getHeight());
         add(startGif);
     }
@@ -52,6 +53,7 @@ public class MainMenu extends GraphicsProgram {
             } else {
                 // Transition from controls to Round1
                 remove(controlImage);
+                Sound.stopBackgroundMusic();
                 GameClass.transitionToRound1(); // Move to Round1 after control screen
             }
         }

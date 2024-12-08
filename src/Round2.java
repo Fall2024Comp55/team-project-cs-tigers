@@ -79,6 +79,7 @@ public class Round2 extends Round {
 
         startWaveMovement(); // Start Wave's movement when content is set up
         setupHealthBars(); // Set up health bars
+        Sound.playBackgroundMusic("media/youtube_GYkZRFpKS48_audio (remux).wav");
     }
 
     private void startWaveMovement() {
@@ -192,7 +193,8 @@ public class Round2 extends Round {
             GameClass.transitionToRound3(); // Transition to Round3
         } else {
             // If Tiger loses, show defeat screen
-            GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
+        	Sound.stopBackgroundMusic();
+        	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);
         }
