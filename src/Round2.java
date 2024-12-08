@@ -186,18 +186,36 @@ public class Round2 extends Round {
     }
 
     private void showResultScreen(boolean playerWon) {
-        stopAllElements(); // Clean up before transitioning
-
-        removeAll(); // Clear the current game screen
+        stopAllTimers(); // Stop game elements
+        stopAllAnimations(); 
+        removeAll(); // Clear the screen
+        
         if (playerWon) {
-        	GameClass.transitionToRound3(true);  // Transition to Round2 after winning
+            GameClass.transitionToRound3(true);  // Proceed to next round
         } else {
-            // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);
+
+            Timer restartTimer = new Timer();
+            restartTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    remove(dftScreen);  // Remove defeat screen
+                    GameClass.startMainMenu();  // Return to Main Menu
+                }
+            }, 3000);  // Delay of 3 seconds
         }
     }
+    private void stopAllTimers() {
+        if (waveMovementTimer != null) waveMovementTimer.cancel();
+    }
+
+    private void stopAllAnimations() {
+        if (powerCat != null) powerCat.stopMovement();
+        if (willie != null) willie.stopMovement();
+    }
+
 
     private void stopAllElements() {
         if (waveMovementTimer != null) {

@@ -194,15 +194,39 @@ public class Round1 extends Round {
     }
 
     private void showResultScreen(boolean playerWon) {
-        removeAll(); // Clear the current game screen
+        stopAllTimers();
+        stopAllAnimations();
+        removeAll(); // Clear current round
+
         if (playerWon) {
-        	GameClass.transitionToRound2(true);  // Transition to Round2 after winning
+            GameClass.transitionToRound2(true);  // Proceed to next round
         } else {
-            // If Tiger loses, show defeat screen
             GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
-
             add(dftScreen);
+
+            Timer restartTimer = new Timer();
+            restartTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    remove(dftScreen); // Remove defeat screen
+                    GameClass.startMainMenu();  // Return to Main Menu after 3 seconds
+                }
+            }, 3000); 
+        }
+    }
+
+ // Add these methods near the bottom, after existing helper methods:
+    private void stopAllTimers() {
+        if (hornetMovementTimer != null) hornetMovementTimer.cancel();
+    }
+
+    private void stopAllAnimations() {
+        if (powerCat != null) powerCat.stopMovement();
+        if (herkie != null) herkie.stopMovement();
+    }
+
+
 
             // Timer to go back to Main Menu after 3 seconds of showing defeat screen
 //            Timer restartTimer = new Timer();
@@ -213,8 +237,6 @@ public class Round1 extends Round {
 //                    startRound(); // Go back to the main menu
 //                }
 //            }, 3000); // Wait for 3 seconds before transitioning
-        }
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {

@@ -14,14 +14,15 @@ public class GameClass extends GraphicsProgram {
         startMainMenu(); // Start the game with the Main Menu
     }
 
-    // Show the main menu
-    private void startMainMenu() {
+ // Add this in GameClass.java
+    public static void startMainMenu() {
         if (!isTransitioning) {
             isTransitioning = true;
             System.out.println("Starting Main Menu...");
-            switchScreen(new MainMenu());
+            switchScreen(new MainMenu());  // Switch to MainMenu
             isTransitioning = false;
         }
+  
     }
 
     // Transition to Round1
