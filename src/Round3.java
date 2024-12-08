@@ -180,7 +180,7 @@ public class Round3 extends Round {
     private void showResultScreen(boolean playerWon) {
         stopAllTimers(); 
         removeAll(); 
-
+        Sound.stopBackgroundMusic();
         GImage resultScreen = new GImage(playerWon ? "media/vicScreen.gif" : "media/dftScreen.gif", 0, 0);
         resultScreen.setSize(getWidth(), getHeight());
         add(resultScreen);
