@@ -114,16 +114,12 @@ public class Wave {
 	
 	public void checkSide() {
 		if(wave.getX() > tiger.getX()) {
-			//if(!isAttackActive) {
 				wave.setImage("Willie.png");
 				isFacingRight = false;
-			//}
 		}
 		else {
-			//if(!isAttackActive) {
 				wave.setImage("WillieFlipped.png");
 				isFacingRight = true;
-			//}
 		}
 	}
 	

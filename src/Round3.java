@@ -181,6 +181,7 @@ public class Round3 extends Round {
         stopAllTimers(); 
         removeAll(); 
         Sound.stopBackgroundMusic();
+        if(!playerWon) {triton.setTigerDeath();}
         GImage resultScreen = new GImage(playerWon ? "media/vicScreen.gif" : "media/dftScreen.gif", 0, 0);
         resultScreen.setSize(getWidth(), getHeight());
         add(resultScreen);

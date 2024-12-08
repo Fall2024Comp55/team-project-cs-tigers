@@ -22,6 +22,7 @@ public class King {
 	private boolean isFacingRight = false;
 	private boolean isPaused = false;
 	private boolean isTridentThrowActive = false;
+	private boolean isTigerDead = false;
 	private static final double GROUNDLEVEL = 900;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("KingLeft.png",0,GROUNDLEVEL);
@@ -57,6 +58,9 @@ public class King {
 	}
 	public int getDamageGiven() {
 		return damageGiven;
+	}
+	public void setTigerDeath() {
+		isTigerDead = true;
 	}
 	public void setHP(double i) {
 		hp = i;
@@ -336,32 +340,34 @@ public class King {
 		movementTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isDead()) {
-					if(!isAttackActive) {
-						if(!isWalkActive) {
-							double tempX = rgen.nextDouble(0,WINDOWWIDTH - king.getWidth());
-							double tempY = GROUNDLEVEL - king.getHeight();
-							
-							Timer t = new Timer();
-							TimerTask t2 = new TimerTask() {
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									if(!isPaused) {
-										if(!isAttackActive) {
-											walkToEnemy(king,tempX,tempY);
-											isWalkActive = true;
-											
-											if(king.getX() == tempX && king.getY() == tempY) {
-												isWalkActive = false;
-												cancel();
+				if(!isTigerDead) {
+					if(!isDead()) {
+						if(!isAttackActive) {
+							if(!isWalkActive) {
+								double tempX = rgen.nextDouble(0,WINDOWWIDTH - king.getWidth());
+								double tempY = GROUNDLEVEL - king.getHeight();
+								
+								Timer t = new Timer();
+								TimerTask t2 = new TimerTask() {
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										if(!isPaused) {
+											if(!isAttackActive) {
+												walkToEnemy(king,tempX,tempY);
+												isWalkActive = true;
+												
+												if(king.getX() == tempX && king.getY() == tempY) {
+													isWalkActive = false;
+													cancel();
+												}
 											}
 										}
 									}
-								}
-							};	
-							
-							t.scheduleAtFixedRate(t2, 0, 50);
+								};	
+								
+								t.scheduleAtFixedRate(t2, 0, 50);
+							}
 						}
 					}
 				}
@@ -372,46 +378,48 @@ public class King {
 		attackTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(!isDead()) {
-					if(!isPaused) {
-						if(!isAttackActive) {
-							 double dx = king.getX() - tiger.getX();
-					         double dy = king.getY() - tiger.getY();
-					         double distance = Math.sqrt(dx * dx + dy * dy);
-					        if(distance <= 200) {
-			                    int choice = rgen.nextInt(1, 10);
-			                    if (choice == 10) {
-			                    	grenadeAttack();
-			                    	grenadeAttack();
-			                    	grenadeAttack();
-			                    } else if (choice == 9) {
-			                    	if(!isTridentThrowActive) {
-			                    		tridentThrowAttack();
-			                    	}
-			                    } else if (choice >= 1 && choice <= 7) {
-			                        tridentStab();
-			                    } else if(choice == 8) {
-			                    	lightingBolt();
-			                    	lightingBolt();
-			                    	lightingBolt();
-			                    }
-					        }
-					        else {
-					        	int choice = rgen.nextInt(1, 10);
-			                    if (choice >= 1 && choice <= 3) {
-			                    	lightingBolt();
-			                    	lightingBolt();
-			                    	lightingBolt();
-			                    } else if (choice >= 7 && choice <= 10) {
-			                    	if(!isTridentThrowActive) {
-			                    		tridentThrowAttack();
-			                    	}
-			                    }else if(choice >= 4 && choice <= 6 ) {
-			                    	grenadeAttack();
-			                    	grenadeAttack();
-			                    	grenadeAttack();
-			                    }
-					        }
+				if(!isTigerDead) {
+					if(!isDead()) {
+						if(!isPaused) {
+							if(!isAttackActive) {
+								 double dx = king.getX() - tiger.getX();
+						         double dy = king.getY() - tiger.getY();
+						         double distance = Math.sqrt(dx * dx + dy * dy);
+						        if(distance <= 200) {
+				                    int choice = rgen.nextInt(1, 10);
+				                    if (choice == 10) {
+				                    	grenadeAttack();
+				                    	grenadeAttack();
+				                    	grenadeAttack();
+				                    } else if (choice == 9) {
+				                    	if(!isTridentThrowActive) {
+				                    		tridentThrowAttack();
+				                    	}
+				                    } else if (choice >= 1 && choice <= 7) {
+				                        tridentStab();
+				                    } else if(choice == 8) {
+				                    	lightingBolt();
+				                    	lightingBolt();
+				                    	lightingBolt();
+				                    }
+						        }
+						        else {
+						        	int choice = rgen.nextInt(1, 10);
+				                    if (choice >= 1 && choice <= 3) {
+				                    	lightingBolt();
+				                    	lightingBolt();
+				                    	lightingBolt();
+				                    } else if (choice >= 7 && choice <= 10) {
+				                    	if(!isTridentThrowActive) {
+				                    		tridentThrowAttack();
+				                    	}
+				                    }else if(choice >= 4 && choice <= 6 ) {
+				                    	grenadeAttack();
+				                    	grenadeAttack();
+				                    	grenadeAttack();
+				                    }
+						        }
+							}
 						}
 					}
 				}

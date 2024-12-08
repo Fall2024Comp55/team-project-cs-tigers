@@ -205,6 +205,7 @@ public class Round1 extends Round {
 
             // If Tiger loses, show defeat screen
         	Sound.stopBackgroundMusic();
+        	herkie.setTigerDeath();
         	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);

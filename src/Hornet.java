@@ -15,6 +15,7 @@ public class Hornet {
     private int damageGiven = 0;
     private boolean isPaused = false;
     private boolean isFacingRight = false;
+	private boolean isTigerDead = false;
     private static final double GROUNDLEVEL = 700.0;
     private static final double SPEED = 15.0;
     private static final double STINGERSPEED = 20.0;
@@ -30,13 +31,10 @@ public class Hornet {
 	private GraphicsProgram parentProgram;
 	private double WINDOWWIDTH = 20.0;
 	
-//	public int tempHealth = 200;
-//    GImage tigerTemp = new GImage("TigerPlaceHolder.png", 400, 400);
 
 	
 	public Hornet(GraphicsProgram parentProgram) {
         setRandomTarget();
-//        hornet = new GImage("HornetPrototype.gif", 100, 100);
         this.parentProgram = parentProgram;
     }
 	
@@ -52,6 +50,9 @@ public class Hornet {
 	
 	public void setTigerLoc(GImage t) {
 		tiger = t;
+	}
+	public void setTigerDeath() {
+		isTigerDead = true;
 	}
 	public GImage getHornetLoc() {
 		return hornet;
@@ -86,7 +87,6 @@ public class Hornet {
             s.move(speed * dx / distance, speed * dy / distance);
         } else {
             s.setLocation(LocationX, LocationY);
-            //remove(s);
         }
     }
 	public void checkSide() {
@@ -212,7 +212,6 @@ public class Hornet {
 				                    setDamageGiven(RANGEATTACKVALUE);
 				                    parentProgram.remove(s);
 				                    numOfStingers = numOfStingers - 1;
-				                   //remove(s);
 				                    cancel();
 			                	}
 			                }
@@ -224,7 +223,6 @@ public class Hornet {
 				                    setDamageGiven(RANGEATTACKVALUE);
 				                    parentProgram.remove(s);
 				                    numOfStingers = numOfStingers - 1;
-				                   //remove(s);
 				                    cancel();
 			                	}
 			                }
@@ -351,7 +349,6 @@ public class Hornet {
 	    }
 	 
 	public void spawnHornet() {
-		//add(hornet);
 		parentProgram.add(hornet);
 		
 		Timer t = new Timer();
@@ -365,69 +362,48 @@ public class Hornet {
         moveTask = new TimerTask() {
             @Override
             public void run() {
-            	if(!isDead()) {
-	            	if(!isPaused) {
-		                if (!active) {
-		                    glideToTarget();
-		                    checkSide();
+            	if(!isTigerDead) {
+	            	if(!isDead()) {
+		            	if(!isPaused) {
+			                if (!active) {
+			                    glideToTarget();
+			                    checkSide();
+			                }
 		                }
-	                }
+	            	}
             	}
             }
         };
         timer.scheduleAtFixedRate(moveTask, 0, 50);
         
-        
-        //GImage temp = new GImage("TigerPlaceHolder.png", 400, 400);
-//        tigerTemp.setSize(200, 200);
-//        add(tigerTemp);
 
         TimerTask actionTask = new TimerTask() {
             @Override
             public void run() {
-            	if(!isDead()) {
-	            	if(!isPaused) {
-	            		if (!getActive()) {
-	            			int choice = rgen.nextInt(1, 10);
-			                if (choice >= 9 && choice <= 10) {
-			                    chargeAttack();
-			                } else if (choice >= 1 && choice <= 4) {
-			                	if(numOfStingers < 3) {
-			                		stingerAttack();
-			                	}
-			                } else if (choice >= 5 && choice <= 8) {
-			                    honeyBombAttack();
-			                }
-	                	}
-	                }
+            	if(!isTigerDead) {
+	            	if(!isDead()) {
+		            	if(!isPaused) {
+		            		if (!getActive()) {
+		            			int choice = rgen.nextInt(1, 10);
+				                if (choice >= 9 && choice <= 10) {
+				                    chargeAttack();
+				                } else if (choice >= 1 && choice <= 4) {
+				                	if(numOfStingers < 3) {
+				                		stingerAttack();
+				                	}
+				                } else if (choice >= 5 && choice <= 8) {
+				                    honeyBombAttack();
+				                }
+		                	}
+		                }
+	            	}
             	}
             }
         };
 
         timer.scheduleAtFixedRate(actionTask, 500, 1500);
-        
-//        Timer t22 = new Timer();
-//        t22.scheduleAtFixedRate(new TimerTask() {
-//        	@Override
-//        	public void run() {
-//        		setTigerLoc(tigerTemp);
-//        		System.out.println("Health: " + (tempHealth - getDamageGiven()));
-//        	}
-//        },0,500);
-        
 	}
-//	@Override
-//	public void run() {
-//		spawnHornet();
-//    }
-//	public void init() {
-//		setSize(1920,1080);
-//	}
-//	
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//			new Hornet().start();
-//	}
+        
 // round1
 	public void stopMovement() {
 		// TODO Auto-generated method stub
