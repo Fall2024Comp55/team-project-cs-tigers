@@ -8,7 +8,6 @@ public class Round1 extends Round {
     private GImage welcomeGif;
     private boolean isPaused = false;
     private Timer hornetMovementTimer;
-    private static final double HORNET_SPEED = 5.0;
     private Hornet herkie = new Hornet(this);
     private Tiger powerCat = new Tiger(this);
 

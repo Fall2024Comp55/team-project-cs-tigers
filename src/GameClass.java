@@ -79,5 +79,46 @@ public class GameClass extends GraphicsProgram {
         currentScreen.start();         // Start the new screen
     }
 }
-// tested
+
+//CREDITS: 
+//COMP55 PowerCat Protector of UOP Project
+//Fall 2025
+//
+//Created by:
+//Paul Marro 
+//Rogelio Calderon
+//Faizah Muthana
+//Ibrahim Tahir
+//
+//Sound credits:
+//
+//Street Fighter II Arcade Music - Opening Theme - CPS1
+//
+//Street Fighter II Arcade Music - Sagat Stage - CPS1
+//
+//Street Fighter II Arcade Music - Ken Stage - CPS1
+//
+//Street Fighter II Arcade Music - Chun Li Stage - CPS1
+//
+//Street Fighter II: Win Theme (1991)
+//
+//Punch_02.wav by thefsoundman -- https://freesound.org/s/118513/ -- License: Creative Commons 0
+//
+//Swoosh.ogg by WizardOZ -- https://freesound.org/s/419341/ -- License: Creative Commons 0
+//
+//Bomb - Small by Zangrutz -- https://freesound.org/s/155235/ -- License: Attribution 3.0
+//
+//Whip 01.wav by erkanozan -- https://freesound.org/s/51755/ -- License: Creative Commons 0
+//
+//Popping Bubble Wrap 8 by Geoff-Bremner-Audio -- https://freesound.org/s/754232/ -- License: Creative Commons 0
+//
+//Bubbles6.wav by kwahmah_02 -- https://freesound.org/s/261568/ -- License: Attribution 3.0
+//
+//SeaweedSlide_01.WAV by gmtechb -- https://freesound.org/s/49172/ -- License: Attribution 3.0
+//
+//thunder3.ogg by Josh74000MC -- https://freesound.org/s/475094/ -- License: Creative Commons 0
+//
+//Heavy Impacts by RICHERlandTV -- https://freesound.org/s/232358/ -- License: Attribution 4.0
+//
+//whoosh04.wav by FreqMan -- https://freesound.org/s/25073/ -- License: Attribution 4.0
 

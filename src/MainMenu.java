@@ -64,7 +64,7 @@ public class MainMenu extends GraphicsProgram {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                // Dynamically scale images to fit the window size
+                // scale images to fit the window size
                 if (startGif != null) scaleImageToWindow(startGif);
                 if (controlImage != null) scaleImageToWindow(controlImage);
             }
@@ -80,4 +80,4 @@ public class MainMenu extends GraphicsProgram {
 	public static void main(String[] args) {
         new MainMenu().start();
     }
-}
+} 

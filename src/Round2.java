@@ -221,15 +221,6 @@ public class Round2 extends Round {
         if (willie != null) willie.stopMovement();
     }
 
-
-    private void stopAllElements() {
-        if (waveMovementTimer != null) {
-            waveMovementTimer.cancel();
-        }
-        willie.stopMovement();
-        powerCat.stopMovement();
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_P) {
