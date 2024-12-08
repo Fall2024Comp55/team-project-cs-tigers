@@ -25,6 +25,7 @@ public class Round2 extends Round {
 
     @Override
     public void init() {
+        removeAll(); // Clear any lingering components
         setSize((int) getWidth(), (int) getHeight()); // size of the game window
         addKeyListeners();
         showMapScreen(); // Show the map before gameplay starts
@@ -186,19 +187,39 @@ public class Round2 extends Round {
     }
 
     private void showResultScreen(boolean playerWon) {
-        stopAllElements(); // Clean up before transitioning
-
-        removeAll(); // Clear the current game screen
+        stopAllTimers(); // Stop game elements
+        stopAllAnimations(); 
+        removeAll(); // Clear the screen
+        
         if (playerWon) {
-            GameClass.transitionToRound3(); // Transition to Round3
+            GameClass.transitionToRound3(true);  // Proceed to next round
         } else {
+
             // If Tiger loses, show defeat screen
         	Sound.stopBackgroundMusic();
         	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);
+
+            Timer restartTimer = new Timer();
+            restartTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    remove(dftScreen);  // Remove defeat screen
+                    GameClass.startMainMenu();  // Return to Main Menu
+                }
+            }, 3000);  // Delay of 3 seconds
         }
     }
+    private void stopAllTimers() {
+        if (waveMovementTimer != null) waveMovementTimer.cancel();
+    }
+
+    private void stopAllAnimations() {
+        if (powerCat != null) powerCat.stopMovement();
+        if (willie != null) willie.stopMovement();
+    }
+
 
     private void stopAllElements() {
         if (waveMovementTimer != null) {
@@ -280,4 +301,4 @@ public class Round2 extends Round {
     public static void main(String[] args) {
         new Round2().start(); // Launch Round 2
     }
-}
+} 

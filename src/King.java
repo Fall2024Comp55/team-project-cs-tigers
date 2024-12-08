@@ -420,4 +420,13 @@ public class King {
 		
 		
 	}
+	// added for round1
+	public void stopMovement() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void startMovement() {
+		// TODO Auto-generated method stub
+		
+	}
 }

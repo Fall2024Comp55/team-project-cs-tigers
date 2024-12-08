@@ -1,125 +1,84 @@
-import acm.graphics.*;
 import acm.program.*;
-import javax.swing.*;
+// tested 
+public class GameClass extends GraphicsProgram {
 
-public class GameClass {
-
-    private static int currentRound = 0;  // Tracks the current round (0 = MainMenu, 1 = Round1, etc.)
-    private static boolean isTransitioning = false;  // Prevents overlapping transitions
-    private static boolean gameOver = false; // Tracks if the game has ended
+    private static GraphicsProgram currentScreen; // Active screen
+    private static boolean isTransitioning = false; // Prevents overlapping transitions
 
     public static void main(String[] args) {
-        // Start the game with the Main Menu
-        SwingUtilities.invokeLater(GameClass::startGame);
+        new GameClass().start(); // Start the application
     }
 
-    public static void startGame() {
-        // Start the Main Menu
+    @Override
+    public void run() {
+        startMainMenu(); // Start the game with the Main Menu
+    }
+
+ // Add this in GameClass.java
+    public static void startMainMenu() {
         if (!isTransitioning) {
             isTransitioning = true;
-            gameOver = false; // Reset game state
             System.out.println("Starting Main Menu...");
-            SwingUtilities.invokeLater(() -> {
-                MainMenu mainMenu = new MainMenu();
-                mainMenu.start();
-                currentRound = 0;  // Set to Main Menu
-                isTransitioning = false;
-            });
+            switchScreen(new MainMenu());  // Switch to MainMenu
+            isTransitioning = false;
         }
+  
     }
 
+    // Transition to Round1
     public static void transitionToRound1() {
-        // Transition to Round1
         if (!isTransitioning) {
             isTransitioning = true;
             System.out.println("Transitioning to Round1...");
-            SwingUtilities.invokeLater(() -> { 
-                Round1 round1 = new Round1();
-                round1.start();
-                Sound.stopBackgroundMusic();
-                currentRound = 1;  // Set to Round1
-                isTransitioning = false;
-            });
+            Sound.stopBackgroundMusic();
+            switchScreen(new Round1());
+            isTransitioning = false;
         }
     }
 
-    public static void transitionToRound2() {
-        // Transition to Round2
-        if (!isTransitioning && currentRound == 1) {  // Only allow this if coming from Round1
+    // Transition to Round2
+    public static void transitionToRound2(boolean playerWon) {
+        if (!isTransitioning) {
             isTransitioning = true;
-            System.out.println("Transitioning to Round2...");
-            SwingUtilities.invokeLater(() -> {
-                Round2 round2 = new Round2();
-                round2.start();
-                Sound.stopBackgroundMusic();
-                currentRound = 2;  // Set to Round2
-                isTransitioning = false;
-            });
+            Sound.stopBackgroundMusic();
+            if (playerWon) {
+                System.out.println("Transitioning to Round2...");
+                switchScreen(new Round2());
+            } else {
+                System.out.println("Player lost in Round1. Returning to MainMenu.");
+                switchScreen(new MainMenu());
+            }
+            isTransitioning = false;
         }
     }
 
-    public static void transitionToRound3() {
-        if (!isTransitioning && currentRound == 2) { // Only transition from Round2
+    // Transition to Round3
+    public static void transitionToRound3(boolean playerWon) {
+        if (!isTransitioning) {
             isTransitioning = true;
-            System.out.println("Transitioning to Round3...");
-            SwingUtilities.invokeLater(() -> {
-                Round3 round3 = new Round3(); // Create a new instance of Round3
-                round3.start(); // Start Round3
-                Sound.stopBackgroundMusic();
-                currentRound = 3; // Update the current round
-                isTransitioning = false;
-            });
-        }
-    }
-    public static void displayEndScreen() {
-        // Display the end screen after the final round
-        if (!isTransitioning && currentRound == 3 && !gameOver) {  // Only allow this if coming from Round3
-            isTransitioning = true;
-            gameOver = true; // Mark the game as finished
-            System.out.println("Displaying End Screen...");
-            SwingUtilities.invokeLater(() -> {
-                GraphicsProgram endProgram = new GraphicsProgram() {
-                    @Override
-                    public void run() {
-                        GImage endScreen = new GImage("media/endScreen.png", 0, 0);
-                        endScreen.setSize(getWidth(), getHeight());
-                        add(endScreen);
-                    }
-                };
-                endProgram.start();
-                currentRound = 4;  // Set to End Screen
-                isTransitioning = false;
-            });
+            Sound.stopBackgroundMusic();
+                
+            if (playerWon) {
+                System.out.println("Transitioning to Round3...");
+                switchScreen(new Round3());
+            } else {
+                System.out.println("Player lost in Round2. Returning to MainMenu.");
+                switchScreen(new MainMenu());
+            }
+            isTransitioning = false;
+        
+        
         }
     }
 
-    public static void nextLevel() {
-        // Handles the transition to the next level based on the current round
-        if (gameOver) {
-            System.out.println("Game is already over. Returning to Main Menu...");
-            startGame();
-            return;
+    // Cleanly switch screens
+    private static void switchScreen(GraphicsProgram newScreen) {
+        if (currentScreen != null) {
+            currentScreen.removeAll(); // Clear all content from the current screen
         }
-
-        System.out.println("Next level triggered. Current round: " + currentRound);
-        switch (currentRound) {
-            case 0:  // From Main Menu
-                transitionToRound1();
-                break;
-            case 1:  // From Round1
-                transitionToRound2();
-                break;
-            case 2:  // From Round2
-                transitionToRound3();
-                break;
-            case 3:  // From Round3
-                displayEndScreen();
-                break;
-            default:  // Unexpected case
-                System.out.println("Unexpected round. Resetting to Main Menu.");
-                startGame();
-                break;
-        }
+        currentScreen = newScreen;     // Assign the new screen
+        currentScreen.start();         // Start the new screen
     }
 }
-// test
+
+

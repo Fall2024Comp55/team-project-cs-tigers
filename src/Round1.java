@@ -21,12 +21,15 @@ public class Round1 extends Round {
     private GRect overlay;
     private GLabel pauseMessage;
 
+
     @Override
     public void init() {
+        removeAll(); // Clear any lingering components
         setSize(getWidth(), getHeight()); // Set game window size
-        addKeyListeners();
-        showBurnsMap(); // Show Burns map
+        addKeyListeners(); // Enable key listeners
+        showBurnsMap(); // Display Burns map
     }
+
 
     private void showBurnsMap() {
         GImage burnsMap = new GImage("media/BurnsMap.png", 0, 0);
@@ -192,16 +195,42 @@ public class Round1 extends Round {
     }
 
     private void showResultScreen(boolean playerWon) {
-        removeAll(); // Clear the current game screen
+        stopAllTimers();
+        stopAllAnimations();
+        removeAll(); // Clear current round
+
         if (playerWon) {
-            GameClass.nextLevel();  // Transition to Round2
+            GameClass.transitionToRound2(true);  // Proceed to next round
         } else {
+
             // If Tiger loses, show defeat screen
         	Sound.stopBackgroundMusic();
         	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
-
             add(dftScreen);
+
+            Timer restartTimer = new Timer();
+            restartTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    remove(dftScreen); // Remove defeat screen
+                    GameClass.startMainMenu();  // Return to Main Menu after 3 seconds
+                }
+            }, 3000); 
+        }
+    }
+
+ // Add these methods near the bottom, after existing helper methods:
+    private void stopAllTimers() {
+        if (hornetMovementTimer != null) hornetMovementTimer.cancel();
+    }
+
+    private void stopAllAnimations() {
+        if (powerCat != null) powerCat.stopMovement();
+        if (herkie != null) herkie.stopMovement();
+    }
+
+
 
             // Timer to go back to Main Menu after 3 seconds of showing defeat screen
 //            Timer restartTimer = new Timer();
@@ -212,8 +241,6 @@ public class Round1 extends Round {
 //                    startRound(); // Go back to the main menu
 //                }
 //            }, 3000); // Wait for 3 seconds before transitioning
-        }
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -293,5 +320,4 @@ public class Round1 extends Round {
     public void setSize(double width, double height) {
     }
 }
-
 
