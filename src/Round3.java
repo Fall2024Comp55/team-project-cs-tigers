@@ -157,9 +157,9 @@ public class Round3 extends Round {
     }
 
     private void updateHealthBars() {
-        // Update Player's Health Bar
-        double playerHealthPercentage = Math.max(0, powerCat.getHP() / 150.0);
-        playerHealthBar.setSize(300 * playerHealthPercentage, 25);
+        // Update Player's Health Bar 
+        double playerHealthPercentage = Math.max(0, powerCat.getHP() / 100.0);
+        playerHealthBar.setSize(310 * playerHealthPercentage, 25);
         playerHealthLabel.setLabel(String.valueOf((int) powerCat.getHP()));
 
         // Update Triton's Health Bar (from right to left)
