@@ -19,19 +19,16 @@ public class MainMenu extends GraphicsProgram {
     }
 
     private void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
+        // Placeholder for resizing, handled by ACM
+    }
 
-	private void showStartGif() {
-		Sound.playBackgroundMusic("media/youtube_ARJzWXXupeE_audio (remux).wav");
-		startGif = new GImage("media/Start.gif", 0, 0);
+    private void showStartGif() {
+        Sound.playBackgroundMusic("media/youtube_ARJzWXXupeE_audio (remux).wav");
+        startGif = new GImage("media/Start.gif", 0, 0);
         startGif.setSize(getWidth(), getHeight());
         add(startGif);
     }
 
-
-        
     private void showControlScreen() {
         controlImage = new GImage("media/control.png", 0, 0);
         controlImage.setSize(getWidth(), getHeight());
@@ -44,18 +41,22 @@ public class MainMenu extends GraphicsProgram {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_T) {
+        if (e.getKeyCode() == KeyEvent.VK_T) { 
+            // Handle "T" key for control screen transition
             if (!showingControls) {
-                // Transition from start screen to controls
                 remove(startGif);
                 showControlScreen();
                 showingControls = true;
             } else {
-                // Transition from controls to Round1
                 remove(controlImage);
                 Sound.stopBackgroundMusic();
-                GameClass.transitionToRound1(); // Move to Round1 after control screen
+                GameClass.transitionToRound1(); 
             }
+        }
+
+        // Handle "M" key for mute toggle
+        if (e.getKeyCode() == KeyEvent.VK_M) { 
+            Sound.toggleMute();  // Mute or unmute sound
         }
     }
 
@@ -64,20 +65,19 @@ public class MainMenu extends GraphicsProgram {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                // scale images to fit the window size
+                // Rescale images to fit the window size
                 if (startGif != null) scaleImageToWindow(startGif);
                 if (controlImage != null) scaleImageToWindow(controlImage);
             }
         });
-        requestFocus();
+        requestFocus(); // Ensure the screen gets focus for key input
     }
 
     private void addComponentListener(ComponentAdapter componentAdapter) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static void main(String[] args) {
-        new MainMenu().start();
+        // Placeholder for ACM event listener
     }
-} 
+
+    public static void main(String[] args) {
+        new MainMenu().start(); // Launch the main menu
+    }
+}

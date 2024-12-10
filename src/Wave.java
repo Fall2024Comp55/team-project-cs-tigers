@@ -23,7 +23,7 @@ public class Wave {
 	private boolean isWaveActive = false;
 	private boolean isTigerDead = false;
 	private boolean waveHitCooldown = false;
-	private static final double GROUNDLEVEL = 700;
+	private static final double GROUNDLEVEL = 580;
 	private int damageGiven = 0;
 	private GImage tiger = new GImage("",0,0);
 	private RandomGenerator rgen = RandomGenerator.getInstance();

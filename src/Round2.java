@@ -19,7 +19,7 @@ public class Round2 extends Round {
 
     // Pause feature elements
     private GRect overlay;
-    private GLabel pauseMessage;;
+    private GLabel pauseMessage;
 
     private boolean roundCompleted = false; // Prevents duplicate transitions
 
@@ -49,11 +49,10 @@ public class Round2 extends Round {
 
     private void showWelcomeScreen() {
         welcomeGif = new GImage("media/PoolWelcome.gif", 0, 0);
-        welcomeGif.setSize
-        (getWidth(), getHeight()); // scales to fit the screen
+        welcomeGif.setSize(getWidth(), getHeight()); // scales to fit the screen
         add(welcomeGif);
 
-        // adds a timer to remove the welcome screen and start the round
+        // Adds a timer to remove the welcome screen and start the round
         Timer welcomeTimer = new Timer();
         welcomeTimer.schedule(new TimerTask() {
             @Override
@@ -65,7 +64,7 @@ public class Round2 extends Round {
     }
 
     private void setupContent() {
-        // pool background
+        // Pool background
         backgroundImage = new GImage("media/PoolBackground.png", 0, 0);
         backgroundImage.setSize(getWidth(), getHeight()); // scales to fit the screen
         add(backgroundImage);
@@ -161,7 +160,6 @@ public class Round2 extends Round {
         }, 0, 50); // Refresh every 50ms
     }
 
-
     private void updateHealthBars() {
         double playerHealthPercentage = Math.max(0, powerCat.getHP() / 100.0);
         playerHealthBar.setSize(300 * playerHealthPercentage, 25);
@@ -170,7 +168,6 @@ public class Round2 extends Round {
         double cpuHealthPercentage = Math.max(0, willie.getHP() / 100.0);
         cpuHealthBar.setSize(300 * cpuHealthPercentage, 25);
         cpuHealthLabel.setLabel(String.valueOf((int) willie.getHP()));
-        
     }
 
     private void checkGameOver() {
@@ -188,17 +185,17 @@ public class Round2 extends Round {
 
     private void showResultScreen(boolean playerWon) {
         stopAllTimers(); // Stop game elements
-        stopAllAnimations(); 
+        stopAllAnimations();
         removeAll(); // Clear the screen
-        
+
         if (playerWon) {
-            GameClass.transitionToRound3(true);  // Proceed to next round
+            GameClass.transitionToRound3(true); // Proceed to next round
         } else {
 
             // If Tiger loses, show defeat screen
-        	Sound.stopBackgroundMusic();
-        	willie.setTigerDeath();
-        	GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
+            Sound.stopBackgroundMusic();
+            willie.setTigerDeath();
+            GImage dftScreen = new GImage("media/dftScreen.gif", 0, 0);
             dftScreen.setSize(getWidth(), getHeight());
             add(dftScreen);
 
@@ -206,12 +203,13 @@ public class Round2 extends Round {
             restartTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    remove(dftScreen);  // Remove defeat screen
-                    GameClass.startMainMenu();  // Return to Main Menu
+                    remove(dftScreen); // Remove defeat screen
+                    GameClass.startMainMenu(); // Return to Main Menu
                 }
-            }, 3000);  // Delay of 3 seconds
+            }, 3000); // Delay of 3 seconds
         }
     }
+
     private void stopAllTimers() {
         if (waveMovementTimer != null) waveMovementTimer.cancel();
     }
@@ -225,6 +223,9 @@ public class Round2 extends Round {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_P) {
             togglePause(); // Toggle pause/unpause with 'P' key
+        }
+        if (e.getKeyCode() == KeyEvent.VK_M) { // Add mute/unmute functionality
+            Sound.toggleMute(); // Mute/unmute background sound with 'M' key
         }
         if (!isPaused) { // Only handle keypress if not paused
             powerCat.keyPressed(e, this); // Forward key event to Tiger
@@ -293,4 +294,4 @@ public class Round2 extends Round {
     public static void main(String[] args) {
         new Round2().start(); // Launch Round 2
     }
-} 
+}

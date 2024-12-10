@@ -4,9 +4,11 @@ import java.io.IOException;
 
 public class Sound {
     private static Clip backgroundClip;
+    private static boolean isMuted = false; // Mute state tracker
 
     // Play a sound effect once
     public static void playSound(String filePath) {
+        if (isMuted) return; // Don't play if muted
         try {
             File audioFile = new File(filePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
@@ -20,6 +22,7 @@ public class Sound {
 
     // Play background music (looped)
     public static void playBackgroundMusic(String filePath) {
+        if (isMuted || (backgroundClip != null && backgroundClip.isRunning())) return; 
         try {
             File audioFile = new File(filePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
@@ -38,6 +41,21 @@ public class Sound {
         }
     }
 
+    // Toggle mute/unmute
+    public static void toggleMute() {
+        isMuted = !isMuted;
+
+        if (isMuted) {
+            stopBackgroundMusic();  // Stop the background music when muted
+            System.out.println("Sound muted.");
+        } else {
+            System.out.println("Sound unmuted.");
+            if (backgroundClip != null && !backgroundClip.isRunning()) {
+                backgroundClip.start(); // Resume the clip if it was paused
+            }
+        }
+    }
+
     // Set volume
     public static void setVolume(Clip clip, float volume) {
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
@@ -51,3 +69,4 @@ public class Sound {
         return clip != null && clip.isRunning();
     }
 }
+

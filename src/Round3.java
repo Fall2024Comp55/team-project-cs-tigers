@@ -163,7 +163,7 @@ public class Round3 extends Round {
         playerHealthLabel.setLabel(String.valueOf((int) powerCat.getHP()));
 
         // Update Triton's Health Bar (from right to left)
-        double tritonHealthPercentage = Math.max(0, triton.getHP() / 150.0);
+        double tritonHealthPercentage = Math.max(0, triton.getHP() / 100.0);
         double tritonBarWidth = 300 * tritonHealthPercentage;
         tritonHealthBar.setSize(tritonBarWidth, 25);
         tritonHealthBar.setLocation(getWidth() - 350 - 25 + (300 - tritonBarWidth), tritonHealthBar.getY());
@@ -204,10 +204,13 @@ public class Round3 extends Round {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_P) {
-            togglePause();
+            togglePause(); // Toggle pause/unpause with 'P' key
+        }
+        if (e.getKeyCode() == KeyEvent.VK_M) {
+            Sound.toggleMute(); // Mute/unmute background sound with 'M' key
         }
         if (!isPaused && !gameOver) {
-            powerCat.keyPressed(e, this); 
+            powerCat.keyPressed(e, this); // Forward key event to Tiger if not paused
         }
     }
 

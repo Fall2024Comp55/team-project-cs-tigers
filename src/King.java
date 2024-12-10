@@ -23,7 +23,7 @@ public class King {
 	private boolean isPaused = false;
 	private boolean isTridentThrowActive = false;
 	private boolean isTigerDead = false;
-	private static final double GROUNDLEVEL = 900;
+	private static final double GROUNDLEVEL = 880;
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private GImage king = new GImage("KingLeft.png",0,GROUNDLEVEL);
 	private GImage tiger = new GImage("",0,0);
@@ -424,7 +424,7 @@ public class King {
 					}
 				}
 			}
-		},500, 1500);
+		},500, 1100);
 		
 		
 	}

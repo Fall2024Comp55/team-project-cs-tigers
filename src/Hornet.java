@@ -17,7 +17,7 @@ public class Hornet {
     private boolean isFacingRight = false;
 	private boolean isTigerDead = false;
     private static final double GROUNDLEVEL = 700.0;
-    private static final double SPEED = 15.0;
+    private static final double SPEED = 20.0;
     private static final double STINGERSPEED = 20.0;
     private static final double HONEYBOMBSPEED = 20.0;
     private static final double CHARGESPEED = 25.0;
@@ -202,7 +202,7 @@ public class Hornet {
             public void run() {
             		if(!isPaused) {
 		                double dx = tempX - s.getX();
-		                double dy = GROUNDLEVEL - s.getY();
+		                double dy = tempY - s.getY();
 		                double distance = Math.sqrt(dx * dx + dy * dy);
 	
 		                if (distance > STINGERSPEED) {
@@ -401,7 +401,7 @@ public class Hornet {
             }
         };
 
-        timer.scheduleAtFixedRate(actionTask, 500, 1500);
+        timer.scheduleAtFixedRate(actionTask, 500, 1000);
 	}
         
 // round1

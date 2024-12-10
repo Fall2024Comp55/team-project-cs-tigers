@@ -1,4 +1,6 @@
 import acm.program.*;
+import java.awt.event.KeyEvent;
+
 public class GameClass extends GraphicsProgram {
 
     private static GraphicsProgram currentScreen; // Active screen
@@ -9,11 +11,16 @@ public class GameClass extends GraphicsProgram {
     }
 
     @Override
+    public void init() {
+        addKeyListeners();  // Register key events
+    }
+
+    @Override
     public void run() {
         startMainMenu(); // Start the game with the Main Menu
     }
 
- // Add this in GameClass.java
+    // Start Main Menu
     public static void startMainMenu() {
         if (!isTransitioning) {
             isTransitioning = true;
@@ -21,7 +28,6 @@ public class GameClass extends GraphicsProgram {
             switchScreen(new MainMenu());  // Switch to MainMenu
             isTransitioning = false;
         }
-  
     }
 
     // Transition to Round1
@@ -65,8 +71,14 @@ public class GameClass extends GraphicsProgram {
                 switchScreen(new MainMenu());
             }
             isTransitioning = false;
-        
-        
+        }
+    }
+
+    // Handle Key Events (M to Mute)
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_M) {  // Check if "M" is pressed
+            Sound.toggleMute();  // Mute or unmute the sound
         }
     }
 
@@ -82,7 +94,7 @@ public class GameClass extends GraphicsProgram {
 
 //CREDITS: 
 //COMP55 PowerCat Protector of UOP Project
-//Fall 2025
+//Fall 2024 
 //
 //Created by:
 //Paul Marro 

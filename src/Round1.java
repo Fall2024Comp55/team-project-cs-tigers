@@ -228,29 +228,20 @@ public class Round1 extends Round {
     private void stopAllAnimations() {
         if (powerCat != null) powerCat.stopMovement();
         if (herkie != null) herkie.stopMovement();
+       
     }
-
-
-
-            // Timer to go back to Main Menu after 3 seconds of showing defeat screen
-//            Timer restartTimer = new Timer();
-//            restartTimer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    remove(dftScreen); // Remove defeat screen
-//                    startRound(); // Go back to the main menu
-//                }
-//            }, 3000); // Wait for 3 seconds before transitioning
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_P) {
-            togglePause(); // Toggle pause/unpause with 'P' key
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_P) {
+                togglePause(); // Toggle pause/unpause with 'P' key
+            }
+            if (e.getKeyCode() == KeyEvent.VK_M) { // Add mute/unmute functionality
+                Sound.toggleMute(); // Mute/unmute background sound with 'M' key
+            }
+            if (!isPaused) { // Only handle keypress if not paused
+                powerCat.keyPressed(e, this); // Forward key event to Tiger
+            }
         }
-        if (!isPaused) { // Only handle keypress if not paused
-            powerCat.keyPressed(e, this); // Forward key event to Tiger
-        }
-    }
 
     private void togglePause() {
         isPaused = !isPaused;
